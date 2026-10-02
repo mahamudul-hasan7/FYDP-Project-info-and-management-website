@@ -36,20 +36,25 @@ export default function MemberModal({ member, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
           onClick={onClose}
         >
           <motion.div
             className="member-sheet"
-            initial={{ opacity: 0, y: 60, scale: 0.985 }}
+            initial={{ opacity: 0, y: 40, scale: 0.985 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 60, scale: 0.985 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, y: 40, scale: 0.985 }}
+            transition={{
+              type: 'spring',
+              damping: 30,
+              stiffness: 360,
+              mass: 0.8
+            }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0, bottom: 0.4 }}
+            dragElastic={{ top: 0.05, bottom: 0.45 }}
             onDragEnd={(e, { offset, velocity }) => {
-              if (offset.y > 90 || velocity.y > 400) {
+              if (offset.y > 80 || velocity.y > 350) {
                 onClose();
               }
             }}

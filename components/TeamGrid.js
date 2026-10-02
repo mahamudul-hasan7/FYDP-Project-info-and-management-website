@@ -19,8 +19,8 @@ export default function TeamGrid({ members }) {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.18 }}
-            transition={{ delay: index * 0.055, duration: 0.38 }}
-            whileHover={{ y: -3 }}
+            transition={{ delay: index * 0.05, duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -3, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }}
             whileTap={{ scale: 0.985 }}
             onClick={() => setSelected(member)}
           >

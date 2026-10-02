@@ -33,6 +33,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
 }
 body {
   margin: 0;
@@ -993,8 +994,10 @@ a.btn:active,
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   will-change: opacity;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 body.modal-open .mobile-dock,
@@ -1018,8 +1021,10 @@ body:has(.report-modal-backdrop) .mobile-dock {
   position: relative;
   z-index: 10001;
   will-change: transform, opacity;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   touch-action: pan-y;
 }
 .sheet-handle { display: none; }
