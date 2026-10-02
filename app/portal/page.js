@@ -1141,22 +1141,11 @@ export default function PortalPage() {
               <ArrowUpRight size={14} />
             </Link>
           ) : (
-            <>
-              <button
-                type="button"
-                onClick={handleCopyProfileLink}
-                className="soft-action compact-btn"
-                title="Copy live profile link to share"
-              >
-                {profileLinkCopied ? <Check size={14} className="text-emerald" /> : <Copy size={14} />}
-                <span>{profileLinkCopied ? 'Link Copied ✓' : 'Share Profile'}</span>
-              </button>
-              <Link href={`/member/${session.slug}`} className="primary-action compact-btn" target="_blank">
-                <Eye size={14} />
-                <span>View Live Portfolio</span>
-                <ArrowUpRight size={14} />
-              </Link>
-            </>
+            <Link href={`/member/${session.slug}`} className="primary-action compact-btn" target="_blank">
+              <Eye size={14} />
+              <span>View Live Portfolio</span>
+              <ArrowUpRight size={14} />
+            </Link>
           )}
         </div>
       </section>
@@ -1265,36 +1254,6 @@ export default function PortalPage() {
               </div>
             </div>
           )}
-
-          {/* Clean Profile Header */}
-          <div className="profile-clean-header">
-            <div className="clean-header-left">
-              <div className="clean-avatar-wrap">
-                <MemberAvatar member={profileData} size="lg" className="clean-header-avatar" />
-              </div>
-              <div className="clean-header-meta">
-                <div className="clean-badge-row">
-                  <span className="clean-role-pill">{profileData.role || session.roleTitle}</span>
-                  <span className="clean-id-pill">ID: {profileData.id || session.username}</span>
-                  <span className="clean-uni-pill">UIU CSE</span>
-                </div>
-                <h3 className="clean-user-name">{profileData.name || session.name}</h3>
-                <p className="clean-user-tagline">{profileData.tagline || 'Team Random • FYDP Research & Engineering'}</p>
-              </div>
-            </div>
-
-            <div className="clean-header-actions">
-              <Link
-                href={`/member/${selectedSlug || session.slug}`}
-                className="soft-action clean-action-btn"
-                target="_blank"
-              >
-                <Eye size={14} />
-                <span>View Live Portfolio</span>
-                <ArrowUpRight size={13} />
-              </Link>
-            </div>
-          </div>
 
           {profileMessage && (
             <div className={`portal-feedback ${profileMessage.startsWith('Error') ? 'error' : 'success'}`}>
