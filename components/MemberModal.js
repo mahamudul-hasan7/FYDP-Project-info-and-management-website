@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 import { ArrowUpRight, Code2, Globe, Linkedin, Mail, Phone, UserRound, X } from 'lucide-react';
 import { useEffect } from 'react';
 import MemberAvatar from './MemberAvatar';
+import { maskStudentId } from '../lib/format';
 
 export default function MemberModal({ member, isCurrentUser, onClose }) {
   const dragControls = useDragControls();
@@ -101,7 +102,11 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
             )}
 
             <div className="sheet-meta-grid">
-              <div><UserRound size={16} /><span>ID</span><strong>{member.id}</strong></div>
+              <div>
+                <UserRound size={16} />
+                <span>ID</span>
+                <strong>{isCurrentUser ? member.id : maskStudentId(member.id)}</strong>
+              </div>
               {member.privacy?.email !== false && member.email && (
                 <div>
                   <Mail size={16} />
@@ -117,7 +122,7 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
                   </strong>
                 </div>
               )}
-              {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
+              {member.privacy?.phone === true && member.phone && member.phone !== 'Not provided' && (
                 <div>
                   <Phone size={16} />
                   <span>Phone</span>
@@ -141,7 +146,7 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
                 <span>View Full Profile</span>
                 <ArrowUpRight size={18} />
               </Link>
-              {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
+              {member.privacy?.phone === true && member.phone && member.phone !== 'Not provided' && (
                 <a
                   href={`tel:${member.phone}`}
                   className="soft-action icon-only"

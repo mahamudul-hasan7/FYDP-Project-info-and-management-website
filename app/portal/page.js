@@ -469,23 +469,25 @@ export default function PortalPage() {
       .finally(() => setLoading(false));
   }, [router]);
 
-  // Realtime Live Heartbeat Polling for Team Notes, Tasks, Logs & Audit
+  // Smart Live Sync for Team Notes, Tasks, Logs & Audit (Relaxed 25s polling + window focus refresh)
   useEffect(() => {
     if (!session) return;
 
-    const interval = setInterval(() => {
-      loadNotes();
-      loadTasks();
-      loadLogs();
-      loadAuditLogs();
-    }, 3000);
+    const refreshActiveData = () => {
+      // Skip background network requests if tab is hidden/minimized
+      if (typeof document !== 'undefined' && document.hidden) return;
 
-    const handleFocus = () => {
       loadNotes();
       loadTasks();
       loadLogs();
       loadAuditLogs();
     };
+
+    // 25-second relaxed heartbeat (avoids API spam and high serverless execution counts)
+    const interval = setInterval(refreshActiveData, 25000);
+
+    // Immediate sync when returning to the tab
+    const handleFocus = () => refreshActiveData();
 
     window.addEventListener('focus', handleFocus);
     return () => {
@@ -1866,73 +1868,82 @@ export default function PortalPage() {
             </div>
           )}
 
-          {/* New Task Directive Form */}
-          <form onSubmit={handleCreateTask} className="portal-form-grid task-creation-box">
-            <div className="form-group full-width">
-              <label>Directive / Task Title</label>
-              <input
-                type="text"
-                placeholder="e.g. Implement Confusion Matrix & ROC-AUC curves for baseline model"
-                value={newTaskTitle}
-                onChange={(e) => setNewTaskTitle(e.target.value)}
-                required
-              />
-            </div>
+          {/* New Task Directive Form (Only Super Admin / Lead can assign directives) */}
+          {isAdmin ? (
+            <form onSubmit={handleCreateTask} className="portal-form-grid task-creation-box">
+              <div className="form-group full-width">
+                <label>Directive / Task Title</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Implement Confusion Matrix & ROC-AUC curves for baseline model"
+                  value={newTaskTitle}
+                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                  required
+                />
+              </div>
 
-            <div className="form-group">
-              <label>Assign To Team Member</label>
-              <select
-                value={newTaskAssignee}
-                onChange={(e) => setNewTaskAssignee(e.target.value)}
-                className="member-dropdown"
-              >
-                {allMembers.map((m) => (
-                  <option key={m.slug} value={m.name}>
-                    {m.name} ({m.shortRole})
-                  </option>
-                ))}
-              </select>
-            </div>
+              <div className="form-group">
+                <label>Assign To Team Member</label>
+                <select
+                  value={newTaskAssignee}
+                  onChange={(e) => setNewTaskAssignee(e.target.value)}
+                  className="member-dropdown"
+                >
+                  {allMembers.map((m) => (
+                    <option key={m.slug} value={m.name}>
+                      {m.name} ({m.shortRole})
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="form-group">
-              <label>Priority Level</label>
-              <select
-                value={newTaskPriority}
-                onChange={(e) => setNewTaskPriority(e.target.value)}
-                className="member-dropdown"
-              >
-                <option value="HIGH">🔴 High Priority (Immediate)</option>
-                <option value="MEDIUM">🟡 Medium Priority (Sprint Target)</option>
-                <option value="LOW">🟢 Low Priority (Polish / Review)</option>
-              </select>
-            </div>
+              <div className="form-group">
+                <label>Priority Level</label>
+                <select
+                  value={newTaskPriority}
+                  onChange={(e) => setNewTaskPriority(e.target.value)}
+                  className="member-dropdown"
+                >
+                  <option value="HIGH">🔴 High Priority (Immediate)</option>
+                  <option value="MEDIUM">🟡 Medium Priority (Sprint Target)</option>
+                  <option value="LOW">🟢 Low Priority (Polish / Review)</option>
+                </select>
+              </div>
 
-            <div className="form-group">
-              <label>Target Due Date</label>
-              <input
-                type="date"
-                value={newTaskDueDate}
-                onChange={(e) => setNewTaskDueDate(e.target.value)}
-              />
-            </div>
+              <div className="form-group">
+                <label>Target Due Date</label>
+                <input
+                  type="date"
+                  value={newTaskDueDate}
+                  onChange={(e) => setNewTaskDueDate(e.target.value)}
+                />
+              </div>
 
-            <div className="form-group full-width">
-              <label>Directive Description & Supervisor Notes</label>
-              <textarea
-                rows={2}
-                placeholder="Detail the supervisor's exact requirements, dataset parameters, or architecture requirements..."
-                value={newTaskDesc}
-                onChange={(e) => setNewTaskDesc(e.target.value)}
-              />
-            </div>
+              <div className="form-group full-width">
+                <label>Directive Description & Supervisor Notes</label>
+                <textarea
+                  rows={2}
+                  placeholder="Detail the supervisor's exact requirements, dataset parameters, or architecture requirements..."
+                  value={newTaskDesc}
+                  onChange={(e) => setNewTaskDesc(e.target.value)}
+                />
+              </div>
 
-            <div className="form-footer full-width">
-              <button type="submit" className="primary-action" disabled={taskPosting}>
-                <Plus size={16} />
-                <span>{taskPosting ? 'Creating...' : 'Assign Directive Task'}</span>
-              </button>
+              <div className="form-footer full-width">
+                <button type="submit" className="primary-action" disabled={taskPosting}>
+                  <Plus size={16} />
+                  <span>{taskPosting ? 'Creating...' : 'Assign Directive Task'}</span>
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="role-security-badge" style={{ marginBottom: '18px', padding: '12px 16px', borderRadius: '12px', background: 'var(--card-bg, rgba(255,255,255,0.04))', border: '1px solid var(--border-color, rgba(255,255,255,0.08))', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Sparkles size={16} className="text-orange" />
+              <span style={{ fontSize: '13px', opacity: 0.9 }}>
+                <strong>Supervisor Directives Board:</strong> Directives are managed by Project Admin / Technical Lead. You can update progress on tasks assigned to you.
+              </span>
             </div>
-          </form>
+          )}
 
           {/* Kanban Board Columns View */}
           <div className="kanban-board-grid">
@@ -1945,45 +1956,58 @@ export default function PortalPage() {
               <div className="kanban-card-stack">
                 {tasks
                   .filter((t) => t.status === 'TODO')
-                  .map((task) => (
-                    <div key={task.id} className="kanban-task-card">
-                      <div className="task-card-top">
-                        <span className={`priority-tag ${task.priority.toLowerCase()}`}>
-                          {task.priority}
-                        </span>
-                        {(isAdmin || task.createdBy === session.name) && (
-                          <button
-                            onClick={() => handleDeleteTask(task.id)}
-                            className="task-delete-btn"
-                            title="Delete task"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        )}
-                      </div>
-                      <h5>{task.title}</h5>
-                      {task.description && <p>{task.description}</p>}
-                      <div className="task-meta-row">
-                        <div className="task-assignee">
-                          <User size={12} />
-                          <span>{task.assignee.split(' ')[0]}</span>
+                  .map((task) => {
+                    const isMyTask =
+                      (task.assigneeSlug && String(task.assigneeSlug).toLowerCase() === String(session?.slug || '').toLowerCase()) ||
+                      (task.assignee && String(task.assignee).toLowerCase() === String(session?.name || '').toLowerCase());
+                    const canMove = isAdmin || isMyTask;
+
+                    return (
+                      <div key={task.id} className="kanban-task-card">
+                        <div className="task-card-top">
+                          <span className={`priority-tag ${task.priority.toLowerCase()}`}>
+                            {task.priority}
+                          </span>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDeleteTask(task.id)}
+                              className="task-delete-btn"
+                              title="Delete task"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          )}
                         </div>
-                        <div className="task-due">
-                          <Calendar size={12} />
-                          <span>{task.dueDate}</span>
+                        <h5>{task.title}</h5>
+                        {task.description && <p>{task.description}</p>}
+                        <div className="task-meta-row">
+                          <div className="task-assignee">
+                            <User size={12} />
+                            <span>{task.assignee.split(' ')[0]} {isMyTask ? '(You)' : ''}</span>
+                          </div>
+                          <div className="task-due">
+                            <Calendar size={12} />
+                            <span>{task.dueDate}</span>
+                          </div>
+                        </div>
+                        <div className="task-actions-row">
+                          {canMove ? (
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateTaskStatus(task.id, 'IN_PROGRESS')}
+                              className="task-move-btn in-progress"
+                            >
+                              <span>Start Working ➔</span>
+                            </button>
+                          ) : (
+                            <span style={{ fontSize: '11px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <Lock size={10} /> Read only
+                            </span>
+                          )}
                         </div>
                       </div>
-                      <div className="task-actions-row">
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateTaskStatus(task.id, 'IN_PROGRESS')}
-                          className="task-move-btn in-progress"
-                        >
-                          <span>Start Working ➔</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </div>
 
@@ -1996,45 +2020,58 @@ export default function PortalPage() {
               <div className="kanban-card-stack">
                 {tasks
                   .filter((t) => t.status === 'IN_PROGRESS')
-                  .map((task) => (
-                    <div key={task.id} className="kanban-task-card in-progress-card">
-                      <div className="task-card-top">
-                        <span className={`priority-tag ${task.priority.toLowerCase()}`}>
-                          {task.priority}
-                        </span>
-                        {(isAdmin || task.createdBy === session.name) && (
-                          <button
-                            onClick={() => handleDeleteTask(task.id)}
-                            className="task-delete-btn"
-                            title="Delete task"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        )}
-                      </div>
-                      <h5>{task.title}</h5>
-                      {task.description && <p>{task.description}</p>}
-                      <div className="task-meta-row">
-                        <div className="task-assignee">
-                          <User size={12} />
-                          <span>{task.assignee.split(' ')[0]}</span>
+                  .map((task) => {
+                    const isMyTask =
+                      (task.assigneeSlug && String(task.assigneeSlug).toLowerCase() === String(session?.slug || '').toLowerCase()) ||
+                      (task.assignee && String(task.assignee).toLowerCase() === String(session?.name || '').toLowerCase());
+                    const canMove = isAdmin || isMyTask;
+
+                    return (
+                      <div key={task.id} className="kanban-task-card in-progress-card">
+                        <div className="task-card-top">
+                          <span className={`priority-tag ${task.priority.toLowerCase()}`}>
+                            {task.priority}
+                          </span>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDeleteTask(task.id)}
+                              className="task-delete-btn"
+                              title="Delete task"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          )}
                         </div>
-                        <div className="task-due">
-                          <Calendar size={12} />
-                          <span>{task.dueDate}</span>
+                        <h5>{task.title}</h5>
+                        {task.description && <p>{task.description}</p>}
+                        <div className="task-meta-row">
+                          <div className="task-assignee">
+                            <User size={12} />
+                            <span>{task.assignee.split(' ')[0]} {isMyTask ? '(You)' : ''}</span>
+                          </div>
+                          <div className="task-due">
+                            <Calendar size={12} />
+                            <span>{task.dueDate}</span>
+                          </div>
+                        </div>
+                        <div className="task-actions-row">
+                          {canMove ? (
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateTaskStatus(task.id, 'DONE')}
+                              className="task-move-btn done"
+                            >
+                              <span>Mark as Done ✓</span>
+                            </button>
+                          ) : (
+                            <span style={{ fontSize: '11px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <Lock size={10} /> Read only
+                            </span>
+                          )}
                         </div>
                       </div>
-                      <div className="task-actions-row">
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateTaskStatus(task.id, 'DONE')}
-                          className="task-move-btn done"
-                        >
-                          <span>Mark as Done ✓</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </div>
 
@@ -2047,43 +2084,56 @@ export default function PortalPage() {
               <div className="kanban-card-stack">
                 {tasks
                   .filter((t) => t.status === 'DONE')
-                  .map((task) => (
-                    <div key={task.id} className="kanban-task-card done-card">
-                      <div className="task-card-top">
-                        <span className="priority-tag done">COMPLETED</span>
-                        {(isAdmin || task.createdBy === session.name) && (
-                          <button
-                            onClick={() => handleDeleteTask(task.id)}
-                            className="task-delete-btn"
-                            title="Delete task"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        )}
-                      </div>
-                      <h5>{task.title}</h5>
-                      {task.description && <p>{task.description}</p>}
-                      <div className="task-meta-row">
-                        <div className="task-assignee">
-                          <User size={12} />
-                          <span>{task.assignee.split(' ')[0]}</span>
+                  .map((task) => {
+                    const isMyTask =
+                      (task.assigneeSlug && String(task.assigneeSlug).toLowerCase() === String(session?.slug || '').toLowerCase()) ||
+                      (task.assignee && String(task.assignee).toLowerCase() === String(session?.name || '').toLowerCase());
+                    const canMove = isAdmin || isMyTask;
+
+                    return (
+                      <div key={task.id} className="kanban-task-card done-card">
+                        <div className="task-card-top">
+                          <span className="priority-tag done">COMPLETED</span>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDeleteTask(task.id)}
+                              className="task-delete-btn"
+                              title="Delete task"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          )}
                         </div>
-                        <div className="task-due">
-                          <CheckCircle2 size={12} className="text-emerald" />
-                          <span>Done</span>
+                        <h5>{task.title}</h5>
+                        {task.description && <p>{task.description}</p>}
+                        <div className="task-meta-row">
+                          <div className="task-assignee">
+                            <User size={12} />
+                            <span>{task.assignee.split(' ')[0]} {isMyTask ? '(You)' : ''}</span>
+                          </div>
+                          <div className="task-due">
+                            <CheckCircle2 size={12} className="text-emerald" />
+                            <span>Done</span>
+                          </div>
+                        </div>
+                        <div className="task-actions-row">
+                          {canMove ? (
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateTaskStatus(task.id, 'IN_PROGRESS')}
+                              className="task-move-btn reopen"
+                            >
+                              <span>Reopen Task ↺</span>
+                            </button>
+                          ) : (
+                            <span style={{ fontSize: '11px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <Lock size={10} /> Read only
+                            </span>
+                          )}
                         </div>
                       </div>
-                      <div className="task-actions-row">
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateTaskStatus(task.id, 'IN_PROGRESS')}
-                          className="task-move-btn reopen"
-                        >
-                          <span>Reopen Task ↺</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </div>
           </div>

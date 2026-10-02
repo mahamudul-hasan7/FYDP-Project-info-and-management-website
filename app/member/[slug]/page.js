@@ -20,17 +20,22 @@ import MemberAvatar from '../../../components/MemberAvatar';
 import CopyIdButton from '../../../components/CopyIdButton';
 import TeammateSwitcher from '../../../components/TeammateSwitcher';
 import MobileDock from '../../../components/MobileDock';
-import { getMemberBySlug } from '../../../lib/store';
-import { getMember, members } from '../../../data/members';
+import { getAllMembers, getMemberBySlug } from '../../../lib/store';
+import { maskStudentId } from '../../../lib/format';
+
+export const dynamic = 'force-dynamic';
 
 export function generateStaticParams() {
-  return members.map((member) => ({ slug: member.slug }));
+  const allMembers = getAllMembers() || [];
+  return allMembers.map((member) => ({ slug: member.slug }));
 }
 
 export default async function MemberPage({ params }) {
   const { slug } = await params;
-  const member = getMemberBySlug(slug) || getMember(slug);
+  const member = getMemberBySlug(slug);
   if (!member) notFound();
+
+  const allMembers = getAllMembers() || [];
 
 
   return (
@@ -89,7 +94,7 @@ export default async function MemberPage({ params }) {
                 </a>
               )}
 
-              {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
+              {member.privacy?.phone === true && member.phone && member.phone !== 'Not provided' && (
                 <a
                   href={`tel:${member.phone}`}
                   className="matrix-btn"
@@ -158,7 +163,7 @@ export default async function MemberPage({ params }) {
             </div>
             <div className="meta-row-value">
               {member.id && member.id !== 'To be added' ? (
-                <CopyIdButton text={member.id} label="Student ID" />
+                <CopyIdButton text={maskStudentId(member.id)} label="Student ID (Protected)" />
               ) : (
                 <span className="text-muted">{member.id}</span>
               )}
@@ -183,7 +188,7 @@ export default async function MemberPage({ params }) {
             </div>
           )}
 
-          {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
+          {member.privacy?.phone === true && member.phone && member.phone !== 'Not provided' && (
             <div className="meta-group-row">
               <div className="meta-row-left">
                 <span className="meta-row-icon"><Phone size={16} /></span>
@@ -290,7 +295,7 @@ export default async function MemberPage({ params }) {
       </section>
 
       {/* Teammate Switcher at bottom */}
-      <TeammateSwitcher currentSlug={member.slug} members={members} />
+      <TeammateSwitcher currentSlug={member.slug} members={allMembers} />
 
       <MobileDock />
     </main>

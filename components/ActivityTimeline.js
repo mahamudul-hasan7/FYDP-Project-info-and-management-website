@@ -63,8 +63,8 @@ export default function ActivityTimeline() {
   useEffect(() => {
     fetchTimelineData();
 
-    // Controlled 8-second polling interval (avoids high frequency spam)
-    const interval = setInterval(fetchTimelineData, 8000);
+    // Controlled 30-second polling interval with visibility check
+    const interval = setInterval(fetchTimelineData, 30000);
     const handleFocus = () => fetchTimelineData();
 
     window.addEventListener('focus', handleFocus);

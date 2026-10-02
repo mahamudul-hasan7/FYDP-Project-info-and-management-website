@@ -41,6 +41,11 @@ Open:
 
 Every member is stored in one simple object. You can change name, role, ID, email, phone, skills, responsibility and profile image path there.
 
+## Supabase Database Setup
+
+For detailed instructions on configuring Supabase SQL schemas, API keys, and environment variables locally and in Vercel, see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+
 ## Vercel
 
-Push the folder to GitHub and import the repository in Vercel. Framework preset should detect Next.js automatically.
+Push the folder to GitHub and import the repository in Vercel. Framework preset should detect Next.js automatically. Make sure to set the 4 environment variables from `SUPABASE_SETUP.md` in Vercel Project Settings.
+

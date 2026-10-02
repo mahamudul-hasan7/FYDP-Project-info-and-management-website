@@ -1,10 +1,33 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { CheckCircle2, CircleDot, Clock, Code2, FolderKanban, GraduationCap, Layers, Mail, Sparkles } from 'lucide-react';
-import { projectData } from '../data/project';
+import { projectData as initialProjectData } from '../data/project';
 
 export default function ProjectSection() {
-  const { title, domain, status, progressPercent, supervisor, abstract, techStack, milestones } = projectData;
+  const [project, setProject] = useState(initialProjectData);
+
+  useEffect(() => {
+    fetch('/api/public/project')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.project) {
+          setProject(data.project);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const {
+    title = initialProjectData.title,
+    domain = initialProjectData.domain,
+    status = initialProjectData.status,
+    progressPercent = initialProjectData.progressPercent,
+    supervisor = initialProjectData.supervisor,
+    abstract = initialProjectData.abstract,
+    techStack = initialProjectData.techStack,
+    milestones = initialProjectData.milestones
+  } = project || {};
 
   return (
     <section className="app-section" id="project">
@@ -53,10 +76,10 @@ export default function ProjectSection() {
               <span>Project Supervisor</span>
             </div>
             <div className="widget-body">
-              <h4>{supervisor.name}</h4>
-              <p className="supervisor-desig">{supervisor.designation}</p>
-              <p className="supervisor-dept">{supervisor.department}</p>
-              {supervisor.email && (
+              <h4>{supervisor?.name || 'Faculty Supervisor'}</h4>
+              <p className="supervisor-desig">{supervisor?.designation || 'Supervisor'}</p>
+              <p className="supervisor-dept">{supervisor?.department || 'Department of CSE, UIU'}</p>
+              {supervisor?.email && (
                 <a className="supervisor-email" href={`mailto:${supervisor.email}`}>
                   <Mail size={13} />
                   <span>{supervisor.email}</span>
@@ -65,54 +88,54 @@ export default function ProjectSection() {
             </div>
           </div>
 
-          {/* Tech Stack Card */}
+          {/* Tech Stack Matrix */}
           <div className="project-widget stack-widget">
             <div className="widget-header">
               <Code2 size={18} />
-              <span>Technologies & Tools</span>
+              <span>Core Tech Stack</span>
             </div>
-            <div className="widget-body">
-              <div className="tech-badge-wrap">
-                {techStack.map((tech) => (
-                  <span key={tech.name} className="tech-badge" title={tech.category}>
-                    {tech.name}
-                  </span>
-                ))}
-              </div>
+            <div className="stack-tag-grid">
+              {(techStack || []).map((tech) => (
+                <span key={tech.name || tech} className="stack-tag">
+                  <strong>{tech.name || tech}</strong>
+                  {tech.category && <small>{tech.category}</small>}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* Milestones Stepper Card */}
-          <div className="project-widget timeline-widget">
+          {/* Milestones Road Map */}
+          <div className="project-widget milestone-widget">
             <div className="widget-header">
               <Layers size={18} />
-              <span>Milestones & Timeline</span>
+              <span>Milestone Roadmap</span>
             </div>
-            <div className="widget-body">
-              <div className="milestones-stepper">
-                {milestones.map((item, idx) => {
-                  const isDone = item.status === 'completed';
-                  const isActive = item.status === 'active';
+            <div className="mini-milestone-list">
+              {(milestones || []).map((m, idx) => {
+                const isCompleted = m.status === 'completed';
+                const isActive = m.status === 'active';
 
-                  return (
-                    <div key={item.title} className={`milestone-step ${item.status}`}>
-                      <div className="step-icon">
-                        {isDone ? (
-                          <CheckCircle2 size={15} />
-                        ) : isActive ? (
-                          <CircleDot size={15} className="pulse-icon" />
-                        ) : (
-                          <Clock size={15} />
-                        )}
-                      </div>
-                      <div className="step-content">
-                        <strong>{item.title}</strong>
-                        <small>{item.date}</small>
-                      </div>
+                return (
+                  <div
+                    key={m.title || idx}
+                    className={`mini-milestone-item ${isCompleted ? 'done' : ''} ${isActive ? 'current' : ''}`}
+                  >
+                    <span className="milestone-icon-wrap">
+                      {isCompleted ? (
+                        <CheckCircle2 size={14} className="text-emerald" />
+                      ) : isActive ? (
+                        <CircleDot size={14} className="text-orange pulse" />
+                      ) : (
+                        <Clock size={14} className="text-muted" />
+                      )}
+                    </span>
+                    <div className="milestone-text">
+                      <strong>{m.title}</strong>
+                      <span>{m.date || `Milestone 0${idx + 1}`}</span>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

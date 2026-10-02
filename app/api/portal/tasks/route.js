@@ -37,7 +37,8 @@ export async function POST(request) {
       task: created
     });
   } catch (error) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+    const status = error.message.includes('Forbidden') ? 403 : error.message.includes('Unauthorized') ? 401 : 400;
+    return NextResponse.json({ success: false, message: error.message }, { status });
   }
 }
 
@@ -61,7 +62,8 @@ export async function PUT(request) {
       task: updated
     });
   } catch (error) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+    const status = error.message.includes('Forbidden') ? 403 : error.message.includes('Unauthorized') ? 401 : 400;
+    return NextResponse.json({ success: false, message: error.message }, { status });
   }
 }
 
@@ -81,6 +83,7 @@ export async function DELETE(request) {
     deleteDirectiveTask(id, session);
     return NextResponse.json({ success: true, message: 'Task deleted.' });
   } catch (error) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+    const status = error.message.includes('Forbidden') ? 403 : error.message.includes('Unauthorized') ? 401 : 400;
+    return NextResponse.json({ success: false, message: error.message }, { status });
   }
 }

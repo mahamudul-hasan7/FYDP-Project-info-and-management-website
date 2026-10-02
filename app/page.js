@@ -8,10 +8,13 @@ import TeamLogo from '../components/TeamLogo';
 import ProjectSection from '../components/ProjectSection';
 import ActivityTimeline from '../components/ActivityTimeline';
 import PortalNavButton from '../components/PortalNavButton';
-import { members } from '../data/members';
+import { getAllMembers } from '../lib/store';
 import { projectData } from '../data/project';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const members = getAllMembers() || [];
   const totalMembers = members.length;
   const readyProfiles = members.filter((m) => !m.placeholder).length;
 
