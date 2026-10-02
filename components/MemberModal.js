@@ -6,7 +6,7 @@ import { ArrowUpRight, Code2, Linkedin, Mail, Phone, UserRound, X } from 'lucide
 import { useEffect } from 'react';
 import MemberAvatar from './MemberAvatar';
 
-export default function MemberModal({ member, onClose }) {
+export default function MemberModal({ member, isCurrentUser, onClose }) {
   const dragControls = useDragControls();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function MemberModal({ member, onClose }) {
           onClick={onClose}
         >
           <motion.div
-            className="member-sheet"
+            className={`member-sheet ${isCurrentUser ? 'modal-user-self' : ''}`}
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
@@ -70,7 +70,6 @@ export default function MemberModal({ member, onClose }) {
             <div
               className="sheet-profile"
               onPointerDown={(e) => {
-                // Allow pulling down from header area on touch devices
                 if (e.pointerType === 'touch') {
                   dragControls.start(e);
                 }
@@ -78,13 +77,28 @@ export default function MemberModal({ member, onClose }) {
             >
               <MemberAvatar member={member} size="xl" />
               <div className="sheet-title">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                   <span className="role-chip">{member.shortRole}</span>
+                  {isCurrentUser && (
+                    <span className="modal-you-pill">
+                      <span>⚡ You</span>
+                    </span>
+                  )}
                 </div>
                 <h2>{member.name}</h2>
                 <p>{member.tagline}</p>
               </div>
             </div>
+
+            {isCurrentUser && (
+              <Link className="modal-edit-quick-bar" href="/portal" onClick={onClose}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className="pulsing-circle" />
+                  <strong>You are viewing your own profile</strong>
+                </div>
+                <span>Edit Profile ➔</span>
+              </Link>
+            )}
 
             <div className="sheet-meta-grid">
               <div><UserRound size={16} /><span>ID</span><strong>{member.id}</strong></div>

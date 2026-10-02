@@ -889,6 +889,31 @@ export default function PortalPage() {
     return l.type === notifFilter;
   });
 
+  // Personal user stats for the Executive Metrics Deck
+  const myTasks = tasks.filter((t) => {
+    if (!session) return false;
+    const firstName = session.name.toLowerCase().split(' ')[0];
+    return (
+      (t.assigneeSlug && t.assigneeSlug === session.slug) ||
+      (t.assignee && (t.assignee === session.name || t.assignee.toLowerCase().includes(firstName))) ||
+      (session.slug && t.assigneeSlug?.includes(session.slug))
+    );
+  });
+  const myPendingTasks = myTasks.filter((t) => t.status !== 'COMPLETED');
+  const myCompletedTasks = myTasks.filter((t) => t.status === 'COMPLETED');
+
+  const myLogs = logs.filter((l) => {
+    if (!session) return false;
+    const firstName = session.name.toLowerCase().split(' ')[0];
+    return l.author === session.name || (l.author && l.author.toLowerCase().includes(firstName));
+  });
+
+  const myNotes = notes.filter((n) => {
+    if (!session) return false;
+    const firstName = session.name.toLowerCase().split(' ')[0];
+    return n.author === session.name || (n.author && n.author.toLowerCase().includes(firstName));
+  });
+
   return (
     <main className="app-shell portal-screen">
       {/* Topbar */}
@@ -929,12 +954,16 @@ export default function PortalPage() {
 
       {/* User Executive HUD Banner */}
       <section className="portal-hud-card">
+        <div className="hud-ambient-glow" />
         <div className="hud-user-left">
-          <MemberAvatar
-            member={isAdmin ? { name: 'System Administrator', initials: 'SA' } : (profileData || session)}
-            size="md"
-            className="hud-avatar"
-          />
+          <div className="hud-avatar-container">
+            <MemberAvatar
+              member={isAdmin ? { name: 'System Administrator', initials: 'SA' } : (profileData || session)}
+              size="md"
+              className="hud-avatar"
+            />
+            <span className="hud-online-indicator" title="Active UIU Session" />
+          </div>
           <div className="hud-user-details">
             <div className="hud-badge-row">
               {isAdmin ? (
@@ -945,13 +974,17 @@ export default function PortalPage() {
               ) : (
                 <span className="portal-role-badge member">
                   <UserRound size={13} />
-                  Team Member
+                  Verified Member
                 </span>
               )}
-              <span className="hud-sub-id">{session.username}</span>
+              <span className="hud-sub-id">ID: {session.username}</span>
+              <span className="hud-uni-chip">UIU CSE</span>
             </div>
             <h2>{session.name}</h2>
-            <p>{session.roleTitle}</p>
+            <p className="hud-role-line">
+              <span className="hud-role-lead">{session.roleTitle}</span>
+              {!isAdmin && <span className="hud-dept-sep">• FYDP Workspace Lead</span>}
+            </p>
           </div>
         </div>
 
@@ -962,11 +995,113 @@ export default function PortalPage() {
               <ArrowUpRight size={15} />
             </Link>
           ) : (
-            <Link href={`/member/${session.slug}`} className="soft-action compact-btn" target="_blank">
-              <span>Public Profile</span>
+            <Link href={`/member/${session.slug}`} className="primary-action compact-btn" target="_blank">
+              <span>View Live Portfolio</span>
               <ArrowUpRight size={15} />
             </Link>
           )}
+        </div>
+      </section>
+
+      {/* Executive Personal Metrics Deck (4 Smart Cards) */}
+      <section className="portal-metrics-deck" aria-label="Personal executive summary">
+        <div
+          className="portal-metric-card cursor-pointer"
+          onClick={() => setActiveTab('tasks')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="metric-card-top">
+            <div className="metric-icon-wrap icon-orange">
+              <Target size={18} />
+            </div>
+            <span className={`metric-badge ${myPendingTasks.length > 0 ? 'orange' : 'neutral'}`}>
+              {myPendingTasks.length > 0 ? `${myPendingTasks.length} Pending` : 'All Clear'}
+            </span>
+          </div>
+          <div className="metric-card-body">
+            <span className="metric-label">My Directives</span>
+            <div className="metric-value-row">
+              <strong>{myTasks.length}</strong>
+              <small>{myCompletedTasks.length} Completed</small>
+            </div>
+          </div>
+          <div className="metric-card-footer">
+            <span>View assigned tasks</span>
+            <ArrowRight size={13} />
+          </div>
+        </div>
+
+        <div
+          className="portal-metric-card cursor-pointer"
+          onClick={() => setActiveTab(myLogs.length > 0 ? 'logs' : 'notes')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="metric-card-top">
+            <div className="metric-icon-wrap icon-cyan">
+              <Sparkles size={18} />
+            </div>
+            <span className="metric-badge cyan">
+              {myLogs.length + myNotes.length} Items
+            </span>
+          </div>
+          <div className="metric-card-body">
+            <span className="metric-label">My Contributions</span>
+            <div className="metric-value-row">
+              <strong>{myLogs.length} Logs</strong>
+              <small>• {myNotes.length} Notes</small>
+            </div>
+          </div>
+          <div className="metric-card-footer">
+            <span>Open workspace records</span>
+            <ArrowRight size={13} />
+          </div>
+        </div>
+
+        <div
+          className="portal-metric-card cursor-pointer"
+          onClick={() => setActiveTab('profile')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="metric-card-top">
+            <div className="metric-icon-wrap icon-green">
+              <CheckCircle2 size={18} />
+            </div>
+            <span className="metric-badge green">100% Ready</span>
+          </div>
+          <div className="metric-card-body">
+            <span className="metric-label">Public Portfolio</span>
+            <div className="metric-value-row">
+              <strong>Live & Synced</strong>
+              <small>Next.js / SSR</small>
+            </div>
+          </div>
+          <div className="metric-card-footer">
+            <span>Customize live portfolio</span>
+            <ArrowRight size={13} />
+          </div>
+        </div>
+
+        <div className="portal-metric-card">
+          <div className="metric-card-top">
+            <div className="metric-icon-wrap icon-purple">
+              <ShieldCheck size={18} />
+            </div>
+            <span className="metric-badge active-live">
+              <span className="live-dot" /> Online
+            </span>
+          </div>
+          <div className="metric-card-body">
+            <span className="metric-label">Access Clearance</span>
+            <div className="metric-value-row">
+              <strong style={{ fontSize: '14.5px' }}>{isAdmin ? 'Super Admin 👑' : (session.roleTitle || 'Team Member')}</strong>
+            </div>
+          </div>
+          <div className="metric-card-footer">
+            <span>UIU CSE FYDP Phase 1</span>
+          </div>
         </div>
       </section>
 
