@@ -1468,10 +1468,15 @@ export default function PortalPage() {
             </div>
 
             {/* Section 3: Technical Skills Cloud */}
-            <div className="clean-form-section">
+            <div className="clean-form-section skills-expert-section">
               <div className="clean-section-title">
-                <Code2 size={16} className="text-purple" />
-                <span>Technical Skills & Expertise</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Code2 size={16} className="text-orange" />
+                  <span>Technical Skills & Expertise</span>
+                </div>
+                <span className="clean-count-badge">
+                  {Array.isArray(profileData.skills) ? profileData.skills.length : 0} Added
+                </span>
               </div>
 
               <div className="clean-skills-box">
@@ -1479,8 +1484,9 @@ export default function PortalPage() {
                 <div className="clean-skills-flow">
                   {Array.isArray(profileData.skills) && profileData.skills.length > 0 ? (
                     profileData.skills.map((skill) => (
-                      <span key={skill} className="clean-skill-tag">
-                        <span>{skill}</span>
+                      <span key={skill} className="clean-skill-tag" title={skill}>
+                        <span className="skill-dot" />
+                        <span className="skill-name">{skill}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveSkill(skill)}
@@ -1493,25 +1499,31 @@ export default function PortalPage() {
                       </span>
                     ))
                   ) : (
-                    <span className="text-muted text-sm">No skills added yet.</span>
+                    <div className="empty-skills-hint">
+                      <Tag size={13} className="text-muted" />
+                      <span>No technical skills added yet. Type below or pick from quick suggestions.</span>
+                    </div>
                   )}
                 </div>
 
                 {/* Add Skill Row */}
                 <div className="clean-skill-input-row">
-                  <input
-                    type="text"
-                    placeholder="Type skill name (e.g. Next.js, PyTorch, Docker)..."
-                    value={newSkillInput}
-                    onChange={(e) => setNewSkillInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleAddSkill();
-                      }
-                    }}
-                    className="clean-skill-input"
-                  />
+                  <div className="input-with-icon skill-input-wrap">
+                    <Tag size={14} className="input-prefix-icon" />
+                    <input
+                      type="text"
+                      placeholder="Type a skill or tool (e.g. Next.js, PyTorch, Docker, PostgreSQL)..."
+                      value={newSkillInput}
+                      onChange={(e) => setNewSkillInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddSkill();
+                        }
+                      }}
+                      className="clean-skill-input"
+                    />
+                  </div>
                   <button
                     type="button"
                     onClick={() => handleAddSkill()}
@@ -1519,38 +1531,48 @@ export default function PortalPage() {
                     className="primary-action clean-add-btn"
                   >
                     <Plus size={14} />
-                    <span>Add</span>
+                    <span>Add Skill</span>
                   </button>
                 </div>
 
                 {/* Suggestions */}
                 <div className="clean-suggestions-row">
-                  <span className="clean-sugg-label">Quick Add:</span>
-                  {[
-                    'Next.js',
-                    'React',
-                    'Node.js',
-                    'Python',
-                    'PyTorch',
-                    'FastAPI',
-                    'PostgreSQL',
-                    'Docker',
-                    'UI/UX Design',
-                    'System Architecture',
-                    'Research Analysis'
-                  ]
-                    .filter((s) => !profileData.skills?.includes(s))
-                    .slice(0, 6)
-                    .map((suggestion) => (
-                      <button
-                        key={suggestion}
-                        type="button"
-                        onClick={() => handleAddSkill(suggestion)}
-                        className="clean-sugg-pill"
-                      >
-                        +{suggestion}
-                      </button>
-                    ))}
+                  <div className="clean-sugg-header">
+                    <Sparkles size={12} className="text-orange" />
+                    <span className="clean-sugg-label">Quick Suggestions:</span>
+                  </div>
+                  <div className="clean-sugg-chips">
+                    {[
+                      'Next.js',
+                      'React',
+                      'Node.js',
+                      'Python',
+                      'PyTorch',
+                      'FastAPI',
+                      'PostgreSQL',
+                      'MongoDB',
+                      'Docker',
+                      'Tailwind CSS',
+                      'TypeScript',
+                      'UI/UX Design',
+                      'System Architecture',
+                      'Research & Analysis'
+                    ]
+                      .filter((s) => !profileData.skills?.includes(s))
+                      .slice(0, 8)
+                      .map((suggestion) => (
+                        <button
+                          key={suggestion}
+                          type="button"
+                          onClick={() => handleAddSkill(suggestion)}
+                          className="clean-sugg-pill"
+                          title={`Add ${suggestion}`}
+                        >
+                          <Plus size={10} className="sugg-plus" />
+                          <span>{suggestion}</span>
+                        </button>
+                      ))}
+                  </div>
                 </div>
               </div>
             </div>
