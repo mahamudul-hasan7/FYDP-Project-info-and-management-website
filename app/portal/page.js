@@ -1572,13 +1572,13 @@ export default function PortalPage() {
 
       {/* TAB 1: Profile Modular Section Editor */}
       {activeTab === 'profile' && profileData && (
-        <section className="portal-content-box profile-bento-container">
+        <section className="portal-content-box profile-clean-box">
           {/* Admin Member Switcher Bar */}
           {isAdmin && allMembers.length > 0 && (
             <div className="admin-member-switch-bar">
               <div className="switch-bar-label">
                 <Crown size={14} className="text-orange" />
-                <span>EDITING RECORD FOR:</span>
+                <span>SELECT MEMBER TO EDIT:</span>
               </div>
               <div className="member-pill-selector">
                 {allMembers.map((m) => (
@@ -1597,327 +1597,265 @@ export default function PortalPage() {
             </div>
           )}
 
-          {/* Header Bar */}
-          <div className="box-header-row profile-editor-header">
-            <div>
-              <div className="card-header-badge">
-                <Sparkles size={14} className="text-orange" />
-                <span className="mini-label">WORKSPACE IDENTITY & LIVE PORTFOLIO</span>
+          {/* Clean Profile Header */}
+          <div className="profile-clean-header">
+            <div className="clean-header-left">
+              <div className="clean-avatar-wrap">
+                <MemberAvatar member={profileData} size="lg" className="clean-header-avatar" />
               </div>
-              <h3>Profile Settings & Digital Persona</h3>
-              <p>Customize your public FYDP credentials, contact channels, and technical skills.</p>
+              <div className="clean-header-meta">
+                <div className="clean-badge-row">
+                  <span className="clean-role-pill">{profileData.role || session.roleTitle}</span>
+                  <span className="clean-id-pill">ID: {profileData.id || session.username}</span>
+                  <span className="clean-uni-pill">UIU CSE</span>
+                </div>
+                <h3 className="clean-user-name">{profileData.name || session.name}</h3>
+                <p className="clean-user-tagline">{profileData.tagline || 'Team Random • FYDP Research & Engineering'}</p>
+              </div>
             </div>
-            {profileMessage && (
-              <div className={`portal-feedback ${profileMessage.startsWith('Error') ? 'error' : 'success'}`}>
-                {profileMessage}
-              </div>
-            )}
-          </div>
 
-          {/* Interactive Live Profile Card Preview */}
-          <div className="profile-live-preview-bento">
-            <div className="preview-card-top-bar">
-              <span className="preview-live-indicator">
-                <span className="live-dot" />
-                Live Portfolio Preview
-              </span>
+            <div className="clean-header-actions">
               <Link
                 href={`/member/${selectedSlug || session.slug}`}
-                className="preview-open-link"
+                className="soft-action clean-action-btn"
                 target="_blank"
               >
-                <span>View Full Page</span>
+                <Eye size={14} />
+                <span>View Live Portfolio</span>
                 <ArrowUpRight size={13} />
               </Link>
             </div>
-
-            <div className="preview-card-body">
-              <div className="preview-avatar-wrap">
-                <MemberAvatar member={profileData} size="lg" className="preview-avatar" />
-              </div>
-
-              <div className="preview-info-col">
-                <div className="preview-badge-row">
-                  <span className="role-chip prominent">{profileData.role || session.roleTitle}</span>
-                  <span className="hud-uni-chip">UIU CSE • FYDP</span>
-                  <span className="preview-id-chip">ID: {profileData.id || session.username}</span>
-                </div>
-
-                <h3 className="preview-name">{profileData.name || session.name}</h3>
-                <p className="preview-tagline">“{profileData.tagline || 'Engineering scalable solutions & intelligent architecture'}”</p>
-                
-                {profileData.about && (
-                  <p className="preview-bio-snippet">
-                    {profileData.about.length > 180 ? `${profileData.about.slice(0, 180)}...` : profileData.about}
-                  </p>
-                )}
-
-                {/* Live Skills Chips */}
-                {Array.isArray(profileData.skills) && profileData.skills.length > 0 && (
-                  <div className="preview-skills-row">
-                    {profileData.skills.slice(0, 6).map((skill) => (
-                      <span key={skill} className="preview-skill-tag">
-                        {skill}
-                      </span>
-                    ))}
-                    {profileData.skills.length > 6 && (
-                      <span className="preview-skill-more">+{profileData.skills.length - 6} more</span>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
 
-          {/* Bento Modular Form Sections */}
-          <form onSubmit={handleSaveProfile} className="profile-bento-form">
-            <div className="profile-bento-grid">
-              {/* Card 1: Identity & Academic Credentials */}
-              <div className="profile-section-card">
-                <div className="section-card-head">
-                  <div className="section-head-left">
-                    <div className="section-icon-pill orange">
-                      <UserRound size={15} />
-                    </div>
-                    <div>
-                      <h4>Identity & Academic Info</h4>
-                      <p>Institutional record and headline identity</p>
-                    </div>
-                  </div>
+          {profileMessage && (
+            <div className={`portal-feedback ${profileMessage.startsWith('Error') ? 'error' : 'success'}`}>
+              {profileMessage}
+            </div>
+          )}
+
+          {/* Clean Form */}
+          <form onSubmit={handleSaveProfile} className="clean-profile-form">
+            {/* Section 1: Academic & Personal Info */}
+            <div className="clean-form-section">
+              <div className="clean-section-title">
+                <UserRound size={16} className="text-orange" />
+                <span>Academic & Personal Details</span>
+              </div>
+
+              <div className="clean-fields-grid">
+                <div className="form-group">
+                  <label>
+                    <span>Full Name</span>
+                    {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified Record</span>}
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.name || ''}
+                    onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                    disabled={!isAdmin}
+                    className={!isAdmin ? 'locked-input' : ''}
+                  />
                 </div>
 
-                <div className="section-inputs-grid">
-                  <div className="form-group">
-                    <label>
-                      <span>Full Name</span>
-                      {!isAdmin && <span className="locked-pill"><Lock size={10} /> Locked</span>}
-                    </label>
+                <div className="form-group">
+                  <label>
+                    <span>Student ID</span>
+                    {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified Record</span>}
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.id || ''}
+                    onChange={(e) => setProfileData({ ...profileData, id: e.target.value })}
+                    disabled={!isAdmin}
+                    className={!isAdmin ? 'locked-input' : ''}
+                  />
+                </div>
+
+                <div className="form-group full-width">
+                  <label>Professional Tagline / Motto</label>
+                  <input
+                    type="text"
+                    value={profileData.tagline || ''}
+                    onChange={(e) => setProfileData({ ...profileData, tagline: e.target.value })}
+                    placeholder="e.g. Lead Architect & Full-Stack Engineer"
+                  />
+                </div>
+
+                <div className="form-group full-width">
+                  <label>
+                    <span>About Bio (Overview)</span>
+                    <span className="char-count-hint">{(profileData.about || '').length} chars</span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={profileData.about || ''}
+                    onChange={(e) => setProfileData({ ...profileData, about: e.target.value })}
+                    placeholder="Describe your role, core focus, and technical contributions in FYDP..."
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2: Contact & Social Handles */}
+            <div className="clean-form-section">
+              <div className="clean-section-title">
+                <Mail size={16} className="text-cyan" />
+                <span>Contact Channels & Profiles</span>
+              </div>
+
+              <div className="clean-fields-grid">
+                <div className="form-group">
+                  <label>
+                    <span>Institutional Email</span>
+                    {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified</span>}
+                  </label>
+                  <div className="input-with-icon">
+                    <Mail size={14} className="input-prefix-icon" />
                     <input
-                      type="text"
-                      value={profileData.name || ''}
-                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                      type="email"
+                      value={profileData.email || ''}
+                      onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                       disabled={!isAdmin}
                       className={!isAdmin ? 'locked-input' : ''}
                     />
                   </div>
+                </div>
 
-                  <div className="form-group">
-                    <label>
-                      <span>Student ID</span>
-                      {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified</span>}
-                    </label>
+                <div className="form-group">
+                  <label>Contact Phone</label>
+                  <div className="input-with-icon">
+                    <Phone size={14} className="input-prefix-icon" />
                     <input
                       type="text"
-                      value={profileData.id || ''}
-                      onChange={(e) => setProfileData({ ...profileData, id: e.target.value })}
-                      disabled={!isAdmin}
-                      className={!isAdmin ? 'locked-input' : ''}
+                      value={profileData.phone || ''}
+                      onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                      placeholder="+880 1XXXXXXXXX"
                     />
                   </div>
+                </div>
 
-                  <div className="form-group full-width">
-                    <label>Professional Tagline / Motto</label>
+                <div className="form-group">
+                  <label>GitHub Profile URL</label>
+                  <div className="input-with-icon">
+                    <Github size={14} className="input-prefix-icon" />
                     <input
-                      type="text"
-                      value={profileData.tagline || ''}
-                      onChange={(e) => setProfileData({ ...profileData, tagline: e.target.value })}
-                      placeholder="e.g. Lead Architect & Full-Stack Engineer"
-                    />
-                  </div>
-
-                  <div className="form-group full-width">
-                    <label>
-                      <span>About Bio (Overview)</span>
-                      <span className="char-count-hint">{(profileData.about || '').length} chars</span>
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={profileData.about || ''}
-                      onChange={(e) => setProfileData({ ...profileData, about: e.target.value })}
-                      placeholder="Describe your role, core focus, and technical contributions in FYDP..."
+                      type="url"
+                      value={profileData.github || ''}
+                      onChange={(e) => setProfileData({ ...profileData, github: e.target.value })}
+                      placeholder="https://github.com/username"
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* Card 2: Contact Channels & Developer Profiles */}
-              <div className="profile-section-card">
-                <div className="section-card-head">
-                  <div className="section-head-left">
-                    <div className="section-icon-pill cyan">
-                      <Mail size={15} />
-                    </div>
-                    <div>
-                      <h4>Contact & Developer Channels</h4>
-                      <p>Direct communication and portfolio links</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="section-inputs-grid">
-                  <div className="form-group">
-                    <label>
-                      <span>Official Email</span>
-                      {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified</span>}
-                    </label>
-                    <div className="input-with-icon">
-                      <Mail size={14} className="input-prefix-icon" />
-                      <input
-                        type="email"
-                        value={profileData.email || ''}
-                        onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
-                        disabled={!isAdmin}
-                        className={!isAdmin ? 'locked-input' : ''}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>Contact Phone</label>
-                    <div className="input-with-icon">
-                      <Phone size={14} className="input-prefix-icon" />
-                      <input
-                        type="text"
-                        value={profileData.phone || ''}
-                        onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
-                        placeholder="+880 1XXXXXXXXX"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>GitHub Profile URL</label>
-                    <div className="input-with-icon">
-                      <Github size={14} className="input-prefix-icon" />
-                      <input
-                        type="url"
-                        value={profileData.github || ''}
-                        onChange={(e) => setProfileData({ ...profileData, github: e.target.value })}
-                        placeholder="https://github.com/username"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>LinkedIn Profile URL</label>
-                    <div className="input-with-icon">
-                      <Linkedin size={14} className="input-prefix-icon" />
-                      <input
-                        type="url"
-                        value={profileData.linkedin || ''}
-                        onChange={(e) => setProfileData({ ...profileData, linkedin: e.target.value })}
-                        placeholder="https://linkedin.com/in/username"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 3: Interactive Skills & Competencies Cloud */}
-              <div className="profile-section-card full-span">
-                <div className="section-card-head">
-                  <div className="section-head-left">
-                    <div className="section-icon-pill purple">
-                      <Code2 size={15} />
-                    </div>
-                    <div>
-                      <h4>Technical Expertise & Skills Cloud</h4>
-                      <p>Manage keywords and competencies displayed on your public card</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="skills-interactive-container">
-                  {/* Current Active Skill Pills */}
-                  <div className="skills-cloud-pills">
-                    {Array.isArray(profileData.skills) && profileData.skills.length > 0 ? (
-                      profileData.skills.map((skill) => (
-                        <span key={skill} className="skill-edit-tag">
-                          <span>{skill}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSkill(skill)}
-                            className="skill-remove-btn"
-                            title={`Remove ${skill}`}
-                            aria-label={`Remove ${skill}`}
-                          >
-                            <X size={12} />
-                          </button>
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-muted text-sm">No skills added yet. Add some below!</span>
-                    )}
-                  </div>
-
-                  {/* Add New Skill Input Row */}
-                  <div className="skill-input-row">
+                <div className="form-group">
+                  <label>LinkedIn Profile URL</label>
+                  <div className="input-with-icon">
+                    <Linkedin size={14} className="input-prefix-icon" />
                     <input
-                      type="text"
-                      placeholder="Add a new skill (e.g. Next.js, PyTorch, Docker)..."
-                      value={newSkillInput}
-                      onChange={(e) => setNewSkillInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddSkill();
-                        }
-                      }}
-                      className="skill-add-input"
+                      type="url"
+                      value={profileData.linkedin || ''}
+                      onChange={(e) => setProfileData({ ...profileData, linkedin: e.target.value })}
+                      placeholder="https://linkedin.com/in/username"
                     />
-                    <button
-                      type="button"
-                      onClick={() => handleAddSkill()}
-                      disabled={!newSkillInput.trim()}
-                      className="skill-add-btn"
-                    >
-                      <Plus size={14} />
-                      <span>Add Skill</span>
-                    </button>
-                  </div>
-
-                  {/* Quick-Add Suggestions */}
-                  <div className="skill-suggestions-row">
-                    <span className="suggestions-label">Suggestions:</span>
-                    {[
-                      'Next.js',
-                      'React',
-                      'Node.js',
-                      'Python',
-                      'PyTorch',
-                      'FastAPI',
-                      'PostgreSQL',
-                      'Docker',
-                      'UI/UX Design',
-                      'System Architecture',
-                      'Research & Analysis'
-                    ]
-                      .filter((s) => !profileData.skills?.includes(s))
-                      .slice(0, 6)
-                      .map((suggestion) => (
-                        <button
-                          key={suggestion}
-                          type="button"
-                          onClick={() => handleAddSkill(suggestion)}
-                          className="suggestion-pill"
-                        >
-                          +{suggestion}
-                        </button>
-                      ))}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Floating Save Actions Bar */}
-            <div className="profile-save-bar">
-              <div className="save-bar-left">
-                <Sparkles size={14} className="text-orange" />
-                <span>Changes will sync across both portal and public portfolio instantly.</span>
+            {/* Section 3: Technical Skills Cloud */}
+            <div className="clean-form-section">
+              <div className="clean-section-title">
+                <Code2 size={16} className="text-purple" />
+                <span>Technical Skills & Expertise</span>
               </div>
-              <button type="submit" className="primary-action profile-save-btn" disabled={profileSaving}>
-                <Save size={16} />
-                <span>{profileSaving ? 'Saving Changes...' : 'Save Profile Changes'}</span>
+
+              <div className="clean-skills-box">
+                {/* Active Skill Pills */}
+                <div className="clean-skills-flow">
+                  {Array.isArray(profileData.skills) && profileData.skills.length > 0 ? (
+                    profileData.skills.map((skill) => (
+                      <span key={skill} className="clean-skill-tag">
+                        <span>{skill}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSkill(skill)}
+                          className="clean-skill-del"
+                          title={`Remove ${skill}`}
+                          aria-label={`Remove ${skill}`}
+                        >
+                          <X size={11} />
+                        </button>
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-muted text-sm">No skills added yet.</span>
+                  )}
+                </div>
+
+                {/* Add Skill Row */}
+                <div className="clean-skill-input-row">
+                  <input
+                    type="text"
+                    placeholder="Type skill name (e.g. Next.js, PyTorch, Docker)..."
+                    value={newSkillInput}
+                    onChange={(e) => setNewSkillInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddSkill();
+                      }
+                    }}
+                    className="clean-skill-input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleAddSkill()}
+                    disabled={!newSkillInput.trim()}
+                    className="primary-action clean-add-btn"
+                  >
+                    <Plus size={14} />
+                    <span>Add</span>
+                  </button>
+                </div>
+
+                {/* Suggestions */}
+                <div className="clean-suggestions-row">
+                  <span className="clean-sugg-label">Quick Add:</span>
+                  {[
+                    'Next.js',
+                    'React',
+                    'Node.js',
+                    'Python',
+                    'PyTorch',
+                    'FastAPI',
+                    'PostgreSQL',
+                    'Docker',
+                    'UI/UX Design',
+                    'System Architecture',
+                    'Research Analysis'
+                  ]
+                    .filter((s) => !profileData.skills?.includes(s))
+                    .slice(0, 6)
+                    .map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => handleAddSkill(suggestion)}
+                        className="clean-sugg-pill"
+                      >
+                        +{suggestion}
+                      </button>
+                    ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Clean Save Footer */}
+            <div className="clean-save-bar">
+              <span className="clean-save-note">All updates reflect immediately on your live portfolio.</span>
+              <button type="submit" className="primary-action clean-save-btn" disabled={profileSaving}>
+                <Save size={15} />
+                <span>{profileSaving ? 'Saving...' : 'Save Profile Changes'}</span>
               </button>
             </div>
           </form>
