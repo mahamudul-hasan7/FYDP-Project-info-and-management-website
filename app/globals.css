@@ -989,9 +989,12 @@ a.btn:active,
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(13, 11, 9, 0.75);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(13, 11, 9, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  will-change: opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 body.modal-open .mobile-dock,
@@ -1005,14 +1008,19 @@ body:has(.report-modal-backdrop) .mobile-dock {
 .member-sheet {
   width: min(590px, 100%);
   max-height: min(760px, calc(100vh - 40px));
-  overflow: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border-radius: 32px;
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
   padding: 28px;
   position: relative;
   z-index: 10001;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  touch-action: pan-y;
 }
 .sheet-handle { display: none; }
 .modal-close { position: absolute; top: 18px; right: 18px; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--surface-2); border-radius: 13px; cursor: pointer; }

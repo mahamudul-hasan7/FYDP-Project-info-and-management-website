@@ -36,15 +36,24 @@ export default function MemberModal({ member, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onMouseDown={onClose}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          onClick={onClose}
         >
           <motion.div
             className="member-sheet"
-            initial={{ opacity: 0, y: 80, scale: 0.985 }}
+            initial={{ opacity: 0, y: 60, scale: 0.985 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 80, scale: 0.985 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-            onMouseDown={(e) => e.stopPropagation()}
+            exit={{ opacity: 0, y: 60, scale: 0.985 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 0.4 }}
+            onDragEnd={(e, { offset, velocity }) => {
+              if (offset.y > 90 || velocity.y > 400) {
+                onClose();
+              }
+            }}
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="sheet-handle" aria-hidden="true" />
             <button className="modal-close" onClick={onClose} aria-label="Close profile"><X size={18} /></button>
