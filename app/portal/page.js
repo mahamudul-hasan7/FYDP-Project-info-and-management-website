@@ -133,6 +133,14 @@ export default function PortalPage() {
   const [bannerSaving, setBannerSaving] = useState(false);
   const [bannerMessage, setBannerMessage] = useState('');
 
+  // Rapid Broadcast & Logical Operations Console state
+  const [broadcastText, setBroadcastText] = useState('');
+  const [broadcastTag, setBroadcastTag] = useState('Meeting Note');
+  const [broadcastSending, setBroadcastSending] = useState(false);
+  const [broadcastSuccess, setBroadcastSuccess] = useState('');
+  const [agendaCopied, setAgendaCopied] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+
   const notifPopoverRef = useRef(null);
   const knownAuditIdsRef = useRef(new Set());
   const isInitialAuditLoadedRef = useRef(false);
@@ -914,6 +922,71 @@ export default function PortalPage() {
     return n.author === session.name || (n.author && n.author.toLowerCase().includes(firstName));
   });
 
+  // Rapid Broadcast Handler
+  const handleQuickBroadcast = async (e) => {
+    if (e) e.preventDefault();
+    if (!broadcastText.trim()) return;
+    setBroadcastSending(true);
+    setBroadcastSuccess('');
+
+    try {
+      const res = await fetch('/api/portal/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: broadcastText.slice(0, 48) + (broadcastText.length > 48 ? '...' : ''),
+          content: broadcastText,
+          tag: broadcastTag,
+          author: session.name,
+          authorRole: session.roleTitle
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setBroadcastSuccess('✓ Broadcast dispatched to all team members!');
+        setBroadcastText('');
+        loadNotes();
+        loadAuditLogs();
+        if (soundEnabled) playNotificationChime();
+        setTimeout(() => setBroadcastSuccess(''), 3500);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setBroadcastSending(false);
+    }
+  };
+
+  // Copy Supervisor Consultation Agenda
+  const handleCopySupervisorAgenda = () => {
+    const activeTasksText = myTasks.length > 0 
+      ? myTasks.map((t, idx) => `  ${idx + 1}. [${t.status}] ${t.title}`).join('\n')
+      : '  1. Review architecture baseline & research methodology';
+    
+    const latestLogsText = logs.slice(0, 2).map((l) => `  - ${l.week}: ${l.title}`).join('\n');
+
+    const agenda = `### 🎓 FYDP Supervisor Consultation Agenda\n**Date:** ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n**Team:** Team Random (UIU CSE)\n**Presenter / Communicator:** ${session.name} (${session.roleTitle})\n\n**1. Recent Progress & Milestones:**\n${latestLogsText || '  - Phase 1 Baseline in progress'}\n\n**2. Active Directives & Implementation:**\n${activeTasksText}\n\n**3. Discussion Points for Supervisor:**\n  - Dataset validation & benchmark evaluation metrics\n  - Architecture approval & next milestone timeline\n`;
+
+    navigator.clipboard.writeText(agenda);
+    setAgendaCopied(true);
+    setTimeout(() => setAgendaCopied(false), 3000);
+  };
+
+  // Milestone countdown calculation
+  const targetDate = new Date('2026-10-15T10:00:00');
+  const now = new Date();
+  const diffTime = targetDate - now;
+  const diffDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+
+  // Dynamic velocity score
+  const totalTasks = tasks.length || 1;
+  const completedTasksCount = tasks.filter((t) => t.status === 'COMPLETED').length;
+  const taskRatio = Math.round((completedTasksCount / totalTasks) * 50);
+  const logScore = Math.min(30, logs.length * 10);
+  const noteScore = Math.min(20, notes.length * 5);
+  const velocityScore = Math.min(100, Math.max(45, taskRatio + logScore + noteScore));
+
   return (
     <main className="app-shell portal-screen">
       {/* Topbar */}
@@ -1101,6 +1174,235 @@ export default function PortalPage() {
           </div>
           <div className="metric-card-footer">
             <span>UIU CSE FYDP Phase 1</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Operations Console (4 Logical Functional Cards) */}
+      <section className="portal-operations-grid" aria-label="Command operations console">
+        {/* Logical Card 1: 🎯 Fast Directives Action Box (1-Tap Task Status Switcher) */}
+        <div className="operation-card">
+          <div className="operation-card-header">
+            <div className="op-head-left">
+              <div className="op-icon-pill orange">
+                <Target size={15} />
+              </div>
+              <div>
+                <h4>Fast Directives Hub</h4>
+                <p>1-tap status updates for your assigned milestones</p>
+              </div>
+            </div>
+            <span className="op-counter-tag orange">
+              {myPendingTasks.length} Pending
+            </span>
+          </div>
+
+          <div className="fast-tasks-list">
+            {myTasks.length === 0 ? (
+              <div className="op-empty-state">
+                <CheckCircle2 size={22} className="text-emerald" />
+                <p>No directives assigned to you right now.</p>
+                <button
+                  type="button"
+                  className="soft-action compact-btn"
+                  onClick={() => setActiveTab('tasks')}
+                >
+                  <Plus size={14} />
+                  <span>Create New Directive</span>
+                </button>
+              </div>
+            ) : (
+              myTasks.slice(0, 3).map((task) => (
+                <div key={task.id} className={`fast-task-item ${task.status === 'COMPLETED' ? 'completed' : ''}`}>
+                  <div className="fast-task-info">
+                    <div className="fast-task-title-row">
+                      <span className={`priority-mini-dot ${task.priority?.toLowerCase() || 'high'}`} />
+                      <strong>{task.title}</strong>
+                    </div>
+                    <span className="fast-task-due">Due: {task.dueDate || 'Sprint 4'}</span>
+                  </div>
+                  <div className="fast-task-actions">
+                    {task.status !== 'COMPLETED' ? (
+                      <>
+                        {task.status === 'TODO' && (
+                          <button
+                            type="button"
+                            className="fast-btn in-prog-btn"
+                            onClick={() => handleUpdateTaskStatus(task.id, 'IN_PROGRESS')}
+                            title="Set In Progress"
+                          >
+                            <span>Start ➔</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          className="fast-btn done-btn"
+                          onClick={() => handleUpdateTaskStatus(task.id, 'COMPLETED')}
+                          title="Mark Done"
+                        >
+                          <Check size={13} />
+                          <span>Done</span>
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        type="button"
+                        className="fast-btn revert-btn"
+                        onClick={() => handleUpdateTaskStatus(task.id, 'TODO')}
+                        title="Reopen Directive"
+                      >
+                        <span>Reopen</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Logical Card 2: 📢 Rapid Broadcast Dispatcher */}
+        <div className="operation-card">
+          <div className="operation-card-header">
+            <div className="op-head-left">
+              <div className="op-icon-pill cyan">
+                <Radio size={15} />
+              </div>
+              <div>
+                <h4>Team Rapid Broadcast</h4>
+                <p>Dispatch instant memo & alert all members with audio</p>
+              </div>
+            </div>
+            {broadcastSuccess && <span className="op-success-pill">{broadcastSuccess}</span>}
+          </div>
+
+          <form onSubmit={handleQuickBroadcast} className="rapid-broadcast-form">
+            <div className="broadcast-input-wrap">
+              <input
+                type="text"
+                placeholder="Type quick decision, agenda or announcement..."
+                value={broadcastText}
+                onChange={(e) => setBroadcastText(e.target.value)}
+                className="broadcast-input"
+              />
+              <button
+                type="submit"
+                disabled={broadcastSending || !broadcastText.trim()}
+                className="broadcast-send-btn"
+              >
+                {broadcastSending ? (
+                  <span>Sending...</span>
+                ) : (
+                  <>
+                    <span>⚡ Broadcast</span>
+                    <Send size={13} />
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="broadcast-tags-row">
+              {['Meeting Note', 'Urgent Directive', 'Research Update', 'Architecture Decision'].map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  className={`broadcast-tag-pill ${broadcastTag === tag ? 'active' : ''}`}
+                  onClick={() => setBroadcastTag(tag)}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </form>
+        </div>
+
+        {/* Logical Card 3: ⏱️ Next Supervisor Milestone & Countdown Clock */}
+        <div className="operation-card">
+          <div className="operation-card-header">
+            <div className="op-head-left">
+              <div className="op-icon-pill purple">
+                <Clock size={15} />
+              </div>
+              <div>
+                <h4>Supervisor Consultation Countdown</h4>
+                <p>Phase 1 Methodology & Progress Milestone Review</p>
+              </div>
+            </div>
+            <span className="op-counter-tag purple">Milestone 02</span>
+          </div>
+
+          <div className="milestone-countdown-box">
+            <div className="countdown-number-block">
+              <div className="countdown-digit">
+                <strong>{diffDays}</strong>
+                <span>Days</span>
+              </div>
+              <span className="countdown-colon">:</span>
+              <div className="countdown-digit">
+                <strong>14</strong>
+                <span>Hours</span>
+              </div>
+              <span className="countdown-colon">:</span>
+              <div className="countdown-digit">
+                <strong>00</strong>
+                <span>Mins</span>
+              </div>
+            </div>
+
+            <div className="countdown-actions-row">
+              <button
+                type="button"
+                className="soft-action op-tool-btn"
+                onClick={handleCopySupervisorAgenda}
+              >
+                {agendaCopied ? <Check size={14} className="text-emerald" /> : <FileSpreadsheet size={14} />}
+                <span>{agendaCopied ? 'Agenda Copied ✓' : 'Copy Supervisor Agenda'}</span>
+              </button>
+
+              <button
+                type="button"
+                className="primary-action op-tool-btn"
+                onClick={() => setShowReportModal(true)}
+              >
+                <Printer size={14} />
+                <span>Executive Report</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Logical Card 4: 📊 Live Activity Velocity & Momentum Score */}
+        <div className="operation-card">
+          <div className="operation-card-header">
+            <div className="op-head-left">
+              <div className="op-icon-pill emerald">
+                <Sparkles size={15} />
+              </div>
+              <div>
+                <h4>Workspace Activity Velocity</h4>
+                <p>Automated sprint health & contribution momentum</p>
+              </div>
+            </div>
+            <span className="op-counter-tag green">{velocityScore}% Momentum</span>
+          </div>
+
+          <div className="velocity-card-body">
+            <div className="velocity-progress-track">
+              <div className="velocity-progress-bar" style={{ width: `${velocityScore}%` }} />
+            </div>
+            <div className="velocity-metrics-row">
+              <div>
+                <small>Tasks Completed</small>
+                <strong>{completedTasksCount} / {totalTasks}</strong>
+              </div>
+              <div>
+                <small>Sprint Logs</small>
+                <strong>{logs.length} Published</strong>
+              </div>
+              <div>
+                <small>Team Notes</small>
+                <strong>{notes.length} Recorded</strong>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -2506,6 +2808,61 @@ export default function PortalPage() {
                   );
                 })
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Executive Summary & Print Report Modal */}
+      {showReportModal && (
+        <div className="report-modal-backdrop" onClick={() => setShowReportModal(false)}>
+          <div className="report-modal-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="report-modal-header">
+              <div>
+                <h2>Team Random • FYDP Phase 1 Workspace Summary</h2>
+                <p>Department of Computer Science & Engineering • United International University</p>
+              </div>
+              <button className="modal-close" onClick={() => setShowReportModal(false)} aria-label="Close report"><X size={18} /></button>
+            </div>
+
+            <div className="report-modal-body">
+              <div className="report-info-grid">
+                <div><span>Project:</span><strong>Next-Gen FYDP Smart Workspace & System</strong></div>
+                <div><span>Status:</span><strong>Phase 1 • In Progress (Velocity: {velocityScore}%)</strong></div>
+                <div><span>Supervised By:</span><strong>Faculty Supervisor, Dept. of CSE, UIU</strong></div>
+                <div><span>Generated By:</span><strong>{session.name} ({session.roleTitle})</strong></div>
+              </div>
+
+              <h4 style={{ margin: '18px 0 8px', fontSize: '14px', fontWeight: '800' }}>Active Directives Breakdown ({tasks.length})</h4>
+              <div className="report-tasks-list">
+                {tasks.map((t) => (
+                  <div key={t.id} className="report-task-row">
+                    <span className={`status-pill ${t.status?.toLowerCase()}`}>{t.status}</span>
+                    <strong style={{ fontSize: '13px' }}>{t.title}</strong>
+                    <small style={{ color: 'var(--muted)' }}>Assignee: {t.assignee}</small>
+                  </div>
+                ))}
+              </div>
+
+              <h4 style={{ margin: '18px 0 8px', fontSize: '14px', fontWeight: '800' }}>Recent Sprint Highlights ({logs.length})</h4>
+              <div className="report-logs-list">
+                {logs.slice(0, 3).map((l) => (
+                  <div key={l.id} className="report-log-row">
+                    <strong>{l.week} • {l.title}</strong>
+                    <ul>
+                      {l.highlights?.map((h, i) => <li key={i}>{h}</li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="report-modal-footer">
+              <button className="soft-action" onClick={() => setShowReportModal(false)}>Close</button>
+              <button className="primary-action" onClick={() => window.print()}>
+                <Printer size={16} />
+                <span>Print / Save as PDF</span>
+              </button>
             </div>
           </div>
         </div>
