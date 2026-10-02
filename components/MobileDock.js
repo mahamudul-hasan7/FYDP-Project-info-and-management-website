@@ -57,8 +57,8 @@ export default function MobileDock() {
     }
   };
 
-  // Hide dock on portal and login pages
-  if (pathname === '/login' || pathname === '/portal') return null;
+  // Only show dock on homepage to prevent overlapping on subpages
+  if (pathname !== '/') return null;
 
   return (
     <nav className="mobile-dock" aria-label="Mobile navigation">
