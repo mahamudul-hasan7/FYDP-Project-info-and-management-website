@@ -973,8 +973,7 @@ export default function PortalPage() {
 
   const isAdmin =
     session.role === 'ADMIN' ||
-    session.slug === 'md-mahamudul-hasan' ||
-    session.username === '0112330182' ||
+    session.slug === 'system-admin' ||
     session.username === 'admin';
 
   // Filtered tasks for Kanban board
@@ -2245,7 +2244,7 @@ export default function PortalPage() {
 
             <div className="admin-roster-list">
               {allMembers.map((m) => {
-                const isMemberAdmin = m.slug === 'md-mahamudul-hasan' || (m.role && m.role.toLowerCase().includes('admin'));
+                const isMemberAdmin = m.slug === 'system-admin' || m.username === 'admin' || m.role === 'ADMIN';
                 return (
                   <div key={m.slug} className="roster-item">
                     <div className="roster-left">
