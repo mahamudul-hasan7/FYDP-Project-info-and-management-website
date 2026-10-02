@@ -187,39 +187,40 @@
       "gender": "Female",
       "department": "Department of Computer Science & Engineering",
       "institution": "United International University",
-      "role": "Communication Expert to Faculty",
-      "shortRole": "Faculty Communication",
-      "tagline": "Keeping team and faculty communication clear.",
+      "role": "Presenter",
+      "shortRole": "Presenter",
+      "tagline": "Turning project research & system demos into clear presentations.",
       "initials": "05",
       "image": null,
       "placeholder": true,
       "github": null,
       "linkedin": null,
-      "about": "This slot is reserved for the fifth FYDP team member. Detailed overview, contributions, and technical strengths will be updated once finalized.",
+      "about": "Focuses on presenting the project clearly, structuring presentation slide decks, preparing interactive demo stories, and handling defense Q&A sessions.",
       "responsibilities": [
-        "Faculty communication and meeting scheduling",
-        "Supervisor feedback tracking and task alignment",
-        "Requirement clarification and team follow-ups",
-        "Review milestone check-ins and log coordination"
+        "Presentation delivery and speech structuring",
+        "Live demo walkthroughs and project storytelling",
+        "Viva defense Q&A preparation and mock rehearsals",
+        "Presentation slide design and visual storytelling"
       ],
       "skills": [
-        "Faculty Communication",
-        "Task Coordination",
-        "Feedback Tracking",
-        "Reporting"
+        "Presentation Delivery",
+        "English Communication",
+        "Storytelling",
+        "Defense Q&A",
+        "Slide Design"
       ],
       "focus": [
         [
-          "Faculty Communication",
+          "Presentation Delivery",
+          85
+        ],
+        [
+          "Demo Storytelling",
+          78
+        ],
+        [
+          "Viva Rehearsal",
           75
-        ],
-        [
-          "Coordination",
-          72
-        ],
-        [
-          "Feedback Tracking",
-          68
         ]
       ]
     }
