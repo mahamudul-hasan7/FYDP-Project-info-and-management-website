@@ -34,22 +34,22 @@ export const members = [
     gender: 'Male',
     department: 'Department of Computer Science & Engineering',
     institution: 'United International University',
-    role: 'Presenter / English Communication',
-    shortRole: 'Presenter',
-    tagline: 'Turning project ideas into a clear story.',
+    role: 'Faculty Communicator',
+    shortRole: 'Faculty Communicator',
+    tagline: 'Bridging team progress with supervisor consultations and presentation delivery.',
     initials: 'SH',
     image: '/members/md-sabbir-hossen.jpg',
     github: 'https://github.com',
     linkedin: 'https://linkedin.com',
-    about: 'Focuses on presenting the project clearly in English, orchestrating team rehearsals, preparing interactive demo stories, and handling defense Q&A sessions.',
+    about: 'Serves as the primary point of contact for supervisor and faculty consultations, coordinating milestone reviews, feedback implementation, and leading project defense presentations.',
     responsibilities: [
-      'English presentation delivery and speech structuring',
-      'Live demo walkthroughs and project storytelling',
-      'Viva defense Q&A preparation and mock rehearsals',
-      'Presentation slide design and narrative coherence'
+      'Faculty and supervisor communications, meeting scheduling, and agenda alignment',
+      'Milestone review documentation and supervisor feedback tracking',
+      'English presentation delivery, viva defense preparation, and team rehearsals',
+      'Demo storytelling, slide design, and defense Q&A coordination'
     ],
-    skills: ['Presentation Delivery', 'English Communication', 'Storytelling', 'Defense Q&A', 'Slide Design'],
-    focus: [['Presentation Mastery', 88], ['Demo Storytelling', 78], ['Viva Rehearsal', 75]]
+    skills: ['Faculty Communication', 'Supervisor Consultation', 'Presentation Delivery', 'English Communication', 'Defense Q&A'],
+    focus: [['Faculty Communication', 88], ['Supervisor Review', 82], ['Presentation & Viva', 80]]
   },
   {
     slug: 'tania-islam',
