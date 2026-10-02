@@ -985,13 +985,23 @@ a.btn:active,
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 10000;
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(13, 11, 9, .56);
-  backdrop-filter: blur(12px);
+  background: rgba(13, 11, 9, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
+
+body.modal-open .mobile-dock,
+body:has(.modal-backdrop) .mobile-dock,
+body:has(.report-modal-backdrop) .mobile-dock {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .member-sheet {
   width: min(590px, 100%);
   max-height: min(760px, calc(100vh - 40px));
@@ -1002,6 +1012,7 @@ a.btn:active,
   box-shadow: var(--shadow-lg);
   padding: 28px;
   position: relative;
+  z-index: 10001;
 }
 .sheet-handle { display: none; }
 .modal-close { position: absolute; top: 18px; right: 18px; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--surface-2); border-radius: 13px; cursor: pointer; }
@@ -1812,8 +1823,21 @@ a.btn:active,
     letter-spacing: -0.01em;
   }
 
-  .modal-backdrop { align-items: end; padding: 0; }
-  .member-sheet { width: 100%; max-height: 88vh; border-radius: 30px 30px 0 0; padding: 26px 18px calc(22px + env(safe-area-inset-bottom)); }
+  .modal-backdrop { 
+    align-items: end; 
+    padding: 0; 
+    z-index: 10000; 
+  }
+  .member-sheet { 
+    width: 100%; 
+    max-height: 86vh; 
+    border-radius: 28px 28px 0 0; 
+    padding: 24px 18px calc(30px + env(safe-area-inset-bottom)); 
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 -16px 50px rgba(0, 0, 0, 0.65);
+    z-index: 10001;
+  }
   .sheet-handle { display: block; width: 44px; height: 5px; border-radius: 999px; background: var(--surface-3); margin: -12px auto 22px; }
   .modal-close { top: 18px; right: 18px; }
   .sheet-profile { align-items: flex-end; padding-right: 38px; }
@@ -3642,7 +3666,7 @@ a.btn:active,
    OFFICIAL WORKSPACE SUMMARY REPORT & PDF PRINT STYLES
    ========================================================================== */
 .report-modal-backdrop {
-  z-index: 120;
+  z-index: 10000;
   padding: 20px;
   display: grid;
   place-items: center;

@@ -19,10 +19,12 @@ export default function MemberModal({ member, onClose }) {
     window.addEventListener('keydown', handleKeyDown);
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = originalOverflow;
+      document.body.classList.remove('modal-open');
     };
   }, [member, onClose]);
 
