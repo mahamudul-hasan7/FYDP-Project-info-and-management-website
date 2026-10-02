@@ -2855,6 +2855,8 @@ body:has(.report-modal-backdrop) .mobile-dock {
     font-size: 9.5px;
     padding-top: 6px;
   }
+}
+
 /* Interactive Command & Operations Console (4 Logical Cards) */
 .portal-operations-grid {
   display: grid;
