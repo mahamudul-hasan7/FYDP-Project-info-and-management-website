@@ -2815,11 +2815,49 @@ body:has(.report-modal-backdrop) .mobile-dock {
 @media (max-width: 900px) {
   .portal-metrics-deck {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 }
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .portal-metrics-deck {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .portal-metric-card {
+    padding: 13px 12px;
+    border-radius: 18px;
+    gap: 8px;
+    min-height: 116px;
+  }
+  .metric-icon-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+  .metric-icon-wrap svg {
+    width: 15px;
+    height: 15px;
+  }
+  .metric-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  .metric-label {
+    font-size: 9.5px;
+  }
+  .metric-value-row strong {
+    font-size: 16px;
+  }
+  .metric-value-row small {
+    font-size: 9.5px;
+  }
+  .metric-card-footer {
+    font-size: 9.5px;
+    padding-top: 6px;
+  }
+  .metric-card-footer svg {
+    width: 11px;
+    height: 11px;
   }
 }
 
@@ -3293,6 +3331,11 @@ body:has(.report-modal-backdrop) .mobile-dock {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+}
+@media (max-width: 640px) {
+  .notes-feed-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .team-note-card {
   padding: 14px;
