@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "system-admin",
+    "username": "admin",
+    "aliases": [
+      "superadmin",
+      "admin@teamrandom.uiu.ac.bd",
+      "root",
+      "0000000000"
+    ],
+    "name": "System Administrator",
+    "role": "ADMIN",
+    "roleTitle": "Project Super Admin",
+    "email": "admin@teamrandom.uiu.ac.bd",
+    "passwordHash": "7c14b6fa54dca61bfea5083b01a8014e5539685b682f84b421b4a2e55c44149c"
+  },
+  {
+    "slug": "md-mahamudul-hasan",
+    "username": "0112330182",
+    "aliases": [
+      "mahamudul",
+      "mhasan2330182@bscse.uiu.ac.bd"
+    ],
+    "name": "Md Mahamudul Hasan",
+    "role": "MEMBER",
+    "roleTitle": "Technical Lead",
+    "email": "mhasan2330182@bscse.uiu.ac.bd",
+    "passwordHash": "6e13add33e219d2a04933684612cca2b8a11a6c6fe5804a53805492819c8b995"
+  },
+  {
+    "slug": "md-sabbir-hossen",
+    "username": "0112331026",
+    "aliases": [
+      "sabbir",
+      "mhossen2331026@bscse.uiu.ac.bd"
+    ],
+    "name": "Md Sabbir Hossen",
+    "role": "MEMBER",
+    "roleTitle": "Presenter",
+    "email": "mhossen2331026@bscse.uiu.ac.bd",
+    "passwordHash": "66fcb8409f6eac17e6b0edb726e96ef27962675619e4e3fbfc941748d74144c5"
+  },
+  {
+    "slug": "tania-islam",
+    "username": "0112331025",
+    "aliases": [
+      "tania",
+      "tislam2331025@bscse.uiu.ac.bd"
+    ],
+    "name": "Tania Islam",
+    "role": "MEMBER",
+    "roleTitle": "Lead Researcher",
+    "email": "tislam2331025@bscse.uiu.ac.bd",
+    "passwordHash": "a5a7207202dd71c336c38c5de37155e239afff1b8a66e523d0e41789556d5265"
+  },
+  {
+    "slug": "maria-tasnim",
+    "username": "0112331019",
+    "aliases": [
+      "maria",
+      "mtasnim2331019@bscse.uiu.ac.bd"
+    ],
+    "name": "Maria Tasnim",
+    "role": "MEMBER",
+    "roleTitle": "Research Assistant",
+    "email": "mtasnim2331019@bscse.uiu.ac.bd",
+    "passwordHash": "7b9f1a342eeca08bffc307334da6968edc970722170fbcc6ffbb5bff683bfcfd"
+  },
+  {
+    "slug": "member-five",
+    "username": "member05",
+    "aliases": [
+      "member5",
+      "member05@bscse.uiu.ac.bd"
+    ],
+    "name": "Member 05",
+    "role": "MEMBER",
+    "roleTitle": "Faculty Communication",
+    "email": "member05@bscse.uiu.ac.bd",
+    "passwordHash": "a01043f153c1aafdddbf374b47739b2ca0b56d89ed6d57f54aa66be674727341"
+  }
+]

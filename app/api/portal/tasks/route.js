@@ -1,0 +1,86 @@
+import { NextResponse } from 'next/server';
+import { getSession } from '../../../../lib/auth';
+import {
+  createDirectiveTask,
+  deleteDirectiveTask,
+  getAllTasks,
+  updateDirectiveTask
+} from '../../../../lib/store';
+
+export async function GET() {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const tasks = getAllTasks();
+    return NextResponse.json({ success: true, tasks });
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
+
+export async function POST(request) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const created = createDirectiveTask(body, session);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Directive task created!',
+      task: created
+    });
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+  }
+}
+
+export async function PUT(request) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { id, ...updateData } = body;
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'Task ID required' }, { status: 400 });
+    }
+
+    const updated = updateDirectiveTask(id, updateData, session);
+    return NextResponse.json({
+      success: true,
+      message: 'Task updated!',
+      task: updated
+    });
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'Task ID required' }, { status: 400 });
+    }
+
+    deleteDirectiveTask(id, session);
+    return NextResponse.json({ success: true, message: 'Task deleted.' });
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+  }
+}

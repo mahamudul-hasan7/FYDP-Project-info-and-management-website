@@ -1,0 +1,425 @@
+{
+  "members": [
+    {
+      "slug": "md-mahamudul-hasan",
+      "name": "Md Mahamudul Hasan",
+      "id": "0112330182",
+      "email": "mhasan2330182@bscse.uiu.ac.bd",
+      "phone": "Not provided",
+      "gender": "Male",
+      "department": "Department of Computer Science & Engineering",
+      "institution": "United International University",
+      "role": "Technical Lead / Developer",
+      "shortRole": "Technical Lead",
+      "tagline": "Building the system behind the idea.",
+      "initials": "MH",
+      "image": "/members/md-mahamudul-hasan.jpg",
+      "github": "https://github.com",
+      "linkedin": "https://linkedin.com",
+      "about": "Responsible for the technical direction of the FYDP, including system architecture design, frontend & backend implementation, database modeling, and deployment pipelines.",
+      "responsibilities": [
+        "System architecture and technical roadmap planning",
+        "Frontend & backend development with Next.js & React",
+        "Database integration, API modeling and state management",
+        "Production deployment and performance optimization"
+      ],
+      "skills": [
+        "System Architecture",
+        "Next.js / React",
+        "Node.js",
+        "Database Design",
+        "Deployment"
+      ],
+      "focus": [
+        [
+          "Technical Planning",
+          85
+        ],
+        [
+          "System Development",
+          80
+        ],
+        [
+          "API & Database",
+          72
+        ]
+      ]
+    },
+    {
+      "slug": "md-sabbir-hossen",
+      "name": "Md Sabbir Hossen",
+      "id": "0112331026",
+      "email": "mhossen2331026@bscse.uiu.ac.bd",
+      "phone": "Not provided",
+      "gender": "Male",
+      "department": "Department of Computer Science & Engineering",
+      "institution": "United International University",
+      "role": "Presenter / English Communication",
+      "shortRole": "Presenter",
+      "tagline": "Turning project ideas into a clear story.",
+      "initials": "SH",
+      "image": "/members/md-sabbir-hossen.jpg",
+      "github": "https://github.com",
+      "linkedin": "https://linkedin.com",
+      "about": "Focuses on presenting the project clearly in English, orchestrating team rehearsals, preparing interactive demo stories, and handling defense Q&A sessions.",
+      "responsibilities": [
+        "English presentation delivery and speech structuring",
+        "Live demo walkthroughs and project storytelling",
+        "Viva defense Q&A preparation and mock rehearsals",
+        "Presentation slide design and narrative coherence"
+      ],
+      "skills": [
+        "Presentation Delivery",
+        "English Communication",
+        "Storytelling",
+        "Defense Q&A",
+        "Slide Design"
+      ],
+      "focus": [
+        [
+          "Presentation Mastery",
+          88
+        ],
+        [
+          "Demo Storytelling",
+          78
+        ],
+        [
+          "Viva Rehearsal",
+          75
+        ]
+      ]
+    },
+    {
+      "slug": "tania-islam",
+      "name": "Tania Islam",
+      "id": "0112331025",
+      "email": "tislam2331025@bscse.uiu.ac.bd",
+      "phone": "Not provided",
+      "gender": "Female",
+      "department": "Department of Computer Science & Engineering",
+      "institution": "United International University",
+      "role": "Lead Researcher",
+      "shortRole": "Lead Researcher",
+      "tagline": "Turning existing research into project direction.",
+      "initials": "TI",
+      "image": "/members/tania-islam.jpg",
+      "github": "https://github.com",
+      "linkedin": "https://linkedin.com",
+      "about": "Leads the research backbone of the FYDP by surveying literature, extracting research gaps, formulating methodologies, and grounding project decisions in academic evidence.",
+      "responsibilities": [
+        "Academic literature review and paper benchmarking",
+        "Research gap formulation and hypothesis definition",
+        "Methodology exploration and comparative analysis",
+        "Reference management and thesis documentation guidance"
+      ],
+      "skills": [
+        "Literature Review",
+        "Research Methodology",
+        "Comparative Analysis",
+        "Academic Writing"
+      ],
+      "focus": [
+        [
+          "Literature Review",
+          90
+        ],
+        [
+          "Methodology Design",
+          82
+        ],
+        [
+          "Research Gap Analysis",
+          78
+        ]
+      ]
+    },
+    {
+      "slug": "maria-tasnim",
+      "name": "Maria Tasnim",
+      "id": "0112331019",
+      "email": "mtasnim2331019@bscse.uiu.ac.bd",
+      "phone": "Not provided",
+      "gender": "Female",
+      "department": "Department of Computer Science & Engineering",
+      "institution": "United International University",
+      "role": "Research Assistant",
+      "shortRole": "Research Assistant",
+      "tagline": "Keeping research evidence organized and usable.",
+      "initials": "MT",
+      "image": "/members/maria-tasnim.jpg",
+      "github": "https://github.com",
+      "linkedin": "https://linkedin.com",
+      "about": "Supports the research workflow through systematic dataset collection, paper synthesis, citation cataloging, and structured documentation for supervisor reviews.",
+      "responsibilities": [
+        "Dataset curation and research reference cataloging",
+        "Citation structuring and research paper synthesis",
+        "Weekly progress documentation and meeting notes",
+        "Assistance with comparative tests and data tables"
+      ],
+      "skills": [
+        "Research Support",
+        "Data Curation",
+        "Citation Management",
+        "Documentation"
+      ],
+      "focus": [
+        [
+          "Data & Reference Curation",
+          82
+        ],
+        [
+          "Research Synthesis",
+          80
+        ],
+        [
+          "Documentation",
+          75
+        ]
+      ]
+    },
+    {
+      "slug": "member-five",
+      "name": "Member 05",
+      "id": "To be added",
+      "email": "To be added",
+      "phone": "Not provided",
+      "gender": "Female",
+      "department": "Department of Computer Science & Engineering",
+      "institution": "United International University",
+      "role": "Communication Expert to Faculty",
+      "shortRole": "Faculty Communication",
+      "tagline": "Keeping team and faculty communication clear.",
+      "initials": "05",
+      "image": null,
+      "placeholder": true,
+      "github": null,
+      "linkedin": null,
+      "about": "This slot is reserved for the fifth FYDP team member. Detailed overview, contributions, and technical strengths will be updated once finalized.",
+      "responsibilities": [
+        "Faculty communication and meeting scheduling",
+        "Supervisor feedback tracking and task alignment",
+        "Requirement clarification and team follow-ups",
+        "Review milestone check-ins and log coordination"
+      ],
+      "skills": [
+        "Faculty Communication",
+        "Task Coordination",
+        "Feedback Tracking",
+        "Reporting"
+      ],
+      "focus": [
+        [
+          "Faculty Communication",
+          75
+        ],
+        [
+          "Coordination",
+          72
+        ],
+        [
+          "Feedback Tracking",
+          68
+        ]
+      ]
+    }
+  ],
+  "logs": [
+    {
+      "id": 1,
+      "week": "Week 04 • Current Sprint",
+      "title": "Model Pipeline Architecture & Dataset Balancing",
+      "date": "Oct 02, 2026",
+      "status": "active",
+      "category": "Engineering",
+      "author": "Md Mahamudul Hasan",
+      "highlights": [
+        "Configured remote GPU compute cluster for automated batch training runs.",
+        "Constructed data augmentation pipeline with synthetic balancing techniques.",
+        "Established baseline evaluation metrics (Precision, Recall, ROC-AUC, F1-Score)."
+      ]
+    },
+    {
+      "id": 2,
+      "week": "Week 03",
+      "title": "Supervisor Consultation & Methodology Gap Analysis",
+      "date": "Sep 25, 2026",
+      "status": "completed",
+      "category": "Supervisor Review",
+      "author": "Md Sabbir Hossen",
+      "highlights": [
+        "Conducted Week 03 progress consultation with FYDP supervisor.",
+        "Addressed feedback on cross-dataset validation and feature extraction depth.",
+        "Refined technical deliverables and individual member task assignments."
+      ]
+    },
+    {
+      "id": 3,
+      "week": "Week 02",
+      "title": "Literature Review & Taxonomy Matrix Finalization",
+      "date": "Sep 18, 2026",
+      "status": "completed",
+      "category": "Research",
+      "author": "Tania Islam",
+      "highlights": [
+        "Surveyed 20+ recent IEEE, ACM, and Springer publications (2022–2026).",
+        "Constructed taxonomy comparison matrix identifying critical baseline shortcomings.",
+        "Drafted preliminary Related Works section for final FYDP thesis report."
+      ]
+    },
+    {
+      "id": 4,
+      "week": "Week 01",
+      "title": "FYDP Team Inception & Proposal Defense Approval",
+      "date": "Sep 10, 2026",
+      "status": "completed",
+      "category": "Planning",
+      "author": "Maria Tasnim",
+      "highlights": [
+        "Formed Team Random and mapped specialized member technical roles.",
+        "Finalized project domain scope, problem statement, and defense slide deck.",
+        "Received formal approval from UIU CSE Project & Thesis Committee."
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": 1,
+      "author": "Md Mahamudul Hasan",
+      "authorRole": "Technical Lead",
+      "date": "Oct 02, 2026",
+      "title": "FYDP Phase 1 Architecture Checklist",
+      "content": "Please ensure all frontend component designs follow mobile-first 16:9 compliance. The research team will finalize dataset benchmark tables by next Wednesday.",
+      "tag": "Announcement"
+    },
+    {
+      "id": 2,
+      "author": "Md Sabbir Hossen",
+      "authorRole": "Presenter",
+      "date": "Sep 28, 2026",
+      "title": "Presentation Slide Deck Template Ready",
+      "content": "Uploaded the draft slides for our upcoming supervisor consultation. Review the methodology section.",
+      "tag": "Presentation"
+    }
+  ],
+  "tasks": [],
+  "auditLogs": [
+    {
+      "id": 1790902411589,
+      "timestamp": "2026-10-02T00:53:31.362Z",
+      "formattedTime": "Oct 2, 2026, 06:53 AM",
+      "actorName": "System Administrator",
+      "actorRole": "Project Super Admin",
+      "action": "BANNER_UPDATED",
+      "details": "Updated homepage banner media mode: [Mode: video, Video: /team-banner.mp4]",
+      "type": "SECURITY"
+    },
+    {
+      "id": 1790901856124,
+      "timestamp": "2026-10-02T00:44:15.338Z",
+      "formattedTime": "Oct 2, 2026, 06:44 AM",
+      "actorName": "System Administrator",
+      "actorRole": "Project Super Admin",
+      "action": "BANNER_UPDATED",
+      "details": "Updated homepage banner media mode: [Mode: image, Video: /team-banner.mp4]",
+      "type": "SECURITY"
+    },
+    {
+      "id": 1790899387617,
+      "timestamp": "2026-10-02T00:03:06.686Z",
+      "formattedTime": "Oct 2, 2026, 06:03 AM",
+      "actorName": "System Administrator",
+      "actorRole": "Project Super Admin",
+      "action": "ADMIN_PASSWORD_RESET",
+      "details": "Super Admin override: reset password for md-mahamudul-hasan",
+      "type": "SECURITY"
+    },
+    {
+      "id": 1790898552445,
+      "timestamp": "2026-10-01T23:49:12.152Z",
+      "formattedTime": "Oct 2, 2026, 05:49 AM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "TASK_DELETED",
+      "details": "Deleted directive task: 'Baseline Accuracy Benchmarking'",
+      "type": "TASK"
+    },
+    {
+      "id": 1790898547795,
+      "timestamp": "2026-10-01T23:49:06.953Z",
+      "formattedTime": "Oct 2, 2026, 05:49 AM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "TASK_DELETED",
+      "details": "Deleted directive task: 'GPU Compute Cluster Configuration'",
+      "type": "TASK"
+    },
+    {
+      "id": 1790898544946,
+      "timestamp": "2026-10-01T23:49:04.330Z",
+      "formattedTime": "Oct 2, 2026, 05:49 AM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "TASK_DELETED",
+      "details": "Deleted directive task: 'Dataset Augmentation & Preprocessing Pipeline'",
+      "type": "TASK"
+    },
+    {
+      "id": 1790898541995,
+      "timestamp": "2026-10-01T23:49:01.602Z",
+      "formattedTime": "Oct 2, 2026, 05:49 AM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "TASK_DELETED",
+      "details": "Deleted directive task: 'Related Literature Survey Table'",
+      "type": "TASK"
+    },
+    {
+      "id": 1790898538732,
+      "timestamp": "2026-10-01T23:48:57.970Z",
+      "formattedTime": "Oct 2, 2026, 05:48 AM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "TASK_DELETED",
+      "details": "Deleted directive task: 'Phase 1 Defense Slide Deck Architecture'",
+      "type": "TASK"
+    },
+    {
+      "id": 1,
+      "timestamp": "2026-10-01T10:30:00.000Z",
+      "formattedTime": "Oct 01, 2026 • 10:30 AM",
+      "actorName": "System Administrator",
+      "actorRole": "ADMIN",
+      "action": "SYSTEM_INITIALIZE",
+      "details": "Encrypted persistent workspace database initialized with Super Admin access.",
+      "type": "SECURITY"
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-10-01T19:15:00.000Z",
+      "formattedTime": "Oct 01, 2026 • 07:15 PM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "TASK_STATUS_CHANGE",
+      "details": "Updated directive 'Dataset Augmentation & Preprocessing Pipeline' to IN_PROGRESS",
+      "type": "TASK"
+    },
+    {
+      "id": 3,
+      "timestamp": "2026-10-02T02:45:00.000Z",
+      "formattedTime": "Oct 02, 2026 • 02:45 AM",
+      "actorName": "Md Sabbir Hossen",
+      "actorRole": "Presenter",
+      "action": "NOTE_POSTED",
+      "details": "Published workspace note: 'Presentation Slide Deck Template Ready'",
+      "type": "NOTE"
+    }
+  ],
+  "bannerConfig": {
+    "mode": "video",
+    "videoUrl": "/team-banner.mp4",
+    "imageUrl": "/team-banner.jpg",
+    "headline": "Team Random",
+    "tagline": "Engineering scalable software architecture & intelligent computing solutions."
+  }
+}

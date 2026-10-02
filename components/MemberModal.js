@@ -1,0 +1,130 @@
+'use client';
+
+import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowUpRight, Code2, Linkedin, Mail, Phone, UserRound, X } from 'lucide-react';
+import { useEffect } from 'react';
+import MemberAvatar from './MemberAvatar';
+
+export default function MemberModal({ member, onClose }) {
+  useEffect(() => {
+    if (!member) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [member, onClose]);
+
+  return (
+    <AnimatePresence>
+      {member && (
+        <motion.div
+          className="modal-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onMouseDown={onClose}
+        >
+          <motion.div
+            className="member-sheet"
+            initial={{ opacity: 0, y: 80, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 80, scale: 0.985 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div className="sheet-handle" aria-hidden="true" />
+            <button className="modal-close" onClick={onClose} aria-label="Close profile"><X size={18} /></button>
+
+            <div className="sheet-profile">
+              <MemberAvatar member={member} size="xl" />
+              <div className="sheet-title">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className="role-chip">{member.shortRole}</span>
+                </div>
+                <h2>{member.name}</h2>
+                <p>{member.tagline}</p>
+              </div>
+            </div>
+
+            <div className="sheet-meta-grid">
+              <div><UserRound size={16} /><span>ID</span><strong>{member.id}</strong></div>
+              <div>
+                <Mail size={16} />
+                <span>Email</span>
+                <strong>
+                  {member.email?.includes('@') ? (
+                    <a href={`mailto:${member.email}`} style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                      {member.email}
+                    </a>
+                  ) : (
+                    member.email
+                  )}
+                </strong>
+              </div>
+              {member.phone !== 'Not provided' && (
+                <div>
+                  <Phone size={16} />
+                  <span>Phone</span>
+                  <strong>
+                    <a href={`tel:${member.phone}`} style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                      {member.phone}
+                    </a>
+                  </strong>
+                </div>
+              )}
+            </div>
+
+            <p className="sheet-about">{member.about}</p>
+
+            <div className="skill-row">
+              {member.skills.slice(0, 4).map((skill) => <span key={skill}>{skill}</span>)}
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <Link className="primary-action" href={`/member/${member.slug}`} style={{ flex: 1 }}>
+                <span>View Full Profile</span>
+                <ArrowUpRight size={18} />
+              </Link>
+              {member.linkedin && (
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="soft-action icon-only"
+                  aria-label="LinkedIn Profile"
+                  title="LinkedIn Profile"
+                >
+                  <Linkedin size={18} />
+                </a>
+              )}
+              {member.github && (
+                <a
+                  href={member.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="soft-action icon-only"
+                  aria-label="GitHub Profile"
+                  title="GitHub Profile"
+                >
+                  <Code2 size={18} />
+                </a>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
