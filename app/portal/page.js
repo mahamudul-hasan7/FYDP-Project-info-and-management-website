@@ -1156,7 +1156,11 @@ export default function PortalPage() {
           <div className="hud-avatar-container">
             <div className="hud-avatar-glow-ring">
               <MemberAvatar
-                member={profileData || session}
+                member={
+                  session?.slug === 'system-admin' || session?.username === 'admin'
+                    ? { slug: 'system-admin', name: 'System Administrator', role: 'ADMIN', adminAvatarStyle: profileData?.adminAvatarStyle || 'crown' }
+                    : (profileData || session)
+                }
                 size="md"
                 className="hud-avatar"
               />
@@ -1356,17 +1360,33 @@ export default function PortalPage() {
                   <div className="avatar-preview-showcase">
                     <div className="avatar-preview-card">
                       <div className="avatar-preview-halo">
-                        <MemberAvatar member={profileData} size="xl" className="studio-preview-avatar" />
+                        <MemberAvatar
+                          member={
+                            session?.slug === 'system-admin' || session?.username === 'admin'
+                              ? { slug: 'system-admin', name: 'System Administrator', role: 'ADMIN', adminAvatarStyle: profileData.adminAvatarStyle || 'crown' }
+                              : profileData
+                          }
+                          size="xl"
+                          className="studio-preview-avatar"
+                        />
                       </div>
                       <div className="avatar-preview-info">
                         <strong>{profileData.name}</strong>
                         <span className="avatar-preview-sub">
-                          {profileData.placeholder ? 'Initials Typography Mode' : (profileData.image || `/members/${profileData.slug}.jpg`)}
+                          {session?.slug === 'system-admin' || session?.username === 'admin'
+                            ? `Admin Avatar: ${profileData.adminAvatarStyle || 'crown'}`
+                            : profileData.placeholder
+                            ? 'Initials Typography Mode'
+                            : profileData.image || `/members/${profileData.slug}.jpg`}
                         </span>
                       </div>
                       <div className="avatar-preview-pills">
-                        <span className={`studio-status-pill ${profileData.placeholder ? 'initials' : 'active'}`}>
-                          {profileData.placeholder ? 'Initials Mode' : 'Photo Mode'}
+                        <span className="studio-status-pill active">
+                          {session?.slug === 'system-admin' || session?.username === 'admin'
+                            ? 'Admin Avatar'
+                            : profileData.placeholder
+                            ? 'Initials Mode'
+                            : 'Photo Mode'}
                         </span>
                         <span className="studio-dim-pill">1:1 Square Ratio</span>
                       </div>
@@ -1375,11 +1395,46 @@ export default function PortalPage() {
 
                   {/* Right: Controls & Presets */}
                   <div className="avatar-studio-controls">
+                    {/* Admin Custom Avatar Themes (No user photo required) */}
+                    <div className="studio-presets-section">
+                      <label className="studio-sublabel">Admin Custom Avatar Themes (No Photo Required):</label>
+                      <div className="studio-presets-grid">
+                        {[
+                          { id: 'crown', label: 'Royal Crown', desc: 'Super Admin Gold Crown' },
+                          { id: 'shield', label: 'Cyber Shield', desc: 'Security & Governance Lead' },
+                          { id: 'code', label: 'Terminal Lead', desc: 'Software Architect Core' },
+                          { id: 'sparkle', label: 'Neural AI', desc: 'Intelligent Computing Core' }
+                        ].map((theme) => {
+                          const isSelected = (profileData.adminAvatarStyle || 'crown') === theme.id;
+                          return (
+                            <button
+                              key={theme.id}
+                              type="button"
+                              className={`studio-preset-chip ${isSelected ? 'active' : ''}`}
+                              onClick={() => {
+                                setProfileData({
+                                  ...profileData,
+                                  isAdminAvatar: true,
+                                  adminAvatarStyle: theme.id,
+                                  placeholder: false
+                                });
+                              }}
+                              title={theme.desc}
+                            >
+                              <MemberAvatar member={{ slug: 'system-admin', adminAvatarStyle: theme.id }} size="xs" />
+                              <span>{theme.label}</span>
+                              {isSelected && <span className="chip-check">✓</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
                     {/* Custom Image URL / Path */}
                     <div className="form-group full-width">
                       <label>
-                        <span>Photo Source Path or Remote URL</span>
-                        <span className="char-count-hint">e.g. /members/{profileData.slug}.jpg or https://...</span>
+                        <span>Custom Photo Path or Remote URL (Optional)</span>
+                        <span className="char-count-hint">Leave blank to use Admin Avatar</span>
                       </label>
                       <div className="input-with-icon">
                         <ImageIcon size={14} className="input-prefix-icon" />
@@ -1393,27 +1448,31 @@ export default function PortalPage() {
                     </div>
 
                     {/* Quick Official Photo Presets */}
-                    <div className="studio-presets-section">
-                      <label className="studio-sublabel">Official Team Headshots (1-Click Apply):</label>
-                      <div className="studio-presets-grid">
-                        {allMembers.map((m) => {
-                          const isCurrentActive = (profileData.image === `/members/${m.slug}.jpg` || (!profileData.image && profileData.slug === m.slug)) && !profileData.placeholder;
-                          return (
-                            <button
-                              key={m.slug}
-                              type="button"
-                              className={`studio-preset-chip ${isCurrentActive ? 'active' : ''}`}
-                              onClick={() => setProfileData({ ...profileData, image: `/members/${m.slug}.jpg`, placeholder: false })}
-                              title={`Apply ${m.name}'s photo`}
-                            >
-                              <MemberAvatar member={m} size="xs" />
-                              <span>{m.name.split(' ')[0]}</span>
-                              {isCurrentActive && <span className="chip-check">✓</span>}
-                            </button>
-                          );
-                        })}
+                    {allMembers && allMembers.length > 0 && (
+                      <div className="studio-presets-section">
+                        <label className="studio-sublabel">Assign Member Headshot (Optional):</label>
+                        <div className="studio-presets-grid">
+                          {allMembers.map((m) => {
+                            const isCurrentActive =
+                              (profileData.image === `/members/${m.slug}.jpg` || (!profileData.image && profileData.slug === m.slug)) &&
+                              !profileData.placeholder;
+                            return (
+                              <button
+                                key={m.slug}
+                                type="button"
+                                className={`studio-preset-chip ${isCurrentActive ? 'active' : ''}`}
+                                onClick={() => setProfileData({ ...profileData, image: `/members/${m.slug}.jpg`, placeholder: false })}
+                                title={`Apply ${m.name}'s photo`}
+                              >
+                                <MemberAvatar member={m} size="xs" />
+                                <span>{m.name.split(' ')[0]}</span>
+                                {isCurrentActive && <span className="chip-check">✓</span>}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Smart Actions Bar */}
                     <div className="studio-smart-actions">

@@ -1,8 +1,56 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Crown, Shield, Terminal, Sparkles, KeyRound } from 'lucide-react';
 
 export default function MemberAvatar({ member, size = 'md', className = '' }) {
+  // Check if this is the System Admin profile or requested Admin Avatar
+  const isAdminAvatar =
+    member?.slug === 'system-admin' ||
+    member?.username === 'admin' ||
+    member?.name === 'System Administrator' ||
+    member?.isAdminAvatar;
+
+  if (isAdminAvatar) {
+    const avatarStyle = member?.adminAvatarStyle || member?.image || 'crown';
+    const iconSizes = {
+      xs: 12,
+      sm: 16,
+      md: 26,
+      lg: 32,
+      xl: 42,
+      xxl: 54
+    };
+    const iconSize = iconSizes[size] || 26;
+
+    let styleClass = 'style-crown';
+    let IconComponent = Crown;
+
+    if (avatarStyle.includes('shield')) {
+      styleClass = 'style-shield';
+      IconComponent = Shield;
+    } else if (avatarStyle.includes('code') || avatarStyle.includes('terminal')) {
+      styleClass = 'style-code';
+      IconComponent = Terminal;
+    } else if (avatarStyle.includes('sparkle') || avatarStyle.includes('ai')) {
+      styleClass = 'style-sparkle';
+      IconComponent = Sparkles;
+    } else if (avatarStyle.includes('key') || avatarStyle.includes('security')) {
+      styleClass = 'style-shield';
+      IconComponent = KeyRound;
+    }
+
+    return (
+      <div
+        className={`member-avatar admin-system-avatar ${styleClass} avatar-${size} ${className}`}
+        aria-label="System Administrator Avatar"
+        title="Super Admin Avatar"
+      >
+        <IconComponent size={iconSize} className="admin-avatar-icon-svg" />
+      </div>
+    );
+  }
+
   const getCandidateUrls = (m) => {
     if (!m) return [];
     const candidates = [];
