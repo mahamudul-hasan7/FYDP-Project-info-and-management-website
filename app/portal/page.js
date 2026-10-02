@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   Clock,
   Code2,
+  Copy,
   Crown,
   Download,
   ExternalLink,
@@ -26,6 +27,7 @@ import {
   FileSpreadsheet,
   FileText,
   Github,
+  GraduationCap,
   History,
   KeyRound,
   Layers,
@@ -75,6 +77,9 @@ export default function PortalPage() {
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMessage, setProfileMessage] = useState('');
   const [editingSection, setEditingSection] = useState(null);
+  const [newSkillInput, setNewSkillInput] = useState('');
+  const [profileLinkCopied, setProfileLinkCopied] = useState(false);
+  const [idCopied, setIdCopied] = useState(false);
 
   // Weekly Logs state
   const [logs, setLogs] = useState([]);
@@ -572,6 +577,50 @@ export default function PortalPage() {
     loadProfile(slug);
   };
 
+  // Add a technical skill to the active profile
+  const handleAddSkill = (skillText) => {
+    const text = (skillText || newSkillInput).trim();
+    if (!text || !profileData) return;
+    const current = Array.isArray(profileData.skills) ? profileData.skills : [];
+    if (!current.includes(text)) {
+      setProfileData({
+        ...profileData,
+        skills: [...current, text]
+      });
+    }
+    setNewSkillInput('');
+  };
+
+  // Remove a skill from the active profile
+  const handleRemoveSkill = (skillToRemove) => {
+    if (!profileData || !Array.isArray(profileData.skills)) return;
+    setProfileData({
+      ...profileData,
+      skills: profileData.skills.filter((s) => s !== skillToRemove)
+    });
+  };
+
+  // Copy live public profile link
+  const handleCopyProfileLink = () => {
+    if (!session?.slug) return;
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/member/${session.slug}` : '';
+    if (navigator?.clipboard && url) {
+      navigator.clipboard.writeText(url);
+      setProfileLinkCopied(true);
+      setTimeout(() => setProfileLinkCopied(false), 2500);
+    }
+  };
+
+  // Copy logged-in user student ID
+  const handleCopyMyId = () => {
+    const idToCopy = session?.username || profileData?.id;
+    if (idToCopy && navigator?.clipboard) {
+      navigator.clipboard.writeText(idToCopy);
+      setIdCopied(true);
+      setTimeout(() => setIdCopied(false), 2000);
+    }
+  };
+
   // Save profile changes
   const handleSaveProfile = async (e) => {
     if (e) e.preventDefault();
@@ -1028,35 +1077,58 @@ export default function PortalPage() {
       {/* User Executive HUD Banner */}
       <section className="portal-hud-card">
         <div className="hud-ambient-glow" />
+        <div className="hud-ambient-glow-secondary" />
         <div className="hud-user-left">
           <div className="hud-avatar-container">
-            <MemberAvatar
-              member={isAdmin ? { name: 'System Administrator', initials: 'SA' } : (profileData || session)}
-              size="md"
-              className="hud-avatar"
-            />
-            <span className="hud-online-indicator" title="Active UIU Session" />
+            <div className="hud-avatar-glow-ring">
+              <MemberAvatar
+                member={isAdmin ? { name: 'System Administrator', initials: 'SA' } : (profileData || session)}
+                size="md"
+                className="hud-avatar"
+              />
+            </div>
+            <span className="hud-online-indicator" title="Active UIU Session">
+              <span className="hud-online-pulse" />
+            </span>
           </div>
           <div className="hud-user-details">
             <div className="hud-badge-row">
               {isAdmin ? (
                 <span className="portal-role-badge admin">
-                  <Crown size={13} />
+                  <Crown size={12} />
                   Super Admin 👑
                 </span>
               ) : (
                 <span className="portal-role-badge member">
-                  <UserRound size={13} />
-                  Verified Member
+                  <Sparkles size={12} />
+                  {session.roleTitle || 'Verified Member'}
                 </span>
               )}
-              <span className="hud-sub-id">ID: {session.username}</span>
-              <span className="hud-uni-chip">UIU CSE</span>
+
+              <button
+                type="button"
+                onClick={handleCopyMyId}
+                className={`hud-id-copy-pill ${idCopied ? 'copied' : ''}`}
+                title="Click to copy Student ID"
+              >
+                <UserRound size={11} />
+                <span>ID: {session.username}</span>
+                {idCopied ? <Check size={11} className="text-emerald" /> : <Copy size={11} />}
+              </button>
+
+              <span className="hud-uni-chip">
+                <GraduationCap size={11} />
+                UIU CSE
+              </span>
             </div>
             <h2>{session.name}</h2>
             <p className="hud-role-line">
               <span className="hud-role-lead">{session.roleTitle}</span>
-              {!isAdmin && <span className="hud-dept-sep">• FYDP Workspace Lead</span>}
+              {!isAdmin && (
+                <span className="hud-dept-sep">
+                  • {profileData?.tagline ? `“${profileData.tagline}”` : 'FYDP Workspace Lead'}
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -1064,14 +1136,27 @@ export default function PortalPage() {
         <div className="hud-user-actions">
           {isAdmin ? (
             <Link href="/#team" className="soft-action compact-btn">
-              <span>View Roster</span>
-              <ArrowUpRight size={15} />
+              <Users size={14} />
+              <span>Public Team Roster</span>
+              <ArrowUpRight size={14} />
             </Link>
           ) : (
-            <Link href={`/member/${session.slug}`} className="primary-action compact-btn" target="_blank">
-              <span>View Live Portfolio</span>
-              <ArrowUpRight size={15} />
-            </Link>
+            <>
+              <button
+                type="button"
+                onClick={handleCopyProfileLink}
+                className="soft-action compact-btn"
+                title="Copy live profile link to share"
+              >
+                {profileLinkCopied ? <Check size={14} className="text-emerald" /> : <Copy size={14} />}
+                <span>{profileLinkCopied ? 'Link Copied ✓' : 'Share Profile'}</span>
+              </button>
+              <Link href={`/member/${session.slug}`} className="primary-action compact-btn" target="_blank">
+                <Eye size={14} />
+                <span>View Live Portfolio</span>
+                <ArrowUpRight size={14} />
+              </Link>
+            </>
           )}
         </div>
       </section>
@@ -1487,7 +1572,7 @@ export default function PortalPage() {
 
       {/* TAB 1: Profile Modular Section Editor */}
       {activeTab === 'profile' && profileData && (
-        <section className="portal-content-box">
+        <section className="portal-content-box profile-bento-container">
           {/* Admin Member Switcher Bar */}
           {isAdmin && allMembers.length > 0 && (
             <div className="admin-member-switch-bar">
@@ -1512,10 +1597,15 @@ export default function PortalPage() {
             </div>
           )}
 
-          <div className="box-header-row">
+          {/* Header Bar */}
+          <div className="box-header-row profile-editor-header">
             <div>
-              <h3>Profile Information & Portfolio</h3>
-              <p>Customize your public portfolio page. Updates appear instantly on your live profile.</p>
+              <div className="card-header-badge">
+                <Sparkles size={14} className="text-orange" />
+                <span className="mini-label">WORKSPACE IDENTITY & LIVE PORTFOLIO</span>
+              </div>
+              <h3>Profile Settings & Digital Persona</h3>
+              <p>Customize your public FYDP credentials, contact channels, and technical skills.</p>
             </div>
             {profileMessage && (
               <div className={`portal-feedback ${profileMessage.startsWith('Error') ? 'error' : 'success'}`}>
@@ -1524,114 +1614,310 @@ export default function PortalPage() {
             )}
           </div>
 
-          <form onSubmit={handleSaveProfile} className="portal-form-grid">
-            <div className="form-group">
-              <label>Full Name</label>
-              <input
-                type="text"
-                value={profileData.name || ''}
-                onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                disabled={!isAdmin}
-                className={!isAdmin ? 'locked-input' : ''}
-              />
-              {!isAdmin && <span className="input-hint-lock">Academic Record Locked</span>}
+          {/* Interactive Live Profile Card Preview */}
+          <div className="profile-live-preview-bento">
+            <div className="preview-card-top-bar">
+              <span className="preview-live-indicator">
+                <span className="live-dot" />
+                Live Portfolio Preview
+              </span>
+              <Link
+                href={`/member/${selectedSlug || session.slug}`}
+                className="preview-open-link"
+                target="_blank"
+              >
+                <span>View Full Page</span>
+                <ArrowUpRight size={13} />
+              </Link>
             </div>
 
-            <div className="form-group">
-              <label>Student ID</label>
-              <input
-                type="text"
-                value={profileData.id || ''}
-                onChange={(e) => setProfileData({ ...profileData, id: e.target.value })}
-                disabled={!isAdmin}
-                className={!isAdmin ? 'locked-input' : ''}
-              />
-              {!isAdmin && <span className="input-hint-lock">Official Student ID Locked</span>}
+            <div className="preview-card-body">
+              <div className="preview-avatar-wrap">
+                <MemberAvatar member={profileData} size="lg" className="preview-avatar" />
+              </div>
+
+              <div className="preview-info-col">
+                <div className="preview-badge-row">
+                  <span className="role-chip prominent">{profileData.role || session.roleTitle}</span>
+                  <span className="hud-uni-chip">UIU CSE • FYDP</span>
+                  <span className="preview-id-chip">ID: {profileData.id || session.username}</span>
+                </div>
+
+                <h3 className="preview-name">{profileData.name || session.name}</h3>
+                <p className="preview-tagline">“{profileData.tagline || 'Engineering scalable solutions & intelligent architecture'}”</p>
+                
+                {profileData.about && (
+                  <p className="preview-bio-snippet">
+                    {profileData.about.length > 180 ? `${profileData.about.slice(0, 180)}...` : profileData.about}
+                  </p>
+                )}
+
+                {/* Live Skills Chips */}
+                {Array.isArray(profileData.skills) && profileData.skills.length > 0 && (
+                  <div className="preview-skills-row">
+                    {profileData.skills.slice(0, 6).map((skill) => (
+                      <span key={skill} className="preview-skill-tag">
+                        {skill}
+                      </span>
+                    ))}
+                    {profileData.skills.length > 6 && (
+                      <span className="preview-skill-more">+{profileData.skills.length - 6} more</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Bento Modular Form Sections */}
+          <form onSubmit={handleSaveProfile} className="profile-bento-form">
+            <div className="profile-bento-grid">
+              {/* Card 1: Identity & Academic Credentials */}
+              <div className="profile-section-card">
+                <div className="section-card-head">
+                  <div className="section-head-left">
+                    <div className="section-icon-pill orange">
+                      <UserRound size={15} />
+                    </div>
+                    <div>
+                      <h4>Identity & Academic Info</h4>
+                      <p>Institutional record and headline identity</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="section-inputs-grid">
+                  <div className="form-group">
+                    <label>
+                      <span>Full Name</span>
+                      {!isAdmin && <span className="locked-pill"><Lock size={10} /> Locked</span>}
+                    </label>
+                    <input
+                      type="text"
+                      value={profileData.name || ''}
+                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                      disabled={!isAdmin}
+                      className={!isAdmin ? 'locked-input' : ''}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>
+                      <span>Student ID</span>
+                      {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified</span>}
+                    </label>
+                    <input
+                      type="text"
+                      value={profileData.id || ''}
+                      onChange={(e) => setProfileData({ ...profileData, id: e.target.value })}
+                      disabled={!isAdmin}
+                      className={!isAdmin ? 'locked-input' : ''}
+                    />
+                  </div>
+
+                  <div className="form-group full-width">
+                    <label>Professional Tagline / Motto</label>
+                    <input
+                      type="text"
+                      value={profileData.tagline || ''}
+                      onChange={(e) => setProfileData({ ...profileData, tagline: e.target.value })}
+                      placeholder="e.g. Lead Architect & Full-Stack Engineer"
+                    />
+                  </div>
+
+                  <div className="form-group full-width">
+                    <label>
+                      <span>About Bio (Overview)</span>
+                      <span className="char-count-hint">{(profileData.about || '').length} chars</span>
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={profileData.about || ''}
+                      onChange={(e) => setProfileData({ ...profileData, about: e.target.value })}
+                      placeholder="Describe your role, core focus, and technical contributions in FYDP..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Contact Channels & Developer Profiles */}
+              <div className="profile-section-card">
+                <div className="section-card-head">
+                  <div className="section-head-left">
+                    <div className="section-icon-pill cyan">
+                      <Mail size={15} />
+                    </div>
+                    <div>
+                      <h4>Contact & Developer Channels</h4>
+                      <p>Direct communication and portfolio links</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="section-inputs-grid">
+                  <div className="form-group">
+                    <label>
+                      <span>Official Email</span>
+                      {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified</span>}
+                    </label>
+                    <div className="input-with-icon">
+                      <Mail size={14} className="input-prefix-icon" />
+                      <input
+                        type="email"
+                        value={profileData.email || ''}
+                        onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                        disabled={!isAdmin}
+                        className={!isAdmin ? 'locked-input' : ''}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Contact Phone</label>
+                    <div className="input-with-icon">
+                      <Phone size={14} className="input-prefix-icon" />
+                      <input
+                        type="text"
+                        value={profileData.phone || ''}
+                        onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                        placeholder="+880 1XXXXXXXXX"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>GitHub Profile URL</label>
+                    <div className="input-with-icon">
+                      <Github size={14} className="input-prefix-icon" />
+                      <input
+                        type="url"
+                        value={profileData.github || ''}
+                        onChange={(e) => setProfileData({ ...profileData, github: e.target.value })}
+                        placeholder="https://github.com/username"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>LinkedIn Profile URL</label>
+                    <div className="input-with-icon">
+                      <Linkedin size={14} className="input-prefix-icon" />
+                      <input
+                        type="url"
+                        value={profileData.linkedin || ''}
+                        onChange={(e) => setProfileData({ ...profileData, linkedin: e.target.value })}
+                        placeholder="https://linkedin.com/in/username"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3: Interactive Skills & Competencies Cloud */}
+              <div className="profile-section-card full-span">
+                <div className="section-card-head">
+                  <div className="section-head-left">
+                    <div className="section-icon-pill purple">
+                      <Code2 size={15} />
+                    </div>
+                    <div>
+                      <h4>Technical Expertise & Skills Cloud</h4>
+                      <p>Manage keywords and competencies displayed on your public card</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="skills-interactive-container">
+                  {/* Current Active Skill Pills */}
+                  <div className="skills-cloud-pills">
+                    {Array.isArray(profileData.skills) && profileData.skills.length > 0 ? (
+                      profileData.skills.map((skill) => (
+                        <span key={skill} className="skill-edit-tag">
+                          <span>{skill}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSkill(skill)}
+                            className="skill-remove-btn"
+                            title={`Remove ${skill}`}
+                            aria-label={`Remove ${skill}`}
+                          >
+                            <X size={12} />
+                          </button>
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-muted text-sm">No skills added yet. Add some below!</span>
+                    )}
+                  </div>
+
+                  {/* Add New Skill Input Row */}
+                  <div className="skill-input-row">
+                    <input
+                      type="text"
+                      placeholder="Add a new skill (e.g. Next.js, PyTorch, Docker)..."
+                      value={newSkillInput}
+                      onChange={(e) => setNewSkillInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddSkill();
+                        }
+                      }}
+                      className="skill-add-input"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleAddSkill()}
+                      disabled={!newSkillInput.trim()}
+                      className="skill-add-btn"
+                    >
+                      <Plus size={14} />
+                      <span>Add Skill</span>
+                    </button>
+                  </div>
+
+                  {/* Quick-Add Suggestions */}
+                  <div className="skill-suggestions-row">
+                    <span className="suggestions-label">Suggestions:</span>
+                    {[
+                      'Next.js',
+                      'React',
+                      'Node.js',
+                      'Python',
+                      'PyTorch',
+                      'FastAPI',
+                      'PostgreSQL',
+                      'Docker',
+                      'UI/UX Design',
+                      'System Architecture',
+                      'Research & Analysis'
+                    ]
+                      .filter((s) => !profileData.skills?.includes(s))
+                      .slice(0, 6)
+                      .map((suggestion) => (
+                        <button
+                          key={suggestion}
+                          type="button"
+                          onClick={() => handleAddSkill(suggestion)}
+                          className="suggestion-pill"
+                        >
+                          +{suggestion}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="form-group full-width">
-              <label>Tagline / Motto</label>
-              <input
-                type="text"
-                value={profileData.tagline || ''}
-                onChange={(e) => setProfileData({ ...profileData, tagline: e.target.value })}
-                placeholder="e.g. Lead Architect & Full-Stack Engineer"
-              />
-            </div>
-
-            <div className="form-group full-width">
-              <label>About Me (Bio)</label>
-              <textarea
-                rows={3}
-                value={profileData.about || ''}
-                onChange={(e) => setProfileData({ ...profileData, about: e.target.value })}
-                placeholder="Describe your role, core focus, and technical contributions in FYDP..."
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Contact Phone</label>
-              <input
-                type="text"
-                value={profileData.phone || ''}
-                onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
-                placeholder="+880 1XXXXXXXXX"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Official Email</label>
-              <input
-                type="email"
-                value={profileData.email || ''}
-                onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
-                disabled={!isAdmin}
-                className={!isAdmin ? 'locked-input' : ''}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>GitHub Profile URL</label>
-              <input
-                type="url"
-                value={profileData.github || ''}
-                onChange={(e) => setProfileData({ ...profileData, github: e.target.value })}
-                placeholder="https://github.com/username"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>LinkedIn Profile URL</label>
-              <input
-                type="url"
-                value={profileData.linkedin || ''}
-                onChange={(e) => setProfileData({ ...profileData, linkedin: e.target.value })}
-                placeholder="https://linkedin.com/in/username"
-              />
-            </div>
-
-            <div className="form-group full-width">
-              <label>Technical Skills (Comma Separated)</label>
-              <input
-                type="text"
-                value={Array.isArray(profileData.skills) ? profileData.skills.join(', ') : ''}
-                onChange={(e) =>
-                  setProfileData({
-                    ...profileData,
-                    skills: e.target.value
-                      .split(',')
-                      .map((s) => s.trim())
-                      .filter(Boolean)
-                  })
-                }
-                placeholder="React, Next.js, Node.js, PyTorch, Python"
-              />
-            </div>
-
-            <div className="form-footer full-width">
-              <button type="submit" className="primary-action" disabled={profileSaving}>
+            {/* Floating Save Actions Bar */}
+            <div className="profile-save-bar">
+              <div className="save-bar-left">
+                <Sparkles size={14} className="text-orange" />
+                <span>Changes will sync across both portal and public portfolio instantly.</span>
+              </div>
+              <button type="submit" className="primary-action profile-save-btn" disabled={profileSaving}>
                 <Save size={16} />
-                <span>{profileSaving ? 'Saving Profile...' : 'Save Profile Changes'}</span>
+                <span>{profileSaving ? 'Saving Changes...' : 'Save Profile Changes'}</span>
               </button>
             </div>
           </form>
