@@ -13,6 +13,7 @@ import {
   BellRing,
   Briefcase,
   Calendar,
+  Camera,
   Check,
   CheckCheck,
   CheckCircle2,
@@ -29,6 +30,7 @@ import {
   Github,
   GraduationCap,
   History,
+  Image as ImageIcon,
   KeyRound,
   Layers,
   LayoutDashboard,
@@ -42,12 +44,14 @@ import {
   Plus,
   Printer,
   Radio,
+  RefreshCw,
   Save,
   Search,
   Send,
   Shield,
   ShieldAlert,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   Tag,
   Target,
@@ -1329,6 +1333,181 @@ export default function PortalPage() {
 
           {/* Clean Form */}
           <form onSubmit={handleSaveProfile} className="clean-profile-form">
+            {/* Admin Visual Identity & Member Photo Studio */}
+            {isAdmin && (
+              <div className="clean-form-section admin-avatar-studio">
+                <div className="clean-section-title">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Camera size={16} className="text-orange" />
+                    <span>Member Visual Identity & Photo Studio</span>
+                  </div>
+                  <span className="studio-admin-badge">
+                    <Crown size={11} /> Admin Control
+                  </span>
+                </div>
+
+                <div className="avatar-studio-layout">
+                  {/* Left: Interactive Live Dual Avatar Card */}
+                  <div className="avatar-preview-showcase">
+                    <div className="avatar-preview-card">
+                      <div className="avatar-preview-halo">
+                        <MemberAvatar member={profileData} size="xl" className="studio-preview-avatar" />
+                      </div>
+                      <div className="avatar-preview-info">
+                        <strong>{profileData.name}</strong>
+                        <span className="avatar-preview-sub">
+                          {profileData.placeholder ? 'Initials Typography Mode' : (profileData.image || `/members/${profileData.slug}.jpg`)}
+                        </span>
+                      </div>
+                      <div className="avatar-preview-pills">
+                        <span className={`studio-status-pill ${profileData.placeholder ? 'initials' : 'active'}`}>
+                          {profileData.placeholder ? 'Initials Mode' : 'Photo Mode'}
+                        </span>
+                        <span className="studio-dim-pill">1:1 Square Ratio</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Controls & Presets */}
+                  <div className="avatar-studio-controls">
+                    {/* Custom Image URL / Path */}
+                    <div className="form-group full-width">
+                      <label>
+                        <span>Photo Source Path or Remote URL</span>
+                        <span className="char-count-hint">e.g. /members/{profileData.slug}.jpg or https://...</span>
+                      </label>
+                      <div className="input-with-icon">
+                        <ImageIcon size={14} className="input-prefix-icon" />
+                        <input
+                          type="text"
+                          value={profileData.image || ''}
+                          onChange={(e) => setProfileData({ ...profileData, image: e.target.value, placeholder: false })}
+                          placeholder={`/members/${profileData.slug}.jpg or https://...`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Quick Official Photo Presets */}
+                    <div className="studio-presets-section">
+                      <label className="studio-sublabel">Official Team Headshots (1-Click Apply):</label>
+                      <div className="studio-presets-grid">
+                        {allMembers.map((m) => {
+                          const isCurrentActive = (profileData.image === `/members/${m.slug}.jpg` || (!profileData.image && profileData.slug === m.slug)) && !profileData.placeholder;
+                          return (
+                            <button
+                              key={m.slug}
+                              type="button"
+                              className={`studio-preset-chip ${isCurrentActive ? 'active' : ''}`}
+                              onClick={() => setProfileData({ ...profileData, image: `/members/${m.slug}.jpg`, placeholder: false })}
+                              title={`Apply ${m.name}'s photo`}
+                            >
+                              <MemberAvatar member={m} size="xs" />
+                              <span>{m.name.split(' ')[0]}</span>
+                              {isCurrentActive && <span className="chip-check">✓</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Smart Actions Bar */}
+                    <div className="studio-smart-actions">
+                      <button
+                        type="button"
+                        className="soft-action studio-tool-btn"
+                        onClick={() => {
+                          const defaultPath = `/members/${profileData.slug}.jpg`;
+                          setProfileData({ ...profileData, image: defaultPath, placeholder: false });
+                        }}
+                        title="Auto-match official headshot path to this member"
+                      >
+                        <RefreshCw size={13} />
+                        <span>Match Official Photo</span>
+                      </button>
+
+                      {profileData.github && (
+                        <button
+                          type="button"
+                          className="soft-action studio-tool-btn"
+                          onClick={() => {
+                            const parts = profileData.github.split('/').filter(Boolean);
+                            const handle = parts[parts.length - 1];
+                            if (handle && handle !== 'github.com') {
+                              setProfileData({ ...profileData, image: `https://github.com/${handle}.png`, placeholder: false });
+                            }
+                          }}
+                          title="Import avatar directly from GitHub profile"
+                        >
+                          <Github size={13} />
+                          <span>Import GitHub Avatar</span>
+                        </button>
+                      )}
+
+                      <button
+                        type="button"
+                        className={`soft-action studio-tool-btn ${profileData.placeholder ? 'btn-active-toggle' : ''}`}
+                        onClick={() => {
+                          setProfileData({ ...profileData, placeholder: !profileData.placeholder });
+                        }}
+                        title="Toggle between Photo and Clean Typography Initials"
+                      >
+                        <Sparkles size={13} />
+                        <span>{profileData.placeholder ? '✓ Showing Initials' : 'Use Initials Avatar'}</span>
+                      </button>
+                    </div>
+
+                    {/* Framing & Position Alignment Controls */}
+                    <div className="studio-alignment-row">
+                      <div className="studio-align-group">
+                        <span className="studio-sublabel">Face Focus / Alignment:</span>
+                        <div className="studio-pill-group">
+                          {[
+                            { label: 'Center', val: 'center center' },
+                            { label: 'Top / Face', val: 'center 20%' },
+                            { label: 'Bottom', val: 'center bottom' }
+                          ].map((pos) => (
+                            <button
+                              key={pos.val}
+                              type="button"
+                              className={`studio-option-pill ${(profileData.imagePosition || 'center center') === pos.val ? 'active' : ''}`}
+                              onClick={() => setProfileData({ ...profileData, imagePosition: pos.val })}
+                            >
+                              {pos.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="studio-align-group">
+                        <span className="studio-sublabel">Image Fit:</span>
+                        <div className="studio-pill-group">
+                          {[
+                            { label: 'Cover (Fill)', val: 'cover' },
+                            { label: 'Contain', val: 'contain' }
+                          ].map((fit) => (
+                            <button
+                              key={fit.val}
+                              type="button"
+                              className={`studio-option-pill ${(profileData.imageFit || 'cover') === fit.val ? 'active' : ''}`}
+                              onClick={() => setProfileData({ ...profileData, imageFit: fit.val })}
+                            >
+                              {fit.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Studio Help Tip */}
+                    <div className="studio-guide-tip">
+                      <Sparkles size={12} className="text-orange" />
+                      <span>Recommended: 1:1 aspect ratio square photo (min 400×400px). Save profile to update all views.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Section 1: Academic & Personal Info */}
             <div className="clean-form-section">
               <div className="clean-section-title">
