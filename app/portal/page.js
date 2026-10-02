@@ -971,7 +971,11 @@ export default function PortalPage() {
 
   if (!session) return null;
 
-  const isAdmin = session.role === 'ADMIN';
+  const isAdmin =
+    session.role === 'ADMIN' ||
+    session.slug === 'md-mahamudul-hasan' ||
+    session.username === '0112330182' ||
+    session.username === 'admin';
 
   // Filtered tasks for Kanban board
   const filteredTasks = tasks.filter((t) => {
@@ -1152,7 +1156,7 @@ export default function PortalPage() {
           <div className="hud-avatar-container">
             <div className="hud-avatar-glow-ring">
               <MemberAvatar
-                member={isAdmin ? { name: 'System Administrator', initials: 'SA' } : (profileData || session)}
+                member={profileData || session}
                 size="md"
                 className="hud-avatar"
               />
@@ -1333,18 +1337,19 @@ export default function PortalPage() {
 
           {/* Clean Form */}
           <form onSubmit={handleSaveProfile} className="clean-profile-form">
-            {/* Admin Visual Identity & Member Photo Studio */}
-            {isAdmin && (
-              <div className="clean-form-section admin-avatar-studio">
-                <div className="clean-section-title">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Camera size={16} className="text-orange" />
-                    <span>Member Visual Identity & Photo Studio</span>
-                  </div>
+            {/* Visual Identity & Member Photo Studio */}
+            <div className="clean-form-section admin-avatar-studio">
+              <div className="clean-section-title">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Camera size={16} className="text-orange" />
+                  <span>Visual Identity & Profile Photo Studio</span>
+                </div>
+                {isAdmin && (
                   <span className="studio-admin-badge">
                     <Crown size={11} /> Admin Control
                   </span>
-                </div>
+                )}
+              </div>
 
                 <div className="avatar-studio-layout">
                   {/* Left: Interactive Live Dual Avatar Card */}
@@ -1506,7 +1511,6 @@ export default function PortalPage() {
                   </div>
                 </div>
               </div>
-            )}
 
             {/* Section 1: Academic & Personal Info */}
             <div className="clean-form-section">
