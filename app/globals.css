@@ -4649,14 +4649,95 @@ body:has(.report-modal-backdrop) .mobile-dock {
 
 @media (max-width: 1024px) {
   .admin-grid-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px;
   }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 640px) {
   .admin-grid-metrics {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .admin-kpi-card {
+    padding: 12px 12px 10px !important;
+    border-radius: 16px !important;
+    min-height: auto !important;
+    gap: 4px !important;
+  }
+
+  .admin-kpi-card::before {
+    height: 2.5px !important;
+  }
+
+  .kpi-top {
+    gap: 6px !important;
+  }
+
+  .kpi-label {
+    font-size: 10px !important;
+    letter-spacing: 0.03em !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .kpi-icon-wrap {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 7px !important;
+  }
+
+  .kpi-icon-wrap svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  .kpi-body {
+    margin: 4px 0 6px 0 !important;
+    gap: 1px !important;
+  }
+
+  .kpi-value-row {
+    gap: 5px !important;
+  }
+
+  .kpi-number {
+    font-size: 22px !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  .kpi-fraction {
+    font-size: 13px !important;
+  }
+
+  .kpi-unit {
+    font-size: 11px !important;
+  }
+
+  .kpi-subtext {
+    font-size: 9.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    opacity: 0.8 !important;
+  }
+
+  .kpi-footer {
+    padding-top: 6px !important;
+  }
+
+  .kpi-badge {
+    font-size: 9px !important;
+    padding: 1.5px 6px !important;
+    white-space: nowrap !important;
+  }
+
+  .kpi-progress-bar {
+    height: 4px !important;
   }
 }
 
@@ -4906,9 +4987,6 @@ body:has(.report-modal-backdrop) .mobile-dock {
     grid-template-columns: 1fr;
   }
   .notes-feed-grid {
-    grid-template-columns: 1fr;
-  }
-  .admin-grid-metrics {
     grid-template-columns: 1fr;
   }
   .roster-item {
