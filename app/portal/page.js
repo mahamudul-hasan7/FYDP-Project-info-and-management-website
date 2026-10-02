@@ -2444,37 +2444,93 @@ export default function PortalPage() {
 
           {/* Admin Metrics Grid */}
           <div className="admin-grid-metrics">
-            <div className="quick-card">
-              <Users size={20} className="text-orange" />
-              <div>
-                <span>Registered Team</span>
-                <strong>{allMembers.length} Members Active</strong>
+            {/* Card 1: Registered Team */}
+            <div className="admin-kpi-card kpi-orange">
+              <div className="kpi-top">
+                <span className="kpi-label">Registered Team</span>
+                <div className="kpi-icon-wrap">
+                  <Users size={18} />
+                </div>
+              </div>
+              <div className="kpi-body">
+                <div className="kpi-value-row">
+                  <span className="kpi-number">{allMembers.length}</span>
+                  <span className="kpi-unit">Members</span>
+                </div>
+                <div className="kpi-subtext">Active FYDP Accounts</div>
+              </div>
+              <div className="kpi-footer">
+                <span className="kpi-badge kpi-badge-green">● 100% Configured</span>
               </div>
             </div>
 
-            <div className="quick-card">
-              <ListTodo size={20} className="text-orange" />
-              <div>
-                <span>Directive Tasks</span>
-                <strong>
-                  {tasks.filter((t) => t.status === 'DONE' || t.status === 'COMPLETED').length} / {tasks.length} Done
-                </strong>
+            {/* Card 2: Directive Tasks */}
+            <div className="admin-kpi-card kpi-amber">
+              <div className="kpi-top">
+                <span className="kpi-label">Supervisor Tasks</span>
+                <div className="kpi-icon-wrap">
+                  <ListTodo size={18} />
+                </div>
+              </div>
+              <div className="kpi-body">
+                <div className="kpi-value-row">
+                  <span className="kpi-number">
+                    {tasks.filter((t) => t.status === 'DONE' || t.status === 'COMPLETED').length}
+                    <span className="kpi-fraction">/{tasks.length}</span>
+                  </span>
+                  <span className="kpi-unit">Done</span>
+                </div>
+                <div className="kpi-subtext">Sprint Action Items</div>
+              </div>
+              <div className="kpi-footer">
+                <div className="kpi-progress-bar">
+                  <div
+                    className="kpi-progress-fill"
+                    style={{
+                      width: `${tasks.length > 0 ? Math.round((tasks.filter((t) => t.status === 'DONE' || t.status === 'COMPLETED').length / tasks.length) * 100) : 0}%`
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="quick-card">
-              <FileText size={20} className="text-cyan" />
-              <div>
-                <span>Sprint Deliverables</span>
-                <strong>{logs.length} Published</strong>
+            {/* Card 3: Sprint Deliverables */}
+            <div className="admin-kpi-card kpi-cyan">
+              <div className="kpi-top">
+                <span className="kpi-label">Sprint Logs</span>
+                <div className="kpi-icon-wrap">
+                  <FileText size={18} />
+                </div>
+              </div>
+              <div className="kpi-body">
+                <div className="kpi-value-row">
+                  <span className="kpi-number">{logs.length}</span>
+                  <span className="kpi-unit">Milestones</span>
+                </div>
+                <div className="kpi-subtext">Published Weekly Logs</div>
+              </div>
+              <div className="kpi-footer">
+                <span className="kpi-badge kpi-badge-cyan">Deliverables Tracked</span>
               </div>
             </div>
 
-            <div className="quick-card">
-              <ShieldCheck size={20} className="text-emerald" />
-              <div>
-                <span>Audit Logs</span>
-                <strong>{auditLogs.length} Events Tracked</strong>
+            {/* Card 4: Audit Logs */}
+            <div className="admin-kpi-card kpi-emerald">
+              <div className="kpi-top">
+                <span className="kpi-label">Security & Audit</span>
+                <div className="kpi-icon-wrap">
+                  <ShieldCheck size={18} />
+                </div>
+              </div>
+              <div className="kpi-body">
+                <div className="kpi-value-row">
+                  <span className="kpi-number">{auditLogs.length}</span>
+                  <span className="kpi-unit">Events</span>
+                </div>
+                <div className="kpi-subtext">Tamper-Evident Logs</div>
+              </div>
+              <div className="kpi-footer">
+                <span className="kpi-badge kpi-badge-emerald">● Realtime Sync</span>
               </div>
             </div>
           </div>
