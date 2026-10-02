@@ -3,34 +3,46 @@
 import { useState, useEffect } from 'react';
 
 export default function MemberAvatar({ member, size = 'md', className = '' }) {
-  const [imgSrc, setImgSrc] = useState(member?.image || null);
-  const [failed, setFailed] = useState(false);
+  const getCandidateUrls = (m) => {
+    if (!m) return [];
+    const candidates = [];
+    if (m.image) candidates.push(m.image);
+    if (m.slug) {
+      candidates.push(`/members/${m.slug}.jpg`);
+      candidates.push(`/members/${m.slug}.png`);
+      candidates.push(`/members/${m.slug}.jpeg`);
+      const noHyphen = m.slug.replace(/-/g, '');
+      candidates.push(`/members/${noHyphen}.jpeg`);
+      candidates.push(`/members/${noHyphen}.jpg`);
+      candidates.push(`/members/${noHyphen}.png`);
+    }
+    return Array.from(new Set(candidates));
+  };
+
+  const [candidateList, setCandidateList] = useState(() => getCandidateUrls(member));
+  const [candidateIndex, setCandidateIndex] = useState(0);
 
   useEffect(() => {
-    setImgSrc(member?.image || null);
-    setFailed(false);
+    const list = getCandidateUrls(member);
+    setCandidateList(list);
+    setCandidateIndex(0);
   }, [member?.image, member?.slug]);
 
+  const currentSrc = candidateList[candidateIndex];
+
   const handleError = () => {
-    if (!imgSrc) {
-      setFailed(true);
-      return;
-    }
-    // If .jpg failed, try .png
-    if (imgSrc.endsWith('.jpg')) {
-      setImgSrc(imgSrc.replace('.jpg', '.png'));
-    } else if (imgSrc.endsWith('.png')) {
-      setImgSrc(imgSrc.replace('.png', '.jpg'));
+    if (candidateIndex + 1 < candidateList.length) {
+      setCandidateIndex((prev) => prev + 1);
     } else {
-      setFailed(true);
+      setCandidateIndex(candidateList.length);
     }
   };
 
-  if (imgSrc && !failed && !member?.placeholder) {
+  if (currentSrc && candidateIndex < candidateList.length && !member?.placeholder) {
     return (
       <div className={`member-avatar avatar-${size} ${className}`} aria-label={`${member?.name || 'Member'} profile photo`}>
         <img
-          src={imgSrc}
+          src={currentSrc}
           alt={member?.name || 'Member'}
           loading="eager"
           decoding="async"
