@@ -32,6 +32,8 @@ export default function MemberAvatar({ member, size = 'md', className = '' }) {
         <img
           src={imgSrc}
           alt={member?.name || 'Member'}
+          loading="eager"
+          decoding="async"
           onError={handleError}
           style={{
             objectPosition: member?.imagePosition || 'center center',

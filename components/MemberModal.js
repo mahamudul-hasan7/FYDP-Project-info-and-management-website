@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 import { ArrowUpRight, Code2, Linkedin, Mail, Phone, UserRound, X } from 'lucide-react';
 import { useEffect } from 'react';
 import MemberAvatar from './MemberAvatar';
 
 export default function MemberModal({ member, onClose }) {
+  const dragControls = useDragControls();
+
   useEffect(() => {
     if (!member) return;
 
@@ -36,34 +38,44 @@ export default function MemberModal({ member, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
           onClick={onClose}
         >
           <motion.div
             className="member-sheet"
-            initial={{ opacity: 0, y: 40, scale: 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 40, scale: 0.985 }}
-            transition={{
-              type: 'spring',
-              damping: 30,
-              stiffness: 360,
-              mass: 0.8
-            }}
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             drag="y"
+            dragControls={dragControls}
+            dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0.05, bottom: 0.45 }}
+            dragElastic={{ top: 0.05, bottom: 0.5 }}
             onDragEnd={(e, { offset, velocity }) => {
-              if (offset.y > 80 || velocity.y > 350) {
+              if (offset.y > 70 || velocity.y > 300) {
                 onClose();
               }
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sheet-handle" aria-hidden="true" />
+            <div
+              className="sheet-handle"
+              aria-hidden="true"
+              onPointerDown={(e) => dragControls.start(e)}
+              style={{ touchAction: 'none', cursor: 'grab' }}
+            />
             <button className="modal-close" onClick={onClose} aria-label="Close profile"><X size={18} /></button>
 
-            <div className="sheet-profile">
+            <div
+              className="sheet-profile"
+              onPointerDown={(e) => {
+                // Allow pulling down from header area on touch devices
+                if (e.pointerType === 'touch') {
+                  dragControls.start(e);
+                }
+              }}
+            >
               <MemberAvatar member={member} size="xl" />
               <div className="sheet-title">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
