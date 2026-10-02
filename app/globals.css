@@ -3807,6 +3807,206 @@ body:has(.report-modal-backdrop) .mobile-dock {
   width: 100%;
 }
 
+/* Field Label & Privacy Controls */
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.field-label-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 750;
+  color: var(--text);
+}
+
+.privacy-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+  outline: none;
+  border: none;
+  white-space: nowrap;
+}
+
+.privacy-toggle-btn.public {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+}
+
+.privacy-toggle-btn.public:hover {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: #10b981;
+  transform: translateY(-1px);
+}
+
+.privacy-toggle-btn.hidden {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: #ef4444;
+}
+
+.privacy-toggle-btn.hidden:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  transform: translateY(-1px);
+}
+
+/* Custom Links Sub-block */
+.custom-links-subblock {
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.custom-links-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.clean-add-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 750;
+  padding: 5px 12px;
+  border-radius: 10px;
+  background: rgba(243, 109, 34, 0.1);
+  border: 1px solid rgba(243, 109, 34, 0.25);
+  color: var(--orange);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clean-add-link-btn:hover {
+  background: rgba(243, 109, 34, 0.18);
+  border-color: var(--orange);
+  transform: translateY(-1px);
+}
+
+.custom-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.custom-link-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 1.2fr) minmax(180px, 2fr) auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.custom-link-row:focus-within {
+  border-color: rgba(243, 109, 34, 0.5);
+}
+
+.custom-link-input-title,
+.custom-link-input-url {
+  width: 100% !important;
+  border-radius: 10px !important;
+  background: var(--surface-2) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--text) !important;
+  font-size: 12.5px !important;
+  font-family: inherit !important;
+  padding: 8px 10px !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+}
+
+.custom-link-url-wrap .custom-link-input-url {
+  padding-left: 32px !important;
+}
+
+.custom-link-url-wrap .input-prefix-icon {
+  left: 10px;
+}
+
+.custom-link-input-title:focus,
+.custom-link-input-url:focus {
+  border-color: var(--orange) !important;
+  background: var(--surface) !important;
+  box-shadow: 0 0 0 2px rgba(243, 109, 34, 0.15) !important;
+}
+
+.custom-link-del-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition: all 0.18s ease;
+}
+
+.custom-link-del-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.empty-custom-links-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px dashed var(--line);
+}
+
+.custom-link-presets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .custom-link-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
 /* Clean Skills Box & Premium Technical Tag Studio */
 .clean-count-badge {
   font-size: 11px;

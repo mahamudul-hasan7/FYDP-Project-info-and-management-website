@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { AnimatePresence, motion, useDragControls } from 'framer-motion';
-import { ArrowUpRight, Code2, Linkedin, Mail, Phone, UserRound, X } from 'lucide-react';
+import { ArrowUpRight, Code2, Globe, Linkedin, Mail, Phone, UserRound, X } from 'lucide-react';
 import { useEffect } from 'react';
 import MemberAvatar from './MemberAvatar';
 
@@ -102,20 +102,22 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
 
             <div className="sheet-meta-grid">
               <div><UserRound size={16} /><span>ID</span><strong>{member.id}</strong></div>
-              <div>
-                <Mail size={16} />
-                <span>Email</span>
-                <strong>
-                  {member.email?.includes('@') ? (
-                    <a href={`mailto:${member.email}`} style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}>
-                      {member.email}
-                    </a>
-                  ) : (
-                    member.email
-                  )}
-                </strong>
-              </div>
-              {member.phone !== 'Not provided' && (
+              {member.privacy?.email !== false && member.email && (
+                <div>
+                  <Mail size={16} />
+                  <span>Email</span>
+                  <strong>
+                    {member.email?.includes('@') ? (
+                      <a href={`mailto:${member.email}`} style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                        {member.email}
+                      </a>
+                    ) : (
+                      member.email
+                    )}
+                  </strong>
+                </div>
+              )}
+              {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
                 <div>
                   <Phone size={16} />
                   <span>Phone</span>
@@ -134,12 +136,22 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
               {member.skills.slice(0, 4).map((skill) => <span key={skill}>{skill}</span>)}
             </div>
 
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <Link className="primary-action" href={`/member/${member.slug}`} style={{ flex: 1 }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <Link className="primary-action" href={`/member/${member.slug}`} style={{ flex: 1, minWidth: 140 }}>
                 <span>View Full Profile</span>
                 <ArrowUpRight size={18} />
               </Link>
-              {member.linkedin && (
+              {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
+                <a
+                  href={`tel:${member.phone}`}
+                  className="soft-action icon-only"
+                  aria-label={`Call ${member.name}`}
+                  title={`Call ${member.phone}`}
+                >
+                  <Phone size={18} />
+                </a>
+              )}
+              {member.privacy?.linkedin !== false && member.linkedin && (
                 <a
                   href={member.linkedin}
                   target="_blank"
@@ -151,7 +163,7 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
                   <Linkedin size={18} />
                 </a>
               )}
-              {member.github && (
+              {member.privacy?.github !== false && member.github && (
                 <a
                   href={member.github}
                   target="_blank"
@@ -163,6 +175,22 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
                   <Code2 size={18} />
                 </a>
               )}
+              {Array.isArray(member.customLinks) &&
+                member.customLinks
+                  .filter((l) => l.isPublic !== false && l.url)
+                  .map((link, idx) => (
+                    <a
+                      key={link.id || idx}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="soft-action icon-only"
+                      aria-label={link.title || 'Website'}
+                      title={link.title ? `${link.title}: ${link.url}` : link.url}
+                    >
+                      <Globe size={18} />
+                    </a>
+                  ))}
             </div>
           </motion.div>
         </motion.div>

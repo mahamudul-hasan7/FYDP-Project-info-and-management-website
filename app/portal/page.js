@@ -24,10 +24,12 @@ import {
   Download,
   ExternalLink,
   Eye,
+  EyeOff,
   FileCheck,
   FileSpreadsheet,
   FileText,
   Github,
+  Globe,
   GraduationCap,
   History,
   Image as ImageIcon,
@@ -51,6 +53,7 @@ import {
   Shield,
   ShieldAlert,
   ShieldCheck,
+  Share2,
   SlidersHorizontal,
   Sparkles,
   Tag,
@@ -1402,18 +1405,44 @@ export default function PortalPage() {
             </div>
 
             {/* Section 2: Contact & Social Handles */}
-            <div className="clean-form-section">
+            <div className="clean-form-section contact-channels-section">
               <div className="clean-section-title">
-                <Mail size={16} className="text-cyan" />
-                <span>Contact Channels & Profiles</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Mail size={16} className="text-cyan" />
+                  <span>Contact Channels & Profiles</span>
+                </div>
+                <span className="clean-count-badge" style={{ background: 'rgba(6, 182, 212, 0.12)', borderColor: 'rgba(6, 182, 212, 0.28)', color: '#06b6d4' }}>
+                  Privacy & Links Hub
+                </span>
               </div>
 
               <div className="clean-fields-grid">
+                {/* Institutional Email */}
                 <div className="form-group">
-                  <label>
-                    <span>Institutional Email</span>
-                    {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified</span>}
-                  </label>
+                  <div className="field-label-row">
+                    <label>
+                      <Mail size={13} className="text-muted" />
+                      <span>Institutional Email</span>
+                      {!isAdmin && <span className="locked-pill"><Lock size={10} /> Verified</span>}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setProfileData({
+                          ...profileData,
+                          privacy: {
+                            ...(profileData.privacy || {}),
+                            email: profileData.privacy?.email === false ? true : false
+                          }
+                        })
+                      }
+                      className={`privacy-toggle-btn ${profileData.privacy?.email !== false ? 'public' : 'hidden'}`}
+                      title={profileData.privacy?.email !== false ? 'Public: Visible on portfolio (Click to Hide)' : 'Hidden: Hidden from public (Click to Show)'}
+                    >
+                      {profileData.privacy?.email !== false ? <Eye size={12} /> : <EyeOff size={12} />}
+                      <span>{profileData.privacy?.email !== false ? 'Public' : 'Hidden'}</span>
+                    </button>
+                  </div>
                   <div className="input-with-icon">
                     <Mail size={14} className="input-prefix-icon" />
                     <input
@@ -1426,8 +1455,31 @@ export default function PortalPage() {
                   </div>
                 </div>
 
+                {/* Contact Phone */}
                 <div className="form-group">
-                  <label>Contact Phone</label>
+                  <div className="field-label-row">
+                    <label>
+                      <Phone size={13} className="text-muted" />
+                      <span>Contact Phone</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setProfileData({
+                          ...profileData,
+                          privacy: {
+                            ...(profileData.privacy || {}),
+                            phone: profileData.privacy?.phone === false ? true : false
+                          }
+                        })
+                      }
+                      className={`privacy-toggle-btn ${profileData.privacy?.phone !== false ? 'public' : 'hidden'}`}
+                      title={profileData.privacy?.phone !== false ? 'Public: Click-to-call active (Click to Hide)' : 'Hidden: Private from visitors (Click to Show)'}
+                    >
+                      {profileData.privacy?.phone !== false ? <Eye size={12} /> : <EyeOff size={12} />}
+                      <span>{profileData.privacy?.phone !== false ? 'Public' : 'Hidden'}</span>
+                    </button>
+                  </div>
                   <div className="input-with-icon">
                     <Phone size={14} className="input-prefix-icon" />
                     <input
@@ -1439,8 +1491,31 @@ export default function PortalPage() {
                   </div>
                 </div>
 
+                {/* GitHub Profile URL */}
                 <div className="form-group">
-                  <label>GitHub Profile URL</label>
+                  <div className="field-label-row">
+                    <label>
+                      <Github size={13} className="text-muted" />
+                      <span>GitHub Profile URL</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setProfileData({
+                          ...profileData,
+                          privacy: {
+                            ...(profileData.privacy || {}),
+                            github: profileData.privacy?.github === false ? true : false
+                          }
+                        })
+                      }
+                      className={`privacy-toggle-btn ${profileData.privacy?.github !== false ? 'public' : 'hidden'}`}
+                      title={profileData.privacy?.github !== false ? 'Public: Visible on portfolio (Click to Hide)' : 'Hidden: Hidden from public (Click to Show)'}
+                    >
+                      {profileData.privacy?.github !== false ? <Eye size={12} /> : <EyeOff size={12} />}
+                      <span>{profileData.privacy?.github !== false ? 'Public' : 'Hidden'}</span>
+                    </button>
+                  </div>
                   <div className="input-with-icon">
                     <Github size={14} className="input-prefix-icon" />
                     <input
@@ -1452,8 +1527,31 @@ export default function PortalPage() {
                   </div>
                 </div>
 
+                {/* LinkedIn Profile URL */}
                 <div className="form-group">
-                  <label>LinkedIn Profile URL</label>
+                  <div className="field-label-row">
+                    <label>
+                      <Linkedin size={13} className="text-muted" />
+                      <span>LinkedIn Profile URL</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setProfileData({
+                          ...profileData,
+                          privacy: {
+                            ...(profileData.privacy || {}),
+                            linkedin: profileData.privacy?.linkedin === false ? true : false
+                          }
+                        })
+                      }
+                      className={`privacy-toggle-btn ${profileData.privacy?.linkedin !== false ? 'public' : 'hidden'}`}
+                      title={profileData.privacy?.linkedin !== false ? 'Public: Visible on portfolio (Click to Hide)' : 'Hidden: Hidden from public (Click to Show)'}
+                    >
+                      {profileData.privacy?.linkedin !== false ? <Eye size={12} /> : <EyeOff size={12} />}
+                      <span>{profileData.privacy?.linkedin !== false ? 'Public' : 'Hidden'}</span>
+                    </button>
+                  </div>
                   <div className="input-with-icon">
                     <Linkedin size={14} className="input-prefix-icon" />
                     <input
@@ -1463,6 +1561,135 @@ export default function PortalPage() {
                       placeholder="https://linkedin.com/in/username"
                     />
                   </div>
+                </div>
+              </div>
+
+              {/* Dynamic Custom Links & Websites Sub-block */}
+              <div className="custom-links-subblock">
+                <div className="custom-links-header">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <Globe size={15} className="text-orange" />
+                    <strong style={{ fontSize: 13, color: 'var(--text)' }}>Additional Websites & Custom Links</strong>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentList = Array.isArray(profileData.customLinks) ? [...profileData.customLinks] : [];
+                      setProfileData({
+                        ...profileData,
+                        customLinks: [
+                          ...currentList,
+                          { id: Date.now(), title: '', url: '', isPublic: true }
+                        ]
+                      });
+                    }}
+                    className="soft-action clean-add-link-btn"
+                  >
+                    <Plus size={13} />
+                    <span>Add Custom Link</span>
+                  </button>
+                </div>
+
+                {/* List of Custom Links */}
+                {Array.isArray(profileData.customLinks) && profileData.customLinks.length > 0 ? (
+                  <div className="custom-links-list">
+                    {profileData.customLinks.map((link, idx) => (
+                      <div key={link.id || idx} className="custom-link-row">
+                        <div className="custom-link-title-wrap">
+                          <input
+                            type="text"
+                            placeholder="Platform / Title (e.g. Portfolio, Google Scholar)"
+                            value={link.title || ''}
+                            onChange={(e) => {
+                              const updated = [...profileData.customLinks];
+                              updated[idx] = { ...updated[idx], title: e.target.value };
+                              setProfileData({ ...profileData, customLinks: updated });
+                            }}
+                            className="custom-link-input-title"
+                          />
+                        </div>
+                        <div className="input-with-icon custom-link-url-wrap">
+                          <ExternalLink size={13} className="input-prefix-icon" />
+                          <input
+                            type="url"
+                            placeholder="https://..."
+                            value={link.url || ''}
+                            onChange={(e) => {
+                              const updated = [...profileData.customLinks];
+                              updated[idx] = { ...updated[idx], url: e.target.value };
+                              setProfileData({ ...profileData, customLinks: updated });
+                            }}
+                            className="custom-link-input-url"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = [...profileData.customLinks];
+                            updated[idx] = { ...updated[idx], isPublic: link.isPublic === false ? true : false };
+                            setProfileData({ ...profileData, customLinks: updated });
+                          }}
+                          className={`privacy-toggle-btn ${link.isPublic !== false ? 'public' : 'hidden'}`}
+                          title={link.isPublic !== false ? 'Public (Click to Hide)' : 'Hidden (Click to Show)'}
+                        >
+                          {link.isPublic !== false ? <Eye size={12} /> : <EyeOff size={12} />}
+                          <span>{link.isPublic !== false ? 'Public' : 'Hidden'}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = profileData.customLinks.filter((_, i) => i !== idx);
+                            setProfileData({ ...profileData, customLinks: updated });
+                          }}
+                          className="custom-link-del-btn"
+                          title="Delete Link"
+                          aria-label="Delete Link"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-custom-links-note">
+                    <Share2 size={14} className="text-muted" />
+                    <span>No custom links added yet. Click &ldquo;Add Custom Link&rdquo; or pick a preset below.</span>
+                  </div>
+                )}
+
+                {/* Popular Platform Quick Presets */}
+                <div className="custom-link-presets">
+                  <span className="clean-sugg-label">Popular Presets:</span>
+                  {[
+                    { title: 'Portfolio Website', urlPrefix: 'https://' },
+                    { title: 'Google Scholar', urlPrefix: 'https://scholar.google.com/citations?user=' },
+                    { title: 'ResearchGate', urlPrefix: 'https://www.researchgate.net/profile/' },
+                    { title: 'Twitter / X', urlPrefix: 'https://x.com/' },
+                    { title: 'Kaggle', urlPrefix: 'https://www.kaggle.com/' },
+                    { title: 'Medium', urlPrefix: 'https://medium.com/@' }
+                  ]
+                    .filter((p) => !profileData.customLinks?.some((l) => l.title?.toLowerCase() === p.title.toLowerCase()))
+                    .map((preset) => (
+                      <button
+                        key={preset.title}
+                        type="button"
+                        onClick={() => {
+                          const currentList = Array.isArray(profileData.customLinks) ? [...profileData.customLinks] : [];
+                          setProfileData({
+                            ...profileData,
+                            customLinks: [
+                              ...currentList,
+                              { id: Date.now(), title: preset.title, url: preset.urlPrefix, isPublic: true }
+                            ]
+                          });
+                        }}
+                        className="clean-sugg-pill"
+                        title={`Add ${preset.title}`}
+                      >
+                        <Plus size={10} className="sugg-plus" />
+                        <span>{preset.title}</span>
+                      </button>
+                    ))}
                 </div>
               </div>
             </div>

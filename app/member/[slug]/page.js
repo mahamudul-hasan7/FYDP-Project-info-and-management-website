@@ -5,6 +5,8 @@ import {
   Briefcase,
   CheckCircle2,
   Code2,
+  ExternalLink,
+  Globe,
   GraduationCap,
   Linkedin,
   Mail,
@@ -76,7 +78,7 @@ export default async function MemberPage({ params }) {
 
             {/* Quick Action Matrix */}
             <div className="profile-action-matrix">
-              {member.email?.includes('@') && (
+              {member.privacy?.email !== false && member.email?.includes('@') && (
                 <a
                   href={`mailto:${member.email}`}
                   className="matrix-btn primary"
@@ -87,7 +89,19 @@ export default async function MemberPage({ params }) {
                 </a>
               )}
 
-              {member.linkedin && (
+              {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
+                <a
+                  href={`tel:${member.phone}`}
+                  className="matrix-btn"
+                  aria-label={`Call ${member.name}`}
+                  title={`Call ${member.phone}`}
+                >
+                  <Phone size={16} />
+                  <span>Call Phone</span>
+                </a>
+              )}
+
+              {member.privacy?.linkedin !== false && member.linkedin && (
                 <a
                   href={member.linkedin}
                   target="_blank"
@@ -100,7 +114,7 @@ export default async function MemberPage({ params }) {
                 </a>
               )}
 
-              {member.github && (
+              {member.privacy?.github !== false && member.github && (
                 <a
                   href={member.github}
                   target="_blank"
@@ -113,16 +127,24 @@ export default async function MemberPage({ params }) {
                 </a>
               )}
 
-              {member.phone && member.phone !== 'Not provided' && (
-                <a
-                  href={`tel:${member.phone}`}
-                  className="matrix-btn"
-                  aria-label={`Call ${member.name}`}
-                >
-                  <Phone size={16} />
-                  <span>Call</span>
-                </a>
-              )}
+              {/* Dynamic Public Custom Links */}
+              {Array.isArray(member.customLinks) &&
+                member.customLinks
+                  .filter((l) => l.isPublic !== false && l.url)
+                  .map((link, idx) => (
+                    <a
+                      key={link.id || idx}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="matrix-btn"
+                      aria-label={link.title || 'Website Link'}
+                      title={link.url}
+                    >
+                      <Globe size={16} />
+                      <span>{link.title || 'Website'}</span>
+                    </a>
+                  ))}
             </div>
           </div>
         </div>
@@ -143,21 +165,37 @@ export default async function MemberPage({ params }) {
             </div>
           </div>
 
-          <div className="meta-group-row">
-            <div className="meta-row-left">
-              <span className="meta-row-icon"><Mail size={16} /></span>
-              <span className="meta-row-label">Institutional Email</span>
+          {member.privacy?.email !== false && (
+            <div className="meta-group-row">
+              <div className="meta-row-left">
+                <span className="meta-row-icon"><Mail size={16} /></span>
+                <span className="meta-row-label">Institutional Email</span>
+              </div>
+              <div className="meta-row-value">
+                {member.email?.includes('@') ? (
+                  <a href={`mailto:${member.email}`} className="email-link">
+                    {member.email}
+                  </a>
+                ) : (
+                  <span className="text-muted">{member.email}</span>
+                )}
+              </div>
             </div>
-            <div className="meta-row-value">
-              {member.email?.includes('@') ? (
-                <a href={`mailto:${member.email}`} className="email-link">
-                  {member.email}
+          )}
+
+          {member.privacy?.phone !== false && member.phone && member.phone !== 'Not provided' && (
+            <div className="meta-group-row">
+              <div className="meta-row-left">
+                <span className="meta-row-icon"><Phone size={16} /></span>
+                <span className="meta-row-label">Contact Phone</span>
+              </div>
+              <div className="meta-row-value">
+                <a href={`tel:${member.phone}`} className="email-link">
+                  {member.phone}
                 </a>
-              ) : (
-                <span className="text-muted">{member.email}</span>
-              )}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="meta-group-row">
             <div className="meta-row-left">
