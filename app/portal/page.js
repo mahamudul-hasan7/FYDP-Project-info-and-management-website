@@ -43,6 +43,7 @@ import {
   Printer,
   Radio,
   Save,
+  Search,
   Send,
   Shield,
   ShieldAlert,
@@ -121,6 +122,7 @@ export default function PortalPage() {
   // Activity Audit Logs & Live Notifications state
   const [auditLogs, setAuditLogs] = useState([]);
   const [auditFilter, setAuditFilter] = useState('ALL');
+  const [auditSearchQuery, setAuditSearchQuery] = useState('');
   const [toasts, setToasts] = useState([]);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [notifFilter, setNotifFilter] = useState('ALL');
@@ -917,10 +919,18 @@ export default function PortalPage() {
     return t.status === taskFilter;
   });
 
-  // Filtered audit logs
+  // Filtered audit logs with category and keyword search
   const filteredAuditLogs = auditLogs.filter((l) => {
-    if (auditFilter === 'ALL') return true;
-    return l.type === auditFilter;
+    const matchesCategory = auditFilter === 'ALL' || l.type === auditFilter;
+    if (!matchesCategory) return false;
+    if (!auditSearchQuery.trim()) return true;
+    const q = auditSearchQuery.toLowerCase().trim();
+    return (
+      (l.actorName && l.actorName.toLowerCase().includes(q)) ||
+      (l.action && l.action.toLowerCase().includes(q)) ||
+      (l.details && l.details.toLowerCase().includes(q)) ||
+      (l.type && l.type.toLowerCase().includes(q))
+    );
   });
 
   // Notification counts and filtering logic
@@ -2116,6 +2126,7 @@ export default function PortalPage() {
             </div>
           </div>
 
+          {/* Admin Metrics Grid */}
           <div className="admin-grid-metrics">
             <div className="quick-card">
               <Users size={20} className="text-orange" />
@@ -2129,7 +2140,17 @@ export default function PortalPage() {
               <ListTodo size={20} className="text-orange" />
               <div>
                 <span>Directive Tasks</span>
-                <strong>{tasks.length} Total ({tasks.filter(t => t.status === 'DONE').length} Done)</strong>
+                <strong>
+                  {tasks.filter((t) => t.status === 'DONE' || t.status === 'COMPLETED').length} / {tasks.length} Done
+                </strong>
+              </div>
+            </div>
+
+            <div className="quick-card">
+              <FileText size={20} className="text-cyan" />
+              <div>
+                <span>Sprint Deliverables</span>
+                <strong>{logs.length} Published</strong>
               </div>
             </div>
 
@@ -2142,53 +2163,76 @@ export default function PortalPage() {
             </div>
           </div>
 
-          {/* Member Roster & Security Actions */}
+          {/* Member Roster & Permissions Management */}
           <div className="admin-roster-box">
-            <h4>Member Permissions & Quick Controls</h4>
+            <div className="box-header-row" style={{ marginBottom: 12, paddingBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Users size={17} className="text-orange" />
+                <h4 style={{ margin: 0 }}>Team Member Permissions & Quick Controls</h4>
+              </div>
+              <span className="clean-sugg-label" style={{ fontSize: 11 }}>
+                Total: {allMembers.length} Accounts
+              </span>
+            </div>
+
             <div className="admin-roster-list">
-              {allMembers.map((m) => (
-                <div key={m.slug} className="roster-item">
-                  <div className="roster-left">
-                    <MemberAvatar member={m} size="sm" />
-                    <div className="roster-meta">
-                      <strong>{m.name}</strong>
-                      <span>
-                        {m.id} • {m.role}
-                      </span>
+              {allMembers.map((m) => {
+                const isMemberAdmin = m.slug === 'md-mahamudul-hasan' || (m.role && m.role.toLowerCase().includes('admin'));
+                return (
+                  <div key={m.slug} className="roster-item">
+                    <div className="roster-left">
+                      <MemberAvatar member={m} size="sm" />
+                      <div className="roster-meta">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                          <strong>{m.name}</strong>
+                          {isMemberAdmin ? (
+                            <span className="portal-role-badge admin">
+                              <Crown size={10} /> Super Admin
+                            </span>
+                          ) : (
+                            <span className="portal-role-badge member">{m.shortRole || 'Member'}</span>
+                          )}
+                        </div>
+                        <span>
+                          {m.id} • {m.email || `${m.slug}@uiu.ac.bd`}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="roster-right">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('profile');
+                          handleMemberChange(m.slug);
+                        }}
+                        className="soft-action"
+                        style={{ minHeight: 32, padding: '0 12px', fontSize: 12 }}
+                      >
+                        <Pencil size={12} />
+                        <span>Edit Profile</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('security');
+                          setPwdTargetSlug(m.slug);
+                          setPwdMessage('');
+                        }}
+                        className="soft-action"
+                        style={{ minHeight: 32, padding: '0 12px', fontSize: 12, color: 'var(--brand-orange)' }}
+                        title="Set / Reset Member Password"
+                      >
+                        <KeyRound size={12} />
+                        <span>Reset Password</span>
+                      </button>
                     </div>
                   </div>
-                  <div className="roster-right">
-                    <span className="portal-role-badge member">Member</span>
-                    <button
-                      onClick={() => {
-                        setActiveTab('profile');
-                        handleMemberChange(m.slug);
-                      }}
-                      className="soft-action"
-                      style={{ minHeight: 32, padding: '0 12px', fontSize: 12 }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => {
-                        setActiveTab('security');
-                        setPwdTargetSlug(m.slug);
-                        setPwdMessage('');
-                      }}
-                      className="soft-action"
-                      style={{ minHeight: 32, padding: '0 12px', fontSize: 12, color: 'var(--brand-orange)' }}
-                      title="Set / Reset Member Password"
-                    >
-                      <KeyRound size={12} />
-                      <span>Password</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
-          {/* Homepage Banner Media & Video Configuration */}
+          {/* Homepage Banner Media & Video Configuration with Live Preview */}
           <div className="admin-roster-box">
             <div className="box-header-row" style={{ marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -2200,6 +2244,63 @@ export default function PortalPage() {
                   {bannerMessage}
                 </div>
               )}
+            </div>
+
+            {/* Visual Live Preview Frame */}
+            <div className="admin-media-preview-container">
+              <div className="admin-media-preview-head">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Eye size={14} className="text-orange" />
+                  <span>LIVE HOMEPAGE BANNER PREVIEW</span>
+                </div>
+                <span className="preview-mode-tag">
+                  Mode: {bannerConfig.mode.toUpperCase()}
+                </span>
+              </div>
+
+              <div className="admin-media-preview-frame">
+                {bannerConfig.mode !== 'image' && bannerConfig.videoUrl ? (
+                  <video
+                    src={bannerConfig.videoUrl}
+                    poster={bannerConfig.imageUrl || '/team-banner.jpg'}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="admin-preview-video"
+                  />
+                ) : (
+                  <img
+                    src={bannerConfig.imageUrl || '/team-banner.jpg'}
+                    alt="Banner Preview"
+                    className="admin-preview-image"
+                  />
+                )}
+                <div className="admin-preview-overlay">
+                  <span className="admin-preview-badge">UIU CSE • FYDP 2026</span>
+                  <h5>{bannerConfig.headline || 'Team Random'}</h5>
+                  <p>{bannerConfig.tagline || 'Engineering scalable software architecture & intelligent computing solutions.'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Presets Bar */}
+            <div className="admin-presets-row">
+              <span className="clean-sugg-label">Presets:</span>
+              <button
+                type="button"
+                className="clean-sugg-pill"
+                onClick={() => setBannerConfig({ ...bannerConfig, videoUrl: '/team-banner.mp4' })}
+              >
+                + Video: /team-banner.mp4
+              </button>
+              <button
+                type="button"
+                className="clean-sugg-pill"
+                onClick={() => setBannerConfig({ ...bannerConfig, imageUrl: '/team-banner.jpg' })}
+              >
+                + Image: /team-banner.jpg
+              </button>
             </div>
 
             <form onSubmit={handleSaveBannerConfig} className="portal-form-grid">
@@ -2265,49 +2366,89 @@ export default function PortalPage() {
             </form>
           </div>
 
-          {/* Admin Activity Audit Log Stream */}
+          {/* Admin Activity Audit Log Stream with Search & Category Filters */}
           <div className="admin-audit-section">
             <div className="audit-section-head">
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <History size={18} className="text-orange" />
-                <h4>Live Activity Audit Stream</h4>
+                <h4 style={{ margin: 0 }}>Live Activity Audit Stream</h4>
+                <span className="audit-count-pill">{filteredAuditLogs.length} Events</span>
               </div>
-              <div className="audit-filter-pills">
-                <button
-                  type="button"
-                  className={`filter-pill ${auditFilter === 'ALL' ? 'active' : ''}`}
-                  onClick={() => setAuditFilter('ALL')}
-                >
-                  All ({auditLogs.length})
-                </button>
-                <button
-                  type="button"
-                  className={`filter-pill ${auditFilter === 'SECURITY' ? 'active' : ''}`}
-                  onClick={() => setAuditFilter('SECURITY')}
-                >
-                  Security
-                </button>
-                <button
-                  type="button"
-                  className={`filter-pill ${auditFilter === 'TASK' ? 'active' : ''}`}
-                  onClick={() => setAuditFilter('TASK')}
-                >
-                  Tasks
-                </button>
-                <button
-                  type="button"
-                  className={`filter-pill ${auditFilter === 'PROFILE' ? 'active' : ''}`}
-                  onClick={() => setAuditFilter('PROFILE')}
-                >
-                  Profile
-                </button>
+
+              {/* Search Bar */}
+              <div className="audit-search-box">
+                <Search size={14} className="audit-search-icon" />
+                <input
+                  type="text"
+                  placeholder="Search logs by actor, action or detail..."
+                  value={auditSearchQuery}
+                  onChange={(e) => setAuditSearchQuery(e.target.value)}
+                  className="audit-search-input"
+                />
+                {auditSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setAuditSearchQuery('')}
+                    className="audit-search-clear"
+                    title="Clear search"
+                  >
+                    <X size={12} />
+                  </button>
+                )}
               </div>
+            </div>
+
+            {/* Category Filter Pills */}
+            <div className="audit-filter-pills" style={{ marginTop: 8 }}>
+              <button
+                type="button"
+                className={`filter-pill ${auditFilter === 'ALL' ? 'active' : ''}`}
+                onClick={() => setAuditFilter('ALL')}
+              >
+                All ({auditLogs.length})
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${auditFilter === 'SECURITY' ? 'active' : ''}`}
+                onClick={() => setAuditFilter('SECURITY')}
+              >
+                Security
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${auditFilter === 'TASK' ? 'active' : ''}`}
+                onClick={() => setAuditFilter('TASK')}
+              >
+                Tasks
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${auditFilter === 'PROFILE' ? 'active' : ''}`}
+                onClick={() => setAuditFilter('PROFILE')}
+              >
+                Profile
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${auditFilter === 'NOTE' ? 'active' : ''}`}
+                onClick={() => setAuditFilter('NOTE')}
+              >
+                Notes
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${auditFilter === 'TIMELINE' ? 'active' : ''}`}
+                onClick={() => setAuditFilter('TIMELINE')}
+              >
+                Timeline
+              </button>
             </div>
 
             <div className="audit-logs-stream">
               {filteredAuditLogs.length === 0 ? (
                 <div className="audit-empty-state">
-                  <span>No audit events recorded for this category yet.</span>
+                  <CheckCheck size={28} className="text-muted" />
+                  <span>No audit events match your search or filter criteria.</span>
                 </div>
               ) : (
                 filteredAuditLogs.map((log) => (
@@ -2318,14 +2459,18 @@ export default function PortalPage() {
                       ) : log.type === 'TASK' ? (
                         <ListTodo size={15} className="text-emerald" />
                       ) : log.type === 'PROFILE' ? (
-                        <UserCheck size={15} className="text-orange" />
+                        <UserCheck size={15} className="text-purple" />
+                      ) : log.type === 'NOTE' ? (
+                        <Layers size={15} className="text-amber" />
+                      ) : log.type === 'TIMELINE' ? (
+                        <FileText size={15} className="text-cyan" />
                       ) : (
                         <FileText size={15} />
                       )}
                     </div>
                     <div className="audit-log-content">
                       <div className="audit-log-top">
-                        <span className={`audit-type-tag ${log.type.toLowerCase()}`}>
+                        <span className={`audit-type-tag ${log.type?.toLowerCase() || 'general'}`}>
                           {log.type}
                         </span>
                         <strong className="audit-actor">{log.actorName}</strong>
