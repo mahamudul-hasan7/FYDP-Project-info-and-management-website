@@ -6,7 +6,7 @@ md-mahamudul-hasan.jpg
 md-sabbir-hossen.jpg
 tania-islam.jpg
 maria-tasnim.jpg
-member-five.jpg
+rehnuma-khan.jpg
 
 Recommended: square JPG, 800x800 or 1000x1000, face centered.
 If a file is missing, the website will show initials automatically.

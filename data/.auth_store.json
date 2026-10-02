@@ -67,16 +67,19 @@
     "passwordHash": "7b9f1a342eeca08bffc307334da6968edc970722170fbcc6ffbb5bff683bfcfd"
   },
   {
-    "slug": "member-five",
-    "username": "member05",
+    "slug": "rehnuma-khan",
+    "username": "0112310260",
     "aliases": [
+      "rehnuma",
+      "member05",
       "member5",
-      "member05@bscse.uiu.ac.bd"
+      "member-five",
+      "rkhan2310260@bscse.uiu.ac.bd"
     ],
-    "name": "Member 05",
+    "name": "Rehnuma Khan",
     "role": "MEMBER",
     "roleTitle": "Presenter",
-    "email": "member05@bscse.uiu.ac.bd",
-    "passwordHash": "a01043f153c1aafdddbf374b47739b2ca0b56d89ed6d57f54aa66be674727341"
+    "email": "rkhan2310260@bscse.uiu.ac.bd",
+    "passwordHash": "96a126efeacef4dcc434be4c4e04a589185937ea05e4b085df9e51562b0b0813"
   }
 ]

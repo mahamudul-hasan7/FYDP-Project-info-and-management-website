@@ -30,7 +30,7 @@ const REGISTERED_MEMBERS = [
   { name: 'Sabbir', id: '0112331026', label: 'Sabbir', isAdmin: false },
   { name: 'Tania', id: '0112331025', label: 'Tania', isAdmin: false },
   { name: 'Maria', id: '0112331019', label: 'Maria', isAdmin: false },
-  { name: 'Member 05', id: 'member05', label: 'Member 05', isAdmin: false }
+  { name: 'Rehnuma', id: '0112310260', label: 'Rehnuma', isAdmin: false }
 ];
 
 export default function LoginPage() {
