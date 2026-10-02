@@ -6877,6 +6877,287 @@ body:has(.report-modal-backdrop) .mobile-dock {
   }
 }
 
+/* ==========================================================================
+   ULTRA-POLISHED MOBILE RESPONSIVE UI/UX DESIGN SYSTEM (SCREENS <= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Prevent horizontal scroll glitch */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+
+  .app-shell {
+    padding: 10px 12px 90px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 1. Header & Navigation */
+  .topbar {
+    min-height: 48px !important;
+    padding: 6px 0 !important;
+  }
+  .app-brand strong {
+    font-size: 15px !important;
+  }
+  .app-brand small {
+    font-size: 10px !important;
+  }
+
+  /* 2. Executive HUD Card */
+  .portal-hud-card {
+    padding: 14px 16px !important;
+    border-radius: 20px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    margin-top: 6px !important;
+  }
+  .hud-user-left {
+    gap: 12px !important;
+    align-items: center !important;
+  }
+  .hud-avatar {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 16px !important;
+  }
+  .hud-avatar-glow-ring {
+    border-radius: 19px !important;
+    padding: 2px !important;
+  }
+  .hud-user-details h2 {
+    font-size: 17.5px !important;
+    line-height: 1.25 !important;
+    margin: 1px 0 0 !important;
+  }
+  .hud-role-line {
+    font-size: 11.5px !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+  .hud-badge-row {
+    gap: 5px !important;
+  }
+  .hud-id-copy-pill {
+    font-size: 10px !important;
+    padding: 2px 7px !important;
+  }
+  .hud-user-actions {
+    width: 100% !important;
+  }
+  .hud-user-actions .compact-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 38px !important;
+    font-size: 12px !important;
+  }
+
+  /* 3. Horizontal Smooth Swipeable Tab Bar */
+  .portal-tab-bar {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 6px !important;
+    padding: 8px 2px !important;
+    margin: 8px 0 12px !important;
+    scrollbar-width: none !important;
+  }
+  .portal-tab-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .portal-tab-btn {
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
+    padding: 8px 13px !important;
+    font-size: 12px !important;
+    border-radius: 12px !important;
+    min-height: 38px !important;
+    white-space: nowrap !important;
+  }
+  .portal-tab-btn.active {
+    background: var(--surface) !important;
+    border-color: var(--orange) !important;
+    color: var(--orange) !important;
+    box-shadow: 0 0 14px rgba(243, 109, 34, 0.25) !important;
+  }
+
+  /* 4. Admin Member Switcher Bar */
+  .admin-member-switch-bar {
+    padding: 10px 12px !important;
+    border-radius: 16px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  .switch-bar-label {
+    font-size: 10px !important;
+  }
+  .member-pill-selector {
+    display: flex !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding-bottom: 2px !important;
+  }
+  .member-pill-selector::-webkit-scrollbar {
+    display: none !important;
+  }
+  .member-select-pill {
+    flex-shrink: 0 !important;
+    padding: 5px 10px 5px 6px !important;
+    font-size: 11.5px !important;
+  }
+
+  /* 5. Visual Identity & Photo/Avatar Studio */
+  .admin-avatar-studio {
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+  .avatar-studio-layout {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .avatar-preview-card {
+    padding: 14px !important;
+    border-radius: 16px !important;
+  }
+  .studio-preview-avatar {
+    width: 68px !important;
+    height: 68px !important;
+    border-radius: 18px !important;
+  }
+  .studio-presets-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding-bottom: 2px !important;
+  }
+  .studio-preset-chip {
+    flex-shrink: 0 !important;
+    padding: 5px 10px !important;
+    font-size: 11px !important;
+  }
+  .studio-smart-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+  .studio-tool-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .studio-alignment-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* 6. Form Sections & Input Grids */
+  .portal-content-box {
+    padding: 16px 14px !important;
+    border-radius: 20px !important;
+    margin-top: 0 !important;
+  }
+  .clean-form-section {
+    padding: 14px !important;
+    border-radius: 16px !important;
+    gap: 12px !important;
+  }
+  .clean-fields-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .clean-section-title {
+    font-size: 13.5px !important;
+  }
+  .portal-form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* 7. Kanban Board Stack */
+  .kanban-board-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .kanban-column {
+    min-height: auto !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+  .task-creation-box {
+    padding: 14px !important;
+    border-radius: 16px !important;
+  }
+
+  /* 8. Roster & Audit Stream */
+  .roster-item {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+  .roster-left {
+    width: 100% !important;
+  }
+  .roster-right {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+  .roster-right button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .audit-log-row {
+    grid-template-columns: auto 1fr !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+  }
+  .audit-time {
+    grid-column: 2 / -1 !important;
+    font-size: 10px !important;
+  }
+
+  /* 9. Public Member Portfolio Screen */
+  .profile-hero-card {
+    padding: 20px 16px !important;
+    border-radius: 22px !important;
+  }
+  .profile-hero-avatar {
+    width: 90px !important;
+    height: 90px !important;
+    border-radius: 22px !important;
+  }
+  .profile-name {
+    font-size: 22px !important;
+    text-align: center !important;
+  }
+  .profile-tagline {
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+  .profile-action-matrix {
+    grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+  .profile-content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .content-card {
+    padding: 16px !important;
+    border-radius: 18px !important;
+  }
+}
+
+
 
 
 
