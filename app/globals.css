@@ -6378,9 +6378,145 @@ body:has(.report-modal-backdrop) .mobile-dock {
   .timeline-view-switcher {
     width: 100%;
   }
-  .timeline-view-btn {
-    flex: 1;
-    justify-content: center;
+}
+
+/* ==========================================================================
+   UNIVERSAL SAVE ANIMATION & GLASSMORPHIC LOADING OVERLAY
+   ========================================================================== */
+.universal-save-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 16px;
+}
+
+.universal-save-card {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 32px;
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  width: min(340px, calc(100vw - 32px));
+}
+
+.save-icon-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.save-icon-circle.saving {
+  background: rgba(243, 109, 34, 0.12);
+  border: 1.5px solid rgba(243, 109, 34, 0.3);
+  color: var(--orange);
+}
+
+.save-icon-circle.success {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1.5px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+}
+
+.save-icon-circle.error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1.5px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+.save-spinner-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.save-spinner-icon {
+  animation: saveSpin 0.75s linear infinite;
+}
+
+@keyframes saveSpin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.save-check-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.save-check-icon {
+  color: #10b981;
+}
+
+.save-error-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.save-error-icon {
+  color: #ef4444;
+}
+
+.save-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.save-text-group h4 {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 850;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.save-text-group p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.save-card-beam-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.save-card-beam-fill {
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, transparent, #f36d22, #06b6d4, #10b981, transparent);
+  animation: saveBeam 1.1s ease-in-out infinite;
+}
+
+@keyframes saveBeam {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
   }
 }
 

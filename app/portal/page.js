@@ -64,6 +64,7 @@ import {
 } from 'lucide-react';
 import ThemeToggle from '../../components/ThemeToggle';
 import MemberAvatar from '../../components/MemberAvatar';
+import UniversalSaveOverlay from '../../components/UniversalSaveOverlay';
 
 export default function PortalPage() {
   const router = useRouter();
@@ -147,6 +148,35 @@ export default function PortalPage() {
   const [broadcastSuccess, setBroadcastSuccess] = useState('');
   const [agendaCopied, setAgendaCopied] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+
+  // Universal Save & Sync Loading Overlay state
+  const [saveOverlay, setSaveOverlay] = useState({
+    show: false,
+    status: 'saving',
+    title: 'Saving changes...',
+    message: 'Synchronizing with workspace database...'
+  });
+
+  const triggerUniversalSave = (title = 'Saving changes...', message = 'Synchronizing with workspace database...') => {
+    setSaveOverlay({ show: true, status: 'saving', title, message });
+  };
+
+  const resolveUniversalSaveSuccess = (title = 'Changes Saved Successfully ✓', message = 'All updates are now live on your portfolio.') => {
+    setSaveOverlay({ show: true, status: 'success', title, message });
+    if (soundEnabled) {
+      playNotificationChime();
+    }
+    setTimeout(() => {
+      setSaveOverlay((prev) => ({ ...prev, show: false }));
+    }, 1150);
+  };
+
+  const resolveUniversalSaveError = (title = 'Failed to Save Changes', message = 'Please check your inputs and try again.') => {
+    setSaveOverlay({ show: true, status: 'error', title, message });
+    setTimeout(() => {
+      setSaveOverlay((prev) => ({ ...prev, show: false }));
+    }, 2200);
+  };
 
   const notifPopoverRef = useRef(null);
   const knownAuditIdsRef = useRef(new Set());
@@ -550,6 +580,7 @@ export default function PortalPage() {
     if (e) e.preventDefault();
     setBannerSaving(true);
     setBannerMessage('');
+    triggerUniversalSave('Updating Banner Media...', 'Applying video & photo settings to homepage banner...');
 
     try {
       const res = await fetch('/api/portal/banner', {
@@ -560,13 +591,16 @@ export default function PortalPage() {
       const data = await res.json();
       if (data.success) {
         setBannerMessage('✓ Banner media settings updated successfully!');
+        resolveUniversalSaveSuccess('Banner Settings Saved ✓', 'Homepage banner configurations updated.');
         loadAuditLogs();
         setTimeout(() => setBannerMessage(''), 3500);
       } else {
         setBannerMessage(`Error: ${data.message}`);
+        resolveUniversalSaveError('Failed to Save Banner', data.message);
       }
     } catch (err) {
       setBannerMessage('Failed to save banner settings.');
+      resolveUniversalSaveError('Connection Error', 'Failed to save banner settings.');
     } finally {
       setBannerSaving(false);
     }
@@ -628,6 +662,7 @@ export default function PortalPage() {
     if (e) e.preventDefault();
     setProfileSaving(true);
     setProfileMessage('');
+    triggerUniversalSave('Saving Profile Changes...', 'Updating credentials and publishing to portfolio...');
 
     try {
       const res = await fetch('/api/portal/profile', {
@@ -642,14 +677,17 @@ export default function PortalPage() {
       const data = await res.json();
       if (data.success) {
         setProfileMessage('✓ Changes saved successfully!');
+        resolveUniversalSaveSuccess('Profile Saved Successfully ✓', 'All changes are now live on your portfolio.');
         setEditingSection(null);
         loadAuditLogs();
         setTimeout(() => setProfileMessage(''), 3500);
       } else {
         setProfileMessage(`Error: ${data.message}`);
+        resolveUniversalSaveError('Error Saving Profile', data.message);
       }
     } catch (err) {
       setProfileMessage('Error saving profile.');
+      resolveUniversalSaveError('Connection Error', 'Error saving profile.');
     } finally {
       setProfileSaving(false);
     }
@@ -661,6 +699,7 @@ export default function PortalPage() {
     if (!newLogTitle || !newLogHighlights) return;
     setLogPosting(true);
     setLogMessage('');
+    triggerUniversalSave('Publishing Sprint Log...', 'Adding milestone deliverable to timeline...');
 
     const highlightsList = newLogHighlights
       .split('\n')
@@ -682,15 +721,20 @@ export default function PortalPage() {
       const data = await res.json();
       if (data.success) {
         setLogMessage('✓ Weekly sprint log published to homepage timeline!');
+        resolveUniversalSaveSuccess('Sprint Log Published ✓', 'Milestone added to public timeline.');
         setNewLogTitle('');
         setNewLogWeek('');
         setNewLogHighlights('');
         loadLogs();
         loadAuditLogs();
         setTimeout(() => setLogMessage(''), 3500);
+      } else {
+        setLogMessage(`Error: ${data.message || 'Failed to post log.'}`);
+        resolveUniversalSaveError('Failed to Publish Log', data.message || 'Server returned an error.');
       }
     } catch (err) {
       setLogMessage('Failed to post log.');
+      resolveUniversalSaveError('Connection Error', 'Failed to publish sprint log.');
     } finally {
       setLogPosting(false);
     }
@@ -717,6 +761,7 @@ export default function PortalPage() {
     if (!newTaskTitle) return;
     setTaskPosting(true);
     setTaskMessage('');
+    triggerUniversalSave('Assigning Directive...', 'Adding directive task to Kanban board...');
 
     try {
       const selectedMember = allMembers.find((m) => m.name === newTaskAssignee);
@@ -737,6 +782,7 @@ export default function PortalPage() {
       const data = await res.json();
       if (data.success) {
         setTaskMessage('✓ Directive task added to workspace board!');
+        resolveUniversalSaveSuccess('Directive Task Assigned ✓', 'Task added to Kanban workflow.');
         setNewTaskTitle('');
         setNewTaskDesc('');
         loadTasks();
@@ -744,9 +790,11 @@ export default function PortalPage() {
         setTimeout(() => setTaskMessage(''), 3500);
       } else {
         setTaskMessage(`Error: ${data.message}`);
+        resolveUniversalSaveError('Failed to Assign Directive', data.message || 'Server returned an error.');
       }
     } catch (err) {
       setTaskMessage('Failed to create task.');
+      resolveUniversalSaveError('Connection Error', 'Failed to create directive task.');
     } finally {
       setTaskPosting(false);
     }
@@ -792,6 +840,7 @@ export default function PortalPage() {
     if (!newNoteTitle || !newNoteContent) return;
     setNotePosting(true);
     setNoteMessage('');
+    triggerUniversalSave('Posting Team Note...', 'Broadcasting private note to workspace...');
 
     try {
       const res = await fetch('/api/portal/notes', {
@@ -807,6 +856,7 @@ export default function PortalPage() {
       const data = await res.json();
       if (data.success) {
         setNoteMessage('✓ Team note published to workspace feed!');
+        resolveUniversalSaveSuccess('Team Note Published ✓', 'Visible to authenticated team members.');
         setNewNoteTitle('');
         setNewNoteContent('');
         loadNotes();
@@ -814,10 +864,12 @@ export default function PortalPage() {
         setTimeout(() => setNoteMessage(''), 3500);
       } else {
         setNoteMessage(`Error: ${data.message}`);
+        resolveUniversalSaveError('Failed to Post Note', data.message || 'Server returned an error.');
       }
     } catch (err) {
       console.error('Failed to post note', err);
       setNoteMessage('Failed to post note.');
+      resolveUniversalSaveError('Connection Error', 'Failed to post team note.');
     } finally {
       setNotePosting(false);
     }
@@ -860,6 +912,7 @@ export default function PortalPage() {
     }
 
     setPwdSaving(true);
+    triggerUniversalSave('Securing Password...', 'Encrypting and updating workspace credentials...');
 
     try {
       const res = await fetch('/api/auth/change-password', {
@@ -876,6 +929,7 @@ export default function PortalPage() {
       if (data.success) {
         setPwdMessage('✓ Password updated successfully!');
         setPwdMessageType('success');
+        resolveUniversalSaveSuccess('Password Updated ✓', 'New security password is now active.');
         setPwdOld('');
         setPwdNew('');
         setPwdConfirm('');
@@ -884,10 +938,12 @@ export default function PortalPage() {
       } else {
         setPwdMessage(`Error: ${data.message || 'Failed to update password.'}`);
         setPwdMessageType('error');
+        resolveUniversalSaveError('Failed to Update Password', data.message || 'Verification failed.');
       }
     } catch (err) {
       setPwdMessage('Failed to update password. Please check connection.');
       setPwdMessageType('error');
+      resolveUniversalSaveError('Connection Error', 'Failed to update credentials.');
     } finally {
       setPwdSaving(false);
     }
@@ -2913,6 +2969,14 @@ export default function PortalPage() {
           ))}
         </div>
       )}
+
+      {/* Universal Save / Sync Animation Overlay */}
+      <UniversalSaveOverlay
+        show={saveOverlay.show}
+        status={saveOverlay.status}
+        title={saveOverlay.title}
+        message={saveOverlay.message}
+      />
     </main>
   );
 }
