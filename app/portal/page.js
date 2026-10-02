@@ -1341,19 +1341,18 @@ export default function PortalPage() {
 
           {/* Clean Form */}
           <form onSubmit={handleSaveProfile} className="clean-profile-form">
-            {/* Visual Identity & Member Photo Studio */}
-            <div className="clean-form-section admin-avatar-studio">
-              <div className="clean-section-title">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Camera size={16} className="text-orange" />
-                  <span>Visual Identity & Profile Photo Studio</span>
-                </div>
-                {isAdmin && (
+            {/* Visual Identity & Member Photo Studio (Admin Only) */}
+            {isAdmin && (
+              <div className="clean-form-section admin-avatar-studio">
+                <div className="clean-section-title">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Camera size={16} className="text-orange" />
+                    <span>Visual Identity & Profile Photo Studio</span>
+                  </div>
                   <span className="studio-admin-badge">
                     <Crown size={11} /> Admin Control
                   </span>
-                )}
-              </div>
+                </div>
 
                 <div className="avatar-studio-layout">
                   {/* Left: Interactive Live Dual Avatar Card */}
@@ -1570,6 +1569,7 @@ export default function PortalPage() {
                   </div>
                 </div>
               </div>
+            )}
 
             {/* Section 1: Academic & Personal Info */}
             <div className="clean-form-section">
