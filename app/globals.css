@@ -2254,23 +2254,25 @@ body:has(.report-modal-backdrop) .mobile-dock {
   letter-spacing: .06em;
 }
 .quick-id-pills-row {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
 }
 .quick-id-pill {
-  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 4px;
+  padding: 8px 10px;
   border-radius: 12px;
   background: var(--surface);
   border: 1px solid var(--line);
   color: var(--text);
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 11.5px;
+  font-weight: 750;
   cursor: pointer;
-  transition: all .2s ease;
+  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
   white-space: nowrap;
   text-align: center;
@@ -2339,8 +2341,10 @@ body:has(.report-modal-backdrop) .mobile-dock {
 }
 
 @media (max-width: 500px) {
-  .quick-id-pills-row {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .quick-id-pill {
+    flex: 1 1 calc(33.333% - 6px);
+    padding: 8px 6px;
+    font-size: 11px;
   }
 }
 
