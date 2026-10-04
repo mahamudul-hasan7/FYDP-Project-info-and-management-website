@@ -202,11 +202,11 @@ async function runSeed() {
   console.log('🔄 Seeding project_info table...');
   const projectRecord = {
     id: 1,
-    title: projectData.title || 'Next-Gen FYDP Smart Workspace & System',
+    title: projectData.title || 'Final Year Design Project (Topic & Title Pending)',
     short_title: projectData.shortTitle || 'Team Random FYDP',
-    domain: projectData.domain || 'Software Engineering & AI',
-    status: projectData.status || 'Phase 1 • In Progress',
-    progress_percent: projectData.progressPercent || 35,
+    domain: projectData.domain || 'Computer Science & Engineering',
+    status: projectData.status || 'Phase 1 • Topic Pending',
+    progress_percent: projectData.progressPercent || 15,
     supervisor: projectData.supervisor || {},
     abstract: projectData.abstract || '',
     tech_stack: projectData.techStack || [],

@@ -1,44 +1,44 @@
 export const projectData = {
-  title: 'Next-Gen FYDP Smart Workspace & System',
+  title: 'Final Year Design Project (Topic & Title Pending)',
   shortTitle: 'Team Random FYDP',
-  domain: 'Software Engineering & AI',
-  status: 'Phase 1 • In Progress',
-  progressPercent: 35,
+  domain: 'Computer Science & Engineering',
+  status: 'Phase 1 • Topic Pending',
+  progressPercent: 15,
   supervisor: {
-    name: 'Faculty Supervisor Name',
+    name: 'Faculty Supervisor',
     role: 'Project Supervisor',
-    designation: 'Assistant Professor',
+    designation: 'Faculty Advisor (TBA)',
     department: 'Department of CSE, UIU',
     email: 'supervisor@cse.uiu.ac.bd'
   },
   abstract:
-    'An advanced final year design project focusing on end-to-end research, scalable software engineering architecture, and modern deployment for high-impact computing solutions.',
+    'The project topic, domain scope, and core architecture are currently under active formulation, background literature review, and supervisor alignment.',
   techStack: [
     { name: 'Next.js', category: 'Frontend' },
     { name: 'React 19', category: 'Frontend' },
-    { name: 'Python / FastAPI', category: 'Backend' },
-    { name: 'PyTorch / ML', category: 'AI/Research' },
+    { name: 'Node.js', category: 'Backend' },
     { name: 'PostgreSQL', category: 'Database' },
-    { name: 'Docker', category: 'DevOps' }
+    { name: 'Git & GitHub', category: 'VCS' },
+    { name: 'Vercel', category: 'Deployment' }
   ],
   milestones: [
     {
-      title: 'Topic Approval & Proposal Defense',
-      status: 'completed',
+      title: 'Topic Selection & Proposal Formulation',
+      status: 'active',
       date: 'Milestone 01'
     },
     {
-      title: 'System Design & Research Methodology',
-      status: 'active',
+      title: 'Supervisor Assignment & Topic Defense',
+      status: 'upcoming',
       date: 'Milestone 02'
     },
     {
-      title: 'Core Implementation & Prototype',
+      title: 'System Design & Prototype Implementation',
       status: 'upcoming',
       date: 'Milestone 03'
     },
     {
-      title: 'Testing, Final Report & Defense',
+      title: 'Final Testing, Documentation & Defense',
       status: 'upcoming',
       date: 'Milestone 04'
     }
