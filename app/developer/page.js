@@ -13,15 +13,18 @@ import {
   Cpu,
   Database,
   ExternalLink,
+  Facebook,
   Flame,
   FolderGit2,
   Github,
   Globe,
   GraduationCap,
+  Instagram,
   Layers,
   Layout,
   Linkedin,
   Mail,
+  MessageCircle,
   Phone,
   Rocket,
   Server,
@@ -45,6 +48,59 @@ export default function DeveloperPage() {
       setTimeout(() => setCopiedEmail(false), 2400);
     }
   };
+
+  const socialLinks = [
+    {
+      name: 'Portfolio',
+      handle: 'mahamud.xyz',
+      url: 'https://www.mahamud.xyz/',
+      icon: Globe,
+      color: '#f36d22',
+      badge: 'Official Site',
+      primary: true
+    },
+    {
+      name: 'GitHub',
+      handle: '@mahamudul-hasan7',
+      url: 'https://github.com/mahamudul-hasan7',
+      icon: Github,
+      color: '#e6edf3',
+      badge: 'Code Repositories'
+    },
+    {
+      name: 'LinkedIn',
+      handle: 'in/mahamudulxhasan',
+      url: 'https://www.linkedin.com/in/mahamudulxhasan/',
+      icon: Linkedin,
+      color: '#0a66c2',
+      badge: 'Professional Network'
+    },
+    {
+      name: 'WhatsApp',
+      handle: '+880 1810-394869',
+      url: 'https://wa.me/8801810394869?text=Hi%20Mahamudul%2C%20reaching%20out%20from%20your%20FYDP%20Workspace',
+      icon: MessageCircle,
+      color: '#25d366',
+      badge: 'Direct Message',
+      highlight: true
+    },
+    {
+      name: 'Facebook',
+      handle: 'fb.com/rakibmahamudh',
+      url: 'https://www.facebook.com/rakibmahamudh',
+      icon: Facebook,
+      color: '#1877f2',
+      badge: 'Social Connect'
+    },
+    {
+      name: 'Instagram',
+      handle: '@rakib_mahamudul',
+      url: 'https://www.instagram.com/rakib_mahamudul/',
+      icon: Instagram,
+      color: '#e1306c',
+      badge: 'Visual Journal'
+    }
+  ];
 
   const techStack = [
     { name: 'Next.js 15 (App Router)', category: 'frontend', level: 'Advanced', icon: Layout },
@@ -150,27 +206,53 @@ export default function DeveloperPage() {
               Architecting high-performance web systems, robust cloud databases, and scalable digital workspaces with clean engineering standards.
             </p>
 
-            {/* Social & Contact Actions */}
+            {/* Quick Hero Social / Contact Actions */}
             <div className="dev-actions-grid">
               <a
-                href="https://github.com/mahamudul-hasan7"
+                href="https://www.mahamud.xyz/"
                 target="_blank"
                 rel="noreferrer"
                 className="dev-btn dev-btn-primary"
+                title="Visit Mahamudul's Official Portfolio"
               >
-                <Github size={16} />
-                <span>GitHub Profile</span>
+                <Globe size={16} />
+                <span>mahamud.xyz</span>
                 <ExternalLink size={13} className="dev-external-arrow" />
               </a>
 
               <a
-                href="https://linkedin.com"
+                href="https://github.com/mahamudul-hasan7"
                 target="_blank"
                 rel="noreferrer"
                 className="dev-btn dev-btn-outline"
+                title="View GitHub Repositories"
+              >
+                <Github size={16} />
+                <span>GitHub</span>
+                <ExternalLink size={13} className="dev-external-arrow" />
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/mahamudulxhasan/"
+                target="_blank"
+                rel="noreferrer"
+                className="dev-btn dev-btn-outline"
+                title="Connect on LinkedIn"
               >
                 <Linkedin size={16} />
                 <span>LinkedIn</span>
+                <ExternalLink size={13} className="dev-external-arrow" />
+              </a>
+
+              <a
+                href="https://wa.me/8801810394869?text=Hi%20Mahamudul%2C%20reaching%20out%20from%20your%20FYDP%20Workspace"
+                target="_blank"
+                rel="noreferrer"
+                className="dev-btn dev-btn-whatsapp"
+                title="Direct WhatsApp Message"
+              >
+                <MessageCircle size={16} />
+                <span>WhatsApp</span>
                 <ExternalLink size={13} className="dev-external-arrow" />
               </a>
 
@@ -208,7 +290,7 @@ export default function DeveloperPage() {
 
       {/* Main Grid Content */}
       <div className="dev-main-grid">
-        {/* Left Column: Engineering Philosophy & Bio */}
+        {/* Left Column: Engineering Philosophy & Blueprint */}
         <div className="dev-left-col">
           <article className="content-card dev-card">
             <div className="card-header-badge">
@@ -282,8 +364,45 @@ export default function DeveloperPage() {
           </article>
         </div>
 
-        {/* Right Column: Tech Arsenal & Terminal */}
+        {/* Right Column: Social Channels Hub, Tech Arsenal & Terminal */}
         <div className="dev-right-col">
+          {/* Verified Social & Contact Hub Card */}
+          <article className="content-card dev-card dev-social-hub-card">
+            <div className="card-header-badge">
+              <Globe size={16} className="text-orange" />
+              <span className="mini-label">OFFICIAL CHANNELS</span>
+            </div>
+            <h2>Verified Connect Hub</h2>
+            <p className="card-subtext">Connect with Mahamudul across official engineering and social platforms</p>
+
+            <div className="dev-channels-list">
+              {socialLinks.map((social, idx) => {
+                const IconComponent = social.icon;
+                return (
+                  <a
+                    key={idx}
+                    href={social.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`dev-channel-row ${social.primary ? 'channel-primary' : ''} ${social.highlight ? 'channel-whatsapp' : ''}`}
+                  >
+                    <div className="dev-channel-icon-wrap" style={{ color: social.color }}>
+                      <IconComponent size={18} />
+                    </div>
+                    <div className="dev-channel-info">
+                      <div className="dev-channel-title-group">
+                        <strong className="dev-channel-name">{social.name}</strong>
+                        <span className="dev-channel-badge">{social.badge}</span>
+                      </div>
+                      <span className="dev-channel-handle">{social.handle}</span>
+                    </div>
+                    <ExternalLink size={15} className="dev-channel-arrow" />
+                  </a>
+                );
+              })}
+            </div>
+          </article>
+
           {/* Tech Arsenal Card */}
           <article className="content-card dev-card">
             <div className="card-header-badge">
@@ -368,47 +487,20 @@ export default function DeveloperPage() {
               </div>
               <div className="term-output">
                 <p><span className="term-key">name:</span> &quot;Md Mahamudul Hasan&quot;</p>
-                <p><span className="term-key">role:</span> &quot;Technical Lead / Full-Stack Engineer&quot;</p>
-                <p><span className="term-key">institution:</span> &quot;United International University (UIU)&quot;</p>
-                <p><span className="term-key">student_id:</span> &quot;011 233 0182&quot;</p>
-                <p><span className="term-key">status:</span> <span className="term-green">&quot;Ready for High-Impact Challenges&quot;</span></p>
+                <p><span className="term-key">role:</span> &quot;Lead Technical Architect / Systems Engineer&quot;</p>
+                <p><span className="term-key">portfolio:</span> <span className="term-green">&quot;https://www.mahamud.xyz&quot;</span></p>
+                <p><span className="term-key">whatsapp:</span> &quot;+8801810394869&quot;</p>
+                <p><span className="term-key">status:</span> <span className="term-green">&quot;Engineering High-Impact Solutions&quot;</span></p>
               </div>
 
               <div className="dev-term-line" style={{ marginTop: '14px' }}>
-                <span className="term-prompt">$</span> <span className="term-cmd">cat contact_info.json</span>
+                <span className="term-prompt">$</span> <span className="term-cmd">cat social_links.json</span>
               </div>
               <div className="term-output">
-                <p><span className="term-key">email:</span> &quot;mhasan2330182@bscse.uiu.ac.bd&quot;</p>
                 <p><span className="term-key">github:</span> &quot;https://github.com/mahamudul-hasan7&quot;</p>
-                <p><span className="term-key">workspace:</span> &quot;Team Random FYDP Platform&quot;</p>
-              </div>
-            </div>
-          </article>
-
-          {/* Contact Direct Card */}
-          <article className="content-card dev-card dev-contact-card">
-            <div className="card-header-badge">
-              <Mail size={16} className="text-orange" />
-              <span className="mini-label">DIRECT INQUIRY</span>
-            </div>
-            <h2>Get In Touch</h2>
-            <p className="card-subtext">Connect for collaboration, software discussions, or technical queries.</p>
-
-            <div className="dev-contact-rows">
-              <div className="dev-contact-row">
-                <div className="dev-contact-icon"><Mail size={16} /></div>
-                <div className="dev-contact-detail">
-                  <small>Academic Email</small>
-                  <strong>mhasan2330182@bscse.uiu.ac.bd</strong>
-                </div>
-              </div>
-
-              <div className="dev-contact-row">
-                <div className="dev-contact-icon"><GraduationCap size={16} /></div>
-                <div className="dev-contact-detail">
-                  <small>Department</small>
-                  <strong>Computer Science &amp; Engineering</strong>
-                </div>
+                <p><span className="term-key">linkedin:</span> &quot;https://linkedin.com/in/mahamudulxhasan&quot;</p>
+                <p><span className="term-key">facebook:</span> &quot;https://facebook.com/rakibmahamudh&quot;</p>
+                <p><span className="term-key">instagram:</span> &quot;https://instagram.com/rakib_mahamudul&quot;</p>
               </div>
             </div>
           </article>
