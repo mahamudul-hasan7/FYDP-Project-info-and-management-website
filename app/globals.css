@@ -1283,6 +1283,8 @@ a.btn:active,
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .tech-badge:hover,
 .stack-tag:hover {
@@ -1295,9 +1297,7 @@ a.btn:active,
   font-weight: 800;
   color: var(--text);
   font-size: 12px;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
+  white-space: nowrap;
 }
 .stack-tag small {
   font-size: 9.5px;
@@ -1310,6 +1310,7 @@ a.btn:active,
   text-transform: uppercase;
   letter-spacing: 0.04em;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .milestones-stepper,
@@ -2431,21 +2432,21 @@ body:has(.report-modal-backdrop) .mobile-dock {
     padding: 6px 12px !important;
     border-radius: 999px !important;
     gap: 6px !important;
-    white-space: normal !important;
-    max-width: 100% !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
   }
   .stack-tag strong {
     font-size: 11.5px !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    word-break: normal !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
   }
   .stack-tag small {
     font-size: 8.5px !important;
-    padding: 1px 6px !important;
+    padding: 2px 6px !important;
     border-radius: 999px !important;
     white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    line-height: 1 !important;
   }
 
   .timeline-feed-grid { grid-template-columns: 1fr; gap: 12px; }
