@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -20,13 +20,13 @@ import {
   Sparkles,
   UserCheck,
   UserRound,
-  Users
+  Users,
+  X
 } from 'lucide-react';
 import ThemeToggle from '../../components/ThemeToggle';
 import TeamLogo from '../../components/TeamLogo';
 
 const REGISTERED_MEMBERS = [
-  { name: 'Admin', id: 'admin', label: '👑 Admin', isAdmin: true },
   { name: 'Mahamudul', id: '0112330182', label: 'Mahamudul', isAdmin: false },
   { name: 'Sabbir', id: '0112331026', label: 'Sabbir', isAdmin: false },
   { name: 'Tania', id: '0112331025', label: 'Tania', isAdmin: false },
@@ -45,6 +45,10 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [existingSession, setExistingSession] = useState(null);
   const [checkingSession, setCheckingSession] = useState(true);
+  const [isAdminUnlocked, setIsAdminUnlocked] = useState(false);
+  
+  const passwordInputRef = useRef(null);
+  const tapTimesRef = useRef([]);
 
   // Check if session already active on mount
   useEffect(() => {
@@ -58,6 +62,39 @@ export default function LoginPage() {
       .catch(() => {})
       .finally(() => setCheckingSession(false));
   }, []);
+
+  const activateAdminMode = () => {
+    setIsAdminUnlocked(true);
+    setIdentifier('admin');
+    setError('');
+    setTimeout(() => {
+      if (passwordInputRef.current) {
+        passwordInputRef.current.focus();
+      }
+    }, 50);
+  };
+
+  // Trigger 1: Desktop Keyboard Shortcut (Alt + A)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.altKey && (e.key === 'a' || e.key === 'A' || e.code === 'KeyA')) {
+        e.preventDefault();
+        activateAdminMode();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Trigger 2: Mobile 3 Fast Taps anywhere on the screen/card
+  const handleFastTapTrigger = () => {
+    const now = Date.now();
+    tapTimesRef.current = [...tapTimesRef.current.filter((t) => now - t < 800), now];
+    if (tapTimesRef.current.length >= 3) {
+      tapTimesRef.current = [];
+      activateAdminMode();
+    }
+  };
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
@@ -98,6 +135,7 @@ export default function LoginPage() {
       await fetch('/api/auth/logout', { method: 'POST' });
       setExistingSession(null);
       setIdentifier('0112330182');
+      setIsAdminUnlocked(false);
       setPassword('');
     } catch (e) {
       setExistingSession(null);
@@ -106,11 +144,18 @@ export default function LoginPage() {
 
   const handleSelectMemberId = (id) => {
     setIdentifier(id);
+    if (id !== 'admin') {
+      setIsAdminUnlocked(false);
+    }
     setError('');
   };
 
+  const visibleMemberList = isAdminUnlocked
+    ? [{ name: 'Admin', id: 'admin', label: '👑 Admin', isAdmin: true }, ...REGISTERED_MEMBERS]
+    : REGISTERED_MEMBERS;
+
   return (
-    <main className="app-shell login-screen">
+    <main className="app-shell login-screen" onClick={handleFastTapTrigger}>
       {/* Topbar */}
       <header className="topbar profile-topbar">
         <Link className="profile-back-btn" href="/" aria-label="Back to Homepage">
@@ -192,18 +237,18 @@ export default function LoginPage() {
             </div>
           ) : (
             <>
-              {/* Quick ID helper pills for effortless profile selection */}
+              {/* Quick ID helper pills for profile selection */}
               <div className="quick-id-selector-bar">
                 <div className="quick-id-head">
                   <Users size={12} className="text-orange" />
                   <span>SELECT YOUR PROFILE:</span>
                 </div>
                 <div className="quick-id-pills-row">
-                  {REGISTERED_MEMBERS.map((m) => (
+                  {visibleMemberList.map((m) => (
                     <button
                       key={m.id}
                       type="button"
-                      className={`quick-id-pill ${identifier === m.id ? 'active' : ''}`}
+                      className={`quick-id-pill ${identifier === m.id ? 'active' : ''} ${m.isAdmin ? 'admin-pill' : ''}`}
                       onClick={() => handleSelectMemberId(m.id)}
                       title={`${m.name} (${m.id})`}
                     >
@@ -212,6 +257,29 @@ export default function LoginPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Secret Admin Mode Active Notification Badge */}
+              {isAdminUnlocked && (
+                <div className="admin-status-pill-unlocked">
+                  <div className="admin-status-left">
+                    <Crown size={14} className="text-orange" />
+                    <span>Admin Login: <strong>TRUE</strong></span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsAdminUnlocked(false);
+                      setIdentifier('0112330182');
+                    }}
+                    className="admin-exit-btn"
+                    title="Exit Admin Mode"
+                    aria-label="Exit Admin Mode"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              )}
 
               {/* Feedback alerts */}
               {error && (
@@ -224,13 +292,16 @@ export default function LoginPage() {
               {/* Secure Form with only Password */}
               <form onSubmit={handleLogin} className="login-form">
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">
+                    {isAdminUnlocked ? 'Super Admin Password' : 'Password'}
+                  </label>
                   <div className="input-wrap">
                     <KeyRound size={17} className="input-icon" />
                     <input
+                      ref={passwordInputRef}
                       id="password"
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter confidential password"
+                      placeholder={isAdminUnlocked ? 'Enter confidential Admin password' : 'Enter confidential password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
