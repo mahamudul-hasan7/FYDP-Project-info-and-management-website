@@ -1262,15 +1262,13 @@ a.btn:active,
   text-underline-offset: 2px;
   margin-top: 5px;
 }
-.tech-badge-wrap,
-.stack-tag-grid {
+.tech-badge-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   width: 100%;
 }
-.tech-badge,
-.stack-tag {
+.tech-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1286,7 +1284,36 @@ a.btn:active,
   white-space: nowrap;
   flex-shrink: 0;
 }
-.tech-badge:hover,
+.tech-badge:hover {
+  border-color: rgba(243, 109, 34, 0.4);
+  background: var(--surface-2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(243, 109, 34, 0.12);
+}
+
+.stack-tag-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 10px;
+  width: 100%;
+}
+.stack-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 7px 11px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
 .stack-tag:hover {
   border-color: rgba(243, 109, 34, 0.4);
   background: var(--surface-2);
@@ -1298,9 +1325,10 @@ a.btn:active,
   color: var(--text);
   font-size: 12px;
   white-space: nowrap;
+  min-width: 0;
 }
 .stack-tag small {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 750;
   color: var(--orange);
   background: rgba(243, 109, 34, 0.1);
