@@ -170,9 +170,6 @@ export default function PortalPage() {
 
   const resolveUniversalSaveSuccess = (title = 'Changes Saved Successfully ✓', message = 'All updates are now live on your portfolio.') => {
     setSaveOverlay({ show: true, status: 'success', title, message });
-    if (soundEnabled) {
-      playNotificationChime();
-    }
     setTimeout(() => {
       setSaveOverlay((prev) => ({ ...prev, show: false }));
     }, 1150);
@@ -189,31 +186,8 @@ export default function PortalPage() {
   const knownAuditIdsRef = useRef(new Set());
   const isInitialAuditLoadedRef = useRef(false);
 
-  // Synthesize pleasant ambient notification sound
-  const playNotificationChime = () => {
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12); // A5
-
-      gain.gain.setValueAtTime(0.12, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + 0.35);
-    } catch (e) {
-      // Audio autoplay permission or Web Audio unavailable
-    }
-  };
+  // Sound disabled per user preference
+  const playNotificationChime = () => {};
 
   // Close notification popover when clicking outside
   useEffect(() => {
@@ -1075,7 +1049,6 @@ export default function PortalPage() {
         setBroadcastText('');
         loadNotes();
         loadAuditLogs();
-        if (soundEnabled) playNotificationChime();
         setTimeout(() => setBroadcastSuccess(''), 3500);
       }
     } catch (err) {
