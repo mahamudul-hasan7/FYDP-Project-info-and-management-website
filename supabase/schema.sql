@@ -264,3 +264,71 @@ CREATE POLICY "Public can view project info"
 -- 2. Protected Internal Tables (Tasks, Notes, Audit Logs, User Credentials)
 -- No public anonymous access is granted to user_credentials or sensitive tables.
 -- Trusted Next.js server endpoints use SUPABASE_SECRET_KEY.
+
+-- =============================================================================
+-- Initial User Credentials Seed (Idempotent)
+-- =============================================================================
+INSERT INTO user_credentials (slug, username, aliases, name, role, role_title, email, password_hash)
+VALUES
+    (
+        'system-admin',
+        'admin',
+        '["superadmin", "admin@teamrandom.uiu.ac.bd", "root", "0000000000"]'::jsonb,
+        'System Administrator',
+        'ADMIN',
+        'Project Super Admin',
+        'admin@teamrandom.uiu.ac.bd',
+        '$2b$10$w29BqDnerqi2Rmd2SEpiLer12x5W3ewHm681/9tGBZqYnrODl4EMe'
+    ),
+    (
+        'md-mahamudul-hasan',
+        '0112330182',
+        '["mahamudul", "mhasan2330182@bscse.uiu.ac.bd"]'::jsonb,
+        'Md Mahamudul Hasan',
+        'MEMBER',
+        'Technical Lead',
+        'mhasan2330182@bscse.uiu.ac.bd',
+        '$2b$10$J2.g7MTH5kwxiQIQ.pt4I.0koyRDg1SSXK404BtKlNyk0SILaV122'
+    ),
+    (
+        'md-sabbir-hossen',
+        '0112331026',
+        '["sabbir", "mhossen2331026@bscse.uiu.ac.bd"]'::jsonb,
+        'Md Sabbir Hossen',
+        'MEMBER',
+        'Faculty Communicator',
+        'mhossen2331026@bscse.uiu.ac.bd',
+        '$2b$10$5V6VBkxzC59Ma2Xym1jXtehMehSadumexrSEMMMMXzTnQHttlWx/y'
+    ),
+    (
+        'tania-islam',
+        '0112331025',
+        '["tania", "tislam2331025@bscse.uiu.ac.bd"]'::jsonb,
+        'Tania Islam',
+        'MEMBER',
+        'Lead Researcher',
+        'tislam2331025@bscse.uiu.ac.bd',
+        '$2b$10$edB8bnjG6JoKMfxtKvge2.ZZlgeEh1AFz1F9Z/4FGup/17NobClsa'
+    ),
+    (
+        'maria-tasnim',
+        '0112331019',
+        '["maria", "mtasnim2331019@bscse.uiu.ac.bd"]'::jsonb,
+        'Maria Tasnim',
+        'MEMBER',
+        'Research Assistant',
+        'mtasnim2331019@bscse.uiu.ac.bd',
+        '$2b$10$.6CXCjGgG6irZb18lVHOx.3NB5MNDWyiDQLmVW5wC0mPGsDKz9tG.'
+    ),
+    (
+        'rehnuma-khan',
+        '0112310260',
+        '["rehnuma", "member05", "member5", "member-five", "rkhan2310260@bscse.uiu.ac.bd"]'::jsonb,
+        'Rehnuma Khan',
+        'MEMBER',
+        'Presenter',
+        'rkhan2310260@bscse.uiu.ac.bd',
+        '$2b$10$YwaBGfkivb6FPiogSjMLC.0qM7WWELIwD3PJAvzFhwPw0Z3N/OZou'
+    )
+ON CONFLICT (slug) DO NOTHING;
+
