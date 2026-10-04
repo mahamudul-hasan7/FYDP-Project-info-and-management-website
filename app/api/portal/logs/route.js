@@ -3,7 +3,7 @@ import { getSession } from '../../../../lib/auth';
 import { createWeeklyLog, deleteWeeklyLog, getAllLogs } from '../../../../lib/store';
 
 export async function GET() {
-  const logs = getAllLogs();
+  const logs = await getAllLogs();
   return NextResponse.json({ success: true, logs });
 }
 
@@ -15,7 +15,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const created = createWeeklyLog(body, session);
+    const created = await createWeeklyLog(body, session);
 
     return NextResponse.json({
       success: true,
@@ -37,7 +37,7 @@ export async function DELETE(request) {
     const { searchParams } = new URL(request.url);
     const logId = parseInt(searchParams.get('id'), 10);
 
-    deleteWeeklyLog(logId, session);
+    await deleteWeeklyLog(logId, session);
 
     return NextResponse.json({ success: true, message: 'Log deleted.' });
   } catch (error) {

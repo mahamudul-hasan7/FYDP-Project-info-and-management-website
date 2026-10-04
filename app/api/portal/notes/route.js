@@ -9,7 +9,7 @@ export async function GET() {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
-    const notes = getAllNotes();
+    const notes = await getAllNotes();
     return NextResponse.json({ success: true, notes });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
@@ -24,7 +24,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const created = createTeamNote(body, session);
+    const created = await createTeamNote(body, session);
 
     return NextResponse.json({
       success: true,
@@ -50,7 +50,7 @@ export async function DELETE(request) {
     }
 
     const { deleteTeamNote } = await import('../../../../lib/store');
-    deleteTeamNote(id, session);
+    await deleteTeamNote(id, session);
 
     return NextResponse.json({ success: true, message: 'Note deleted.' });
   } catch (error) {

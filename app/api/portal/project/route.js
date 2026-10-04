@@ -4,7 +4,7 @@ import { getProjectInfo, updateProjectInfo } from '../../../../lib/store';
 
 export async function GET() {
   try {
-    const project = getProjectInfo();
+    const project = await getProjectInfo();
     return NextResponse.json({ success: true, project });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
@@ -22,7 +22,7 @@ export async function PUT(request) {
     }
 
     const body = await request.json();
-    const updated = updateProjectInfo(body, session);
+    const updated = await updateProjectInfo(body, session);
 
     return NextResponse.json({
       success: true,

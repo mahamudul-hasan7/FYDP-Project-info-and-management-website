@@ -14,7 +14,7 @@ export async function GET() {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
-    const tasks = getAllTasks();
+    const tasks = await getAllTasks();
     return NextResponse.json({ success: true, tasks });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
@@ -29,7 +29,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const created = createDirectiveTask(body, session);
+    const created = await createDirectiveTask(body, session);
 
     return NextResponse.json({
       success: true,
@@ -55,7 +55,7 @@ export async function PUT(request) {
       return NextResponse.json({ success: false, message: 'Task ID required' }, { status: 400 });
     }
 
-    const updated = updateDirectiveTask(id, updateData, session);
+    const updated = await updateDirectiveTask(id, updateData, session);
     return NextResponse.json({
       success: true,
       message: 'Task updated!',
@@ -80,7 +80,7 @@ export async function DELETE(request) {
       return NextResponse.json({ success: false, message: 'Task ID required' }, { status: 400 });
     }
 
-    deleteDirectiveTask(id, session);
+    await deleteDirectiveTask(id, session);
     return NextResponse.json({ success: true, message: 'Task deleted.' });
   } catch (error) {
     const status = error.message.includes('Forbidden') ? 403 : error.message.includes('Unauthorized') ? 401 : 400;

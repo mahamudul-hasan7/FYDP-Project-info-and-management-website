@@ -3,9 +3,9 @@ import { getAllLogs, getAllTasks, getAllAuditLogs } from '../../../../lib/store'
 
 export async function GET() {
   try {
-    const logs = getAllLogs() || [];
-    const tasks = getAllTasks() || [];
-    const auditLogs = getAllAuditLogs() || [];
+    const logs = (await getAllLogs()) || [];
+    const tasks = (await getAllTasks()) || [];
+    const auditLogs = (await getAllAuditLogs()) || [];
 
     // STRICT LIMITATION: Whitelist only official milestone events
     // Filter out: internal task deletions, note updates, password changes, private admin overrides

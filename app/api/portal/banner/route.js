@@ -4,7 +4,7 @@ import { getBannerConfig, updateBannerConfig } from '../../../../lib/store';
 
 export async function GET() {
   try {
-    const config = getBannerConfig();
+    const config = await getBannerConfig();
     return NextResponse.json({ success: true, config });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
@@ -22,7 +22,7 @@ export async function PUT(request) {
     }
 
     const body = await request.json();
-    const updated = updateBannerConfig(body, session);
+    const updated = await updateBannerConfig(body, session);
     return NextResponse.json({ success: true, config: updated, message: 'Banner media settings updated!' });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 400 });
