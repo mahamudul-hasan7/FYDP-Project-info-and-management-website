@@ -25,17 +25,17 @@ import { maskStudentId } from '../../../lib/format';
 
 export const dynamic = 'force-dynamic';
 
-export function generateStaticParams() {
-  const allMembers = getAllMembers() || [];
+export async function generateStaticParams() {
+  const allMembers = (await getAllMembers()) || [];
   return allMembers.map((member) => ({ slug: member.slug }));
 }
 
 export default async function MemberPage({ params }) {
   const { slug } = await params;
-  const member = getMemberBySlug(slug);
+  const member = await getMemberBySlug(slug);
   if (!member) notFound();
 
-  const allMembers = getAllMembers() || [];
+  const allMembers = (await getAllMembers()) || [];
 
 
   return (

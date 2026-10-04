@@ -20,8 +20,8 @@ export async function GET(request) {
       return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
     }
 
-    const member = getMemberBySlug(targetSlug);
-    const allMembers = session.role === 'ADMIN' ? getAllMembers() : null;
+    const member = await getMemberBySlug(targetSlug);
+    const allMembers = session.role === 'ADMIN' ? await getAllMembers() : null;
 
     return NextResponse.json({
       success: true,
@@ -44,7 +44,7 @@ export async function PUT(request) {
     const { slug, ...updateData } = body || {};
 
     const targetSlug = slug || session.slug;
-    const updated = updateMemberProfile(targetSlug, updateData, session);
+    const updated = await updateMemberProfile(targetSlug, updateData, session);
 
     return NextResponse.json({
       success: true,

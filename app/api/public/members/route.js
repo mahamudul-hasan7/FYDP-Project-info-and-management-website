@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const members = getAllMembers() || [];
+    const members = (await getAllMembers()) || [];
     return NextResponse.json({
       success: true,
       members,
