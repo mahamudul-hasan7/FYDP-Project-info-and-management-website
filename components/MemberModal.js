@@ -2,13 +2,23 @@
 
 import Link from 'next/link';
 import { AnimatePresence, motion, useDragControls } from 'framer-motion';
-import { ArrowUpRight, Code2, Globe, Linkedin, Mail, Phone, UserRound, X } from 'lucide-react';
-import { useEffect } from 'react';
+import { ArrowUpRight, Code2, Globe, Linkedin, Mail, Phone, UserRound } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import MemberAvatar from './MemberAvatar';
 import { maskStudentId } from '../lib/format';
 
 export default function MemberModal({ member, isCurrentUser, onClose }) {
   const dragControls = useDragControls();
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 860 : false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 860);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (!member) return;
@@ -31,6 +41,32 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
     };
   }, [member, onClose]);
 
+  const modalVariants = {
+    hidden: isMobile
+      ? { opacity: 0.8, y: '100%' }
+      : { opacity: 0, scale: 0.95, y: 20 },
+    visible: isMobile
+      ? { opacity: 1, y: 0 }
+      : { opacity: 1, scale: 1, y: 0 },
+    exit: isMobile
+      ? { opacity: 0.8, y: '100%' }
+      : { opacity: 0, scale: 0.95, y: 20 }
+  };
+
+  const modalTransition = isMobile
+    ? {
+        type: 'spring',
+        damping: 30,
+        stiffness: 300,
+        mass: 0.75
+      }
+    : {
+        type: 'spring',
+        damping: 26,
+        stiffness: 320,
+        mass: 0.9
+      };
+
   return (
     <AnimatePresence>
       {member && (
@@ -39,39 +75,42 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.18, ease: 'easeOut' }}
+          transition={{ duration: 0.24, ease: [0.32, 0.72, 0, 1] }}
           onClick={onClose}
         >
           <motion.div
             className={`member-sheet ${isCurrentUser ? 'modal-user-self' : ''}`}
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 24 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            drag="y"
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={modalTransition}
+            drag={isMobile ? 'y' : false}
             dragControls={dragControls}
             dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0.05, bottom: 0.5 }}
+            dragElastic={{ top: 0.02, bottom: 0.75 }}
             onDragEnd={(e, { offset, velocity }) => {
-              if (offset.y > 70 || velocity.y > 300) {
+              if (offset.y > 60 || velocity.y > 220) {
                 onClose();
               }
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div
-              className="sheet-handle"
-              aria-hidden="true"
-              onPointerDown={(e) => dragControls.start(e)}
-              style={{ touchAction: 'none', cursor: 'grab' }}
-            />
-            <button className="modal-close" onClick={onClose} aria-label="Close profile"><X size={18} /></button>
+              className="sheet-handle-zone"
+              onPointerDown={(e) => {
+                if (isMobile) dragControls.start(e);
+              }}
+              style={{ touchAction: 'none' }}
+            >
+              <div className="sheet-handle" aria-hidden="true" />
+            </div>
 
             <div
               className="sheet-profile"
               onPointerDown={(e) => {
-                if (e.pointerType === 'touch') {
+                if (isMobile && e.pointerType === 'touch') {
                   dragControls.start(e);
                 }
               }}

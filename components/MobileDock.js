@@ -8,6 +8,7 @@ export default function MobileDock() {
   const pathname = usePathname();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('home');
+  const [isDockHidden, setIsDockHidden] = useState(false);
 
   useEffect(() => {
     if (pathname.startsWith('/member/')) {
@@ -15,7 +16,7 @@ export default function MobileDock() {
       return;
     }
 
-    // On homepage, track active section dynamically based on scroll position
+    // On homepage, track active section dynamically and hide dock near timeline end / footer
     const sections = ['home', 'team', 'project', 'timeline'];
     const handleScroll = () => {
       const scrollPos = window.scrollY + 220;
@@ -25,6 +26,18 @@ export default function MobileDock() {
           setActiveTab(sections[i]);
           break;
         }
+      }
+
+      // Check if user has scrolled near timeline end or into the footer
+      const footer = document.querySelector('.unified-app-footer, .app-footer');
+      if (footer) {
+        const rect = footer.getBoundingClientRect();
+        // When footer approaches or enters bottom view, hide dock
+        const isNearFooter = rect.top <= (window.innerHeight - 30);
+        setIsDockHidden(isNearFooter);
+      } else {
+        const nearBottom = window.innerHeight + window.scrollY >= (document.documentElement.scrollHeight - 140);
+        setIsDockHidden(nearBottom);
       }
     };
 
@@ -61,7 +74,7 @@ export default function MobileDock() {
   if (pathname !== '/') return null;
 
   return (
-    <nav className="mobile-dock" aria-label="Mobile navigation">
+    <nav className={`mobile-dock ${isDockHidden ? 'dock-hidden' : ''}`} aria-label="Mobile navigation">
       <button
         type="button"
         className={`dock-btn ${activeTab === 'home' ? 'active' : ''}`}

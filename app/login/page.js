@@ -27,7 +27,7 @@ import ThemeToggle from '../../components/ThemeToggle';
 import TeamLogo from '../../components/TeamLogo';
 
 const REGISTERED_MEMBERS = [
-  { name: 'Mahamudul', id: '0112330182', label: 'Mahamudul', isAdmin: false },
+  { name: 'Mahamud', id: '0112330182', label: 'Mahamud', isAdmin: false },
   { name: 'Sabbir', id: '0112331026', label: 'Sabbir', isAdmin: false },
   { name: 'Tania', id: '0112331025', label: 'Tania', isAdmin: false },
   { name: 'Maria', id: '0112331019', label: 'Maria', isAdmin: false },

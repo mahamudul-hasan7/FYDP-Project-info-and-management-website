@@ -283,8 +283,8 @@ VALUES
     (
         'md-mahamudul-hasan',
         '0112330182',
-        '["mahamudul", "mhasan2330182@bscse.uiu.ac.bd"]'::jsonb,
-        'Md Mahamudul Hasan',
+        '["mahamud", "mahamudul", "mhasan2330182@bscse.uiu.ac.bd"]'::jsonb,
+        'Md Mahamud Hasan',
         'MEMBER',
         'Technical Lead',
         'mhasan2330182@bscse.uiu.ac.bd',

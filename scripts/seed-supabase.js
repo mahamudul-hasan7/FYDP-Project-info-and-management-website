@@ -264,8 +264,8 @@ async function runSeed() {
     {
       slug: 'md-mahamudul-hasan',
       username: '0112330182',
-      aliases: ['mahamudul', 'mhasan2330182@bscse.uiu.ac.bd'],
-      name: 'Md Mahamudul Hasan',
+      aliases: ['mahamud', 'mahamudul', 'mhasan2330182@bscse.uiu.ac.bd'],
+      name: 'Md Mahamud Hasan',
       role: 'MEMBER',
       role_title: 'Technical Lead',
       email: 'mhasan2330182@bscse.uiu.ac.bd',
