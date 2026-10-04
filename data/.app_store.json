@@ -228,57 +228,57 @@
     {
       "id": 1,
       "week": "Week 04 • Current Sprint",
-      "title": "Model Pipeline Architecture & Dataset Balancing",
+      "title": "FYDP Topic Proposal Formulation & Feasibility Study",
       "date": "Oct 02, 2026",
       "status": "active",
-      "category": "Engineering",
+      "category": "Research & Planning",
       "author": "Md Mahamudul Hasan",
       "highlights": [
-        "Configured remote GPU compute cluster for automated batch training runs.",
-        "Constructed data augmentation pipeline with synthetic balancing techniques.",
-        "Established baseline evaluation metrics (Precision, Recall, ROC-AUC, F1-Score)."
+        "Drafting formal FYDP project proposal and scoping core software system architecture.",
+        "Evaluating candidate problem statements against UIU CSE technical guidelines.",
+        "Establishing team development workflow, continuous deployment, and repository governance."
       ]
     },
     {
       "id": 2,
       "week": "Week 03",
-      "title": "Supervisor Consultation & Methodology Gap Analysis",
+      "title": "Initial Faculty Consultation & Domain Ideation",
       "date": "Sep 25, 2026",
       "status": "completed",
       "category": "Supervisor Review",
       "author": "Md Sabbir Hossen",
       "highlights": [
-        "Conducted Week 03 progress consultation with FYDP supervisor.",
-        "Addressed feedback on cross-dataset validation and feature extraction depth.",
-        "Refined technical deliverables and individual member task assignments."
+        "Conducted preliminary consultation session with prospective faculty supervisor.",
+        "Discussed research methodologies, project feasibility, and timeline milestones.",
+        "Gathered faculty feedback to refine prospective problem statements and scope boundaries."
       ]
     },
     {
       "id": 3,
       "week": "Week 02",
-      "title": "Literature Review & Taxonomy Matrix Finalization",
+      "title": "Background Literature Survey & Gap Analysis",
       "date": "Sep 18, 2026",
       "status": "completed",
       "category": "Research",
       "author": "Tania Islam",
       "highlights": [
-        "Surveyed 20+ recent IEEE, ACM, and Springer publications (2022–2026).",
-        "Constructed taxonomy comparison matrix identifying critical baseline shortcomings.",
-        "Drafted preliminary Related Works section for final FYDP thesis report."
+        "Surveyed 15+ recent IEEE, ACM, and Springer publications (2022–2026).",
+        "Constructed taxonomy comparison matrix identifying critical domain challenges.",
+        "Structured literature synthesis notes for the initial proposal documentation."
       ]
     },
     {
       "id": 4,
       "week": "Week 01",
-      "title": "FYDP Team Inception & Proposal Defense Approval",
+      "title": "FYDP Team Inception, Role Mapping & Portal Setup",
       "date": "Sep 10, 2026",
       "status": "completed",
       "category": "Planning",
       "author": "Maria Tasnim",
       "highlights": [
-        "Formed Team Random and mapped specialized member technical roles.",
-        "Finalized project domain scope, problem statement, and defense slide deck.",
-        "Received formal approval from UIU CSE Project & Thesis Committee."
+        "Formed Team Random and mapped specialized technical and research responsibilities.",
+        "Deployed centralized collaborative workspace and task directives board.",
+        "Initiated Phase 1 milestone tracking under UIU CSE FYDP framework."
       ]
     }
   ],
@@ -288,8 +288,8 @@
       "author": "Md Mahamudul Hasan",
       "authorRole": "Technical Lead",
       "date": "Oct 02, 2026",
-      "title": "FYDP Phase 1 Architecture Checklist",
-      "content": "Please ensure all frontend component designs follow mobile-first 16:9 compliance. The research team will finalize dataset benchmark tables by next Wednesday.",
+      "title": "FYDP Phase 1 Workspace & Architecture Update",
+      "content": "Team collaboration workspace is live with persistent database syncing. All members please update your respective literature review summaries and task progress.",
       "tag": "Announcement"
     },
     {
@@ -297,96 +297,77 @@
       "author": "Md Sabbir Hossen",
       "authorRole": "Faculty Communicator",
       "date": "Sep 28, 2026",
-      "title": "Presentation Slide Deck Template Ready",
-      "content": "Uploaded the draft slides for our upcoming supervisor consultation. Review the methodology section.",
-      "tag": "Presentation"
+      "title": "Upcoming Supervisor Consultation Preparation",
+      "content": "Please submit your domain survey points by Tuesday so we can compile a comprehensive discussion brief for our faculty mentor meeting.",
+      "tag": "Consultation"
     }
   ],
-  "tasks": [],
-  "auditLogs": [
-    {
-      "id": 1790902411589,
-      "timestamp": "2026-10-02T00:53:31.362Z",
-      "formattedTime": "Oct 2, 2026, 06:53 AM",
-      "actorName": "System Administrator",
-      "actorRole": "Project Super Admin",
-      "action": "BANNER_UPDATED",
-      "details": "Updated homepage banner media mode: [Mode: video, Video: /team-banner.mp4]",
-      "type": "SECURITY"
-    },
-    {
-      "id": 1790901856124,
-      "timestamp": "2026-10-02T00:44:15.338Z",
-      "formattedTime": "Oct 2, 2026, 06:44 AM",
-      "actorName": "System Administrator",
-      "actorRole": "Project Super Admin",
-      "action": "BANNER_UPDATED",
-      "details": "Updated homepage banner media mode: [Mode: image, Video: /team-banner.mp4]",
-      "type": "SECURITY"
-    },
-    {
-      "id": 1790899387617,
-      "timestamp": "2026-10-02T00:03:06.686Z",
-      "formattedTime": "Oct 2, 2026, 06:03 AM",
-      "actorName": "System Administrator",
-      "actorRole": "Project Super Admin",
-      "action": "ADMIN_PASSWORD_RESET",
-      "details": "Super Admin override: reset password for md-mahamudul-hasan",
-      "type": "SECURITY"
-    },
-    {
-      "id": 1790898552445,
-      "timestamp": "2026-10-01T23:49:12.152Z",
-      "formattedTime": "Oct 2, 2026, 05:49 AM",
-      "actorName": "Md Mahamudul Hasan",
-      "actorRole": "Technical Lead",
-      "action": "TASK_DELETED",
-      "details": "Deleted directive task: 'Baseline Accuracy Benchmarking'",
-      "type": "TASK"
-    },
-    {
-      "id": 1790898547795,
-      "timestamp": "2026-10-01T23:49:06.953Z",
-      "formattedTime": "Oct 2, 2026, 05:49 AM",
-      "actorName": "Md Mahamudul Hasan",
-      "actorRole": "Technical Lead",
-      "action": "TASK_DELETED",
-      "details": "Deleted directive task: 'GPU Compute Cluster Configuration'",
-      "type": "TASK"
-    },
-    {
-      "id": 1790898544946,
-      "timestamp": "2026-10-01T23:49:04.330Z",
-      "formattedTime": "Oct 2, 2026, 05:49 AM",
-      "actorName": "Md Mahamudul Hasan",
-      "actorRole": "Technical Lead",
-      "action": "TASK_DELETED",
-      "details": "Deleted directive task: 'Dataset Augmentation & Preprocessing Pipeline'",
-      "type": "TASK"
-    },
-    {
-      "id": 1790898541995,
-      "timestamp": "2026-10-01T23:49:01.602Z",
-      "formattedTime": "Oct 2, 2026, 05:49 AM",
-      "actorName": "Md Mahamudul Hasan",
-      "actorRole": "Technical Lead",
-      "action": "TASK_DELETED",
-      "details": "Deleted directive task: 'Related Literature Survey Table'",
-      "type": "TASK"
-    },
-    {
-      "id": 1790898538732,
-      "timestamp": "2026-10-01T23:48:57.970Z",
-      "formattedTime": "Oct 2, 2026, 05:48 AM",
-      "actorName": "Md Mahamudul Hasan",
-      "actorRole": "Technical Lead",
-      "action": "TASK_DELETED",
-      "details": "Deleted directive task: 'Phase 1 Defense Slide Deck Architecture'",
-      "type": "TASK"
-    },
+  "tasks": [
     {
       "id": 1,
-      "timestamp": "2026-10-01T10:30:00.000Z",
+      "title": "FYDP Topic Brainstorming & Candidate Domain Matrix",
+      "description": "Explore and evaluate 3 candidate project domains against UIU CSE technical and research guidelines.",
+      "assignee": "Md Mahamudul Hasan",
+      "assigneeSlug": "md-mahamudul-hasan",
+      "priority": "HIGH",
+      "dueDate": "2026-10-15",
+      "status": "IN_PROGRESS",
+      "createdBy": "Technical Lead",
+      "createdAt": "Oct 01, 2026"
+    },
+    {
+      "id": 2,
+      "title": "Supervisor Consultation Meeting Agenda & Pitch Deck",
+      "description": "Prepare structured meeting agenda, prospective research problem statements, and preliminary slides for faculty consultation.",
+      "assignee": "Md Sabbir Hossen",
+      "assigneeSlug": "md-sabbir-hossen",
+      "priority": "HIGH",
+      "dueDate": "2026-10-10",
+      "status": "IN_PROGRESS",
+      "createdBy": "Technical Lead",
+      "createdAt": "Oct 01, 2026"
+    },
+    {
+      "id": 3,
+      "title": "State-of-the-Art Literature Review & Paper Benchmarking",
+      "description": "Survey 15+ recent IEEE/ACM publications (2022–2026) to extract research gaps and methodology feasibility.",
+      "assignee": "Tania Islam",
+      "assigneeSlug": "tania-islam",
+      "priority": "HIGH",
+      "dueDate": "2026-10-08",
+      "status": "DONE",
+      "createdBy": "Technical Lead",
+      "createdAt": "Sep 26, 2026"
+    },
+    {
+      "id": 4,
+      "title": "Citation Management & Reference Repository Setup",
+      "description": "Organize literature references into structured BibTeX/Mendeley repository and prepare Related Works taxonomy notes.",
+      "assignee": "Maria Tasnim",
+      "assigneeSlug": "maria-tasnim",
+      "priority": "MEDIUM",
+      "dueDate": "2026-10-18",
+      "status": "TODO",
+      "createdBy": "Technical Lead",
+      "createdAt": "Oct 02, 2026"
+    },
+    {
+      "id": 5,
+      "title": "FYDP Phase 1 Defense Template & Presentation Rehearsal",
+      "description": "Draft preliminary proposal slide structure and coordinate team presentation delivery rehearsal.",
+      "assignee": "Rehnuma Khan",
+      "assigneeSlug": "rehnuma-khan",
+      "priority": "LOW",
+      "dueDate": "2026-10-20",
+      "status": "TODO",
+      "createdBy": "Technical Lead",
+      "createdAt": "Oct 02, 2026"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": 1,
+      "timestamp": "2026-10-03T15:02:52.732Z",
       "formattedTime": "Oct 01, 2026 • 10:30 AM",
       "actorName": "System Administrator",
       "actorRole": "ADMIN",
@@ -396,30 +377,23 @@
     },
     {
       "id": 2,
-      "timestamp": "2026-10-01T19:15:00.000Z",
+      "timestamp": "2026-10-04T05:02:52.734Z",
       "formattedTime": "Oct 01, 2026 • 07:15 PM",
       "actorName": "Md Mahamudul Hasan",
       "actorRole": "Technical Lead",
       "action": "TASK_STATUS_CHANGE",
-      "details": "Updated directive 'Dataset Augmentation & Preprocessing Pipeline' to IN_PROGRESS",
+      "details": "Updated directive 'FYDP Topic Brainstorming & Candidate Domain Matrix' to IN_PROGRESS",
       "type": "TASK"
     },
     {
       "id": 3,
-      "timestamp": "2026-10-02T02:45:00.000Z",
+      "timestamp": "2026-10-04T12:02:52.734Z",
       "formattedTime": "Oct 02, 2026 • 02:45 AM",
       "actorName": "Md Sabbir Hossen",
-      "actorRole": "Presenter",
+      "actorRole": "Faculty Communicator",
       "action": "NOTE_POSTED",
-      "details": "Published workspace note: 'Presentation Slide Deck Template Ready'",
+      "details": "Published workspace note: 'Upcoming Supervisor Consultation Preparation'",
       "type": "NOTE"
     }
-  ],
-  "bannerConfig": {
-    "mode": "video",
-    "videoUrl": "/team-banner.mp4",
-    "imageUrl": "/team-banner.jpg",
-    "headline": "Team Random",
-    "tagline": "Engineering scalable software architecture & intelligent computing solutions."
-  }
+  ]
 }

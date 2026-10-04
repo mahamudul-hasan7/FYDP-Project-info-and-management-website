@@ -648,15 +648,156 @@ a.btn:active,
 }
 
 /* 5 Members 2+3 Layout: Row 1 has 2 Lead cards (span 3), Row 2 has 3 Cards (span 2) */
+.team-list .member-flip-container:nth-child(1),
+.team-list .member-flip-container:nth-child(2),
 .team-list .member-row:nth-child(1),
 .team-list .member-row:nth-child(2) {
   grid-column: span 3;
 }
 
+.team-list .member-flip-container:nth-child(3),
+.team-list .member-flip-container:nth-child(4),
+.team-list .member-flip-container:nth-child(5),
 .team-list .member-row:nth-child(3),
 .team-list .member-row:nth-child(4),
 .team-list .member-row:nth-child(5) {
   grid-column: span 2;
+}
+
+/* 3D Flip Container for Member Card (Idea 3) */
+.member-flip-container {
+  width: 100%;
+  min-height: 190px;
+  perspective: 1200px;
+  position: relative;
+}
+
+.member-flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+  border-radius: 24px;
+}
+
+.member-flip-card-inner.card-is-flipped {
+  transform: rotateY(180deg);
+}
+
+.member-flip-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Front Face */
+.member-flip-front {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 18px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+.member-flip-front:hover {
+  border-color: rgba(243, 109, 34, 0.45);
+  box-shadow: 0 12px 28px rgba(54, 35, 22, 0.12);
+}
+
+.member-row-badge-pill {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(243, 109, 34, 0.14);
+  border: 1px solid rgba(243, 109, 34, 0.35);
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.02em;
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.member-row-badge-pill:hover {
+  background: var(--orange);
+  color: #ffffff;
+  border-color: var(--orange);
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(243, 109, 34, 0.35);
+}
+.badge-spin-hint {
+  opacity: 0.8;
+}
+.back-flip-btn {
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+[data-theme="dark"] .back-flip-btn {
+  background: rgba(30, 41, 59, 0.95);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Back Face: UIU ID Card */
+.member-flip-back {
+  background: radial-gradient(circle at 50% 50%, rgba(243, 109, 34, 0.12) 0%, transparent 70%), var(--surface-2);
+  border: 1px solid rgba(243, 109, 34, 0.4);
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
+}
+
+.flip-back-id-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(0.68);
+  transform-origin: center center;
+  width: 100%;
+}
+
+/* Wide Cards (Row 1 Lead cards) slightly larger scale */
+.team-list .member-flip-container:nth-child(1) .flip-back-id-wrapper,
+.team-list .member-flip-container:nth-child(2) .flip-back-id-wrapper {
+  transform: scale(0.76);
+}
+
+@media (max-width: 860px) {
+  .flip-back-id-wrapper,
+  .team-list .member-flip-container:nth-child(1) .flip-back-id-wrapper,
+  .team-list .member-flip-container:nth-child(2) .flip-back-id-wrapper {
+    transform: scale(0.72);
+  }
 }
 
 .member-row {
@@ -2019,7 +2160,8 @@ body:has(.report-modal-backdrop) .mobile-dock {
     gap: 12px;
     width: 100%;
   }
-  .team-list .member-row {
+  .team-list .member-row,
+  .team-list .member-flip-container {
     grid-column: auto !important;
     width: 100%;
   }
@@ -8918,4 +9060,778 @@ body:has(.report-modal-backdrop) .mobile-dock {
     text-align: center;
   }
 }
+
+/* ==========================================================================
+   UIU STUDENT SMART ID CARD REPLICA COMPONENT & DEMO PLAYGROUND
+   ========================================================================== */
+
+.uiu-id-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  user-select: none;
+}
+
+/* Lanyard Assembly */
+.uiu-lanyard-assembly {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: -18px;
+  position: relative;
+  z-index: 5;
+}
+
+.uiu-lanyard-ribbon {
+  width: 58px;
+  height: 90px;
+  background: #111111;
+  border-left: 5px solid #f36d22;
+  border-right: 5px solid #f36d22;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+.uiu-ribbon-text {
+  color: #f36d22;
+  font-size: 26px;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.uiu-ribbon-subtext {
+  font-size: 4px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.uiu-lanyard-leather-loop {
+  width: 44px;
+  height: 22px;
+  background: #1c1c1c;
+  border-radius: 4px 4px 6px 6px;
+  border: 1px solid #333;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+.uiu-rivet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e2e8f0 30%, #94a3b8 70%, #475569 100%);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.uiu-metal-clip-assembly {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.uiu-clip-ring {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #cbd5e1;
+  border-radius: 50%;
+  margin-top: -6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.uiu-clip-swivel {
+  width: 8px;
+  height: 14px;
+  background: linear-gradient(90deg, #94a3b8, #f8fafc, #94a3b8);
+  border-radius: 2px;
+  margin-top: -2px;
+}
+.uiu-clip-hook {
+  width: 14px;
+  height: 20px;
+  border: 3px solid #cbd5e1;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  margin-top: -2px;
+  position: relative;
+}
+
+/* 3D Stage */
+.uiu-card-3d-stage {
+  transform-style: preserve-3d;
+  cursor: grab;
+}
+.uiu-card-3d-stage:active {
+  cursor: grabbing;
+}
+
+/* Frosted Acrylic Card Holder Casing */
+.uiu-holder-casing {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.uiu-holder-casing.holder-visible {
+  padding: 38px 12px 14px 12px;
+  background: rgba(220, 226, 235, 0.4);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 26px;
+  clip-path: polygon(
+    14px 0%, calc(100% - 14px) 0%,
+    100% 14px, 100% 100%,
+    0% 100%, 0% 14px
+  );
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .uiu-holder-casing.holder-visible {
+  background: rgba(35, 40, 48, 0.55);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.uiu-holder-header-slot {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+.uiu-slot-hole {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+.uiu-slot-center-anchor {
+  width: 38px;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Flip Inner Container */
+.uiu-id-flip-inner {
+  position: relative;
+  width: 380px;
+  height: 240px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.uiu-id-flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* Base Card Face */
+.uiu-card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff !important;
+  color: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Front Face (Facing Forward) */
+.uiu-card-front {
+  transform: rotateY(0deg) translateZ(1px);
+  -webkit-transform: rotateY(0deg) translateZ(1px);
+  z-index: 2;
+  padding: 10px 14px 0 14px;
+}
+
+/* Back Face (Facing Backward Initially) */
+.uiu-card-back {
+  transform: rotateY(180deg) translateZ(1px);
+  -webkit-transform: rotateY(180deg) translateZ(1px);
+  z-index: 1;
+  padding: 10px 12px 0 12px;
+  background: #ffffff !important;
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Header */
+.uiu-card-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 2px;
+}
+
+.uiu-brand-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.uiu-crest-icon {
+  width: 40px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.uiu-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.uiu-brand-names {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.95;
+  justify-content: center;
+}
+.uiu-name-main {
+  font-size: 15.5px;
+  font-weight: 950;
+  color: #111827;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.uiu-name-sub {
+  font-size: 7.8px;
+  font-weight: 900;
+  color: #1f2937;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-top: 1.5px;
+}
+.uiu-name-univ {
+  font-size: 9.8px;
+  font-weight: 950;
+  color: #111827;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-top: 1.5px;
+}
+
+.uiu-student-badge {
+  font-size: 13px;
+  font-weight: 950;
+  color: #0f172a;
+  letter-spacing: 0.04em;
+  margin-top: -8px;
+}
+
+/* Main Body Grid */
+.uiu-card-body-grid {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 94px;
+  gap: 10px;
+  padding-top: 4px;
+  align-items: start;
+}
+
+.uiu-data-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 38px;
+}
+
+.uiu-field-group {
+  display: flex;
+  flex-direction: column;
+}
+.uiu-name-group {
+  margin-bottom: 7px;
+}
+.uiu-label {
+  font-size: 7.5px;
+  font-weight: 850;
+  color: #ea580c;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  margin-bottom: 1.5px;
+}
+.uiu-value {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.15;
+}
+.uiu-val-name {
+  font-size: 13px;
+  font-weight: 950;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.uiu-fields-dual-row {
+  display: grid;
+  grid-template-columns: 106px 1fr;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+/* Photo & Signature Column */
+.uiu-photo-signature-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uiu-photo-frame {
+  width: 90px;
+  height: 110px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  overflow: hidden;
+  background: #f8fafc;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.uiu-student-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+}
+.uiu-photo-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 900;
+  color: #ea580c;
+  background: #ffedd5;
+}
+
+.uiu-signature-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1px;
+}
+.uiu-sig-handwriting {
+  font-family: 'Brush Script MT', 'Segoe Script', cursive, sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1;
+}
+.uiu-sig-underline {
+  width: 60px;
+  height: 1px;
+  background: #0f172a;
+  margin: 1px 0 2px;
+  opacity: 0.8;
+}
+.uiu-sig-label {
+  font-size: 7px;
+  font-weight: 750;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+/* Bottom Solid Orange Banner */
+.uiu-card-bottom-banner {
+  margin: auto -14px 0 -14px;
+  height: 32px;
+  background: #ea580c !important;
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+}
+.uiu-banner-id {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.uiu-id-label {
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.03em;
+}
+.uiu-id-value {
+  font-size: 13.5px;
+  font-weight: 950;
+  letter-spacing: 0.03em;
+}
+.uiu-banner-blood {
+  font-size: 10.5px;
+  font-weight: 750;
+}
+.uiu-banner-blood strong {
+  font-weight: 900;
+}
+
+/* ==========================================================================
+   BACK FACE STYLES (EXACT REPLICA)
+   ========================================================================== */
+.uiu-back-rules {
+  font-size: 7px;
+  font-weight: 750;
+  color: #0f172a;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.uiu-back-rules p {
+  margin: 0 0 2px;
+}
+
+.uiu-back-barcode-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.uiu-barcode-box {
+  flex: 1;
+}
+.uiu-real-barcode {
+  width: 180px;
+  height: 28px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #0f172a,
+    #0f172a 2px,
+    transparent 2px,
+    transparent 4px,
+    #0f172a 4px,
+    #0f172a 6px,
+    transparent 6px,
+    transparent 8px,
+    #0f172a 8px,
+    #0f172a 11px
+  );
+  border-radius: 1px;
+}
+
+.uiu-authorized-sig-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 110px;
+}
+.uiu-auth-sig-graphic {
+  width: 70px;
+  height: 18px;
+  border-bottom: 1px solid #64748b;
+  position: relative;
+}
+.uiu-auth-sig-graphic::before {
+  content: 'Sarker';
+  font-family: 'Brush Script MT', cursive, sans-serif;
+  font-size: 14px;
+  color: #334155;
+  position: absolute;
+  bottom: 1px;
+  left: 10px;
+}
+.uiu-auth-sig-label {
+  font-size: 7px;
+  font-weight: 800;
+  color: #334155;
+  margin-top: 2px;
+}
+
+.uiu-back-center-title {
+  margin: 2px 0 4px;
+}
+.uiu-back-center-title strong {
+  font-size: 11px;
+  font-weight: 950;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.uiu-back-orange-panel {
+  margin: auto -12px 0 -12px;
+  background: #ea580c !important;
+  color: #ffffff;
+  padding: 6px 12px 8px 12px;
+  border-radius: 0 0 12px 12px;
+}
+.uiu-back-panel-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5px;
+}
+.uiu-return-notice {
+  margin: 0;
+  font-size: 6.5px;
+  font-style: italic;
+  opacity: 0.95;
+}
+.uiu-campus-name {
+  margin: 1px 0 0;
+  font-size: 7.5px;
+  font-weight: 900;
+}
+.uiu-campus-line {
+  margin: 0;
+  font-size: 6.8px;
+  line-height: 1.25;
+}
+.uiu-back-serial-stamp {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-family: monospace;
+  font-size: 8.5px;
+  font-weight: 950;
+  color: #1a1a1a;
+  letter-spacing: 0.5px;
+}
+
+/* Card Controls */
+.uiu-card-controls {
+  margin-top: 20px;
+}
+.uiu-control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.uiu-control-btn:hover {
+  background: var(--orange);
+  color: #ffffff;
+  border-color: var(--orange);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(243, 109, 34, 0.28);
+}
+.spin-icon {
+  animation: spin 0.6s ease-in-out;
+}
+
+/* Demo Page Shell */
+.id-demo-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-bottom: 60px;
+}
+
+.id-demo-header-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 32px;
+  margin-bottom: 28px;
+}
+.id-demo-header-card h1 {
+  font-size: clamp(28px, 3.5vw, 38px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin: 8px 0 10px;
+}
+.id-demo-subtext {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 720px;
+  margin: 0 0 24px;
+}
+
+.id-demo-member-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.id-member-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.id-member-tab-btn:hover {
+  border-color: rgba(243, 109, 34, 0.4);
+}
+.id-member-tab-btn.active {
+  background: var(--orange);
+  color: #ffffff;
+  border-color: var(--orange);
+}
+.tab-demo-member {
+  border-color: rgba(243, 109, 34, 0.45);
+}
+
+.id-demo-toggles-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.id-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.id-toggle-pill.active {
+  color: var(--text);
+  border-color: rgba(243, 109, 34, 0.3);
+}
+
+/* Display Stage */
+.id-card-display-stage {
+  position: relative;
+  min-height: 480px;
+  background: radial-gradient(circle, rgba(243, 109, 34, 0.08) 0%, transparent 65%), var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.id-stage-backdrop-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(243, 109, 34, 0.15) 0%, transparent 70%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+.id-card-centerpiece {
+  position: relative;
+  z-index: 2;
+}
+
+/* Checklist Notes */
+.id-demo-notes-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 28px;
+}
+.id-demo-notes-card h3 {
+  margin: 0 0 16px;
+  font-size: 17px;
+  font-weight: 850;
+}
+.id-checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.id-checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.id-checklist-item strong {
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .id-demo-header-card {
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+  .id-card-display-stage {
+    padding: 24px 12px;
+    min-height: 400px;
+  }
+  .uiu-holder-casing.holder-visible {
+    padding: 32px 8px 10px 8px;
+    border-radius: 20px;
+  }
+  .uiu-id-flip-inner {
+    width: min(calc(100vw - 52px), 336px);
+    height: 216px;
+  }
+  .uiu-card-front {
+    padding: 8px 10px 0 10px;
+  }
+  .uiu-name-main { font-size: 11.5px; }
+  .uiu-name-sub { font-size: 7px; }
+  .uiu-name-univ { font-size: 7.5px; }
+  .uiu-student-badge { font-size: 11px; }
+  .uiu-card-body-grid {
+    grid-template-columns: 1fr 76px;
+    gap: 8px;
+    padding-top: 4px;
+  }
+  .uiu-val-name {
+    font-size: 11px;
+  }
+  .uiu-label {
+    font-size: 7px;
+  }
+  .uiu-value {
+    font-size: 9px;
+  }
+  .uiu-photo-frame {
+    width: 76px;
+    height: 92px;
+  }
+  .uiu-card-bottom-banner {
+    height: 28px;
+    margin: auto -10px 0 -10px;
+    padding: 0 10px;
+  }
+  .uiu-id-label { font-size: 8px; }
+  .uiu-id-value { font-size: 11px; }
+  .uiu-banner-blood { font-size: 8.5px; }
+  .id-checklist-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 
