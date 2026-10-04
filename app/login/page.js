@@ -35,7 +35,7 @@ const REGISTERED_MEMBERS = [
 
 export default function LoginPage() {
   const router = useRouter();
-  const [identifier, setIdentifier] = useState('');
+  const [identifier, setIdentifier] = useState('0112330182');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -60,6 +60,10 @@ export default function LoginPage() {
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
+    if (!identifier) {
+      setError('Please select a member profile above.');
+      return;
+    }
     setError('');
     setLoading(true);
 
@@ -72,7 +76,7 @@ export default function LoginPage() {
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        setError(data.message || 'Incorrect Student ID or Password.');
+        setError(data.message || 'Incorrect password.');
         setLoading(false);
         return;
       }
@@ -92,7 +96,7 @@ export default function LoginPage() {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       setExistingSession(null);
-      setIdentifier('');
+      setIdentifier('0112330182');
       setPassword('');
     } catch (e) {
       setExistingSession(null);
@@ -138,7 +142,7 @@ export default function LoginPage() {
             </div>
 
             <h1>Workspace Portal</h1>
-            <p>Enter your Student ID and confidential password to access your team dashboard.</p>
+            <p>Select your profile and enter your confidential password to log in.</p>
           </div>
 
           {/* If already logged in, provide prompt to continue or switch */}
@@ -187,11 +191,11 @@ export default function LoginPage() {
             </div>
           ) : (
             <>
-              {/* Quick ID helper pills for effortless input */}
+              {/* Quick ID helper pills for effortless profile selection */}
               <div className="quick-id-selector-bar">
                 <div className="quick-id-head">
                   <Users size={12} className="text-orange" />
-                  <span>QUICK ID SELECT:</span>
+                  <span>SELECT YOUR PROFILE:</span>
                 </div>
                 <div className="quick-id-pills-row">
                   {REGISTERED_MEMBERS.map((m) => (
@@ -216,26 +220,8 @@ export default function LoginPage() {
                 </div>
               )}
 
-              {/* Secure Form */}
+              {/* Secure Form with only Password */}
               <form onSubmit={handleLogin} className="login-form">
-                <div className="form-group">
-                  <label htmlFor="identifier">Student ID / Email</label>
-                  <div className="input-wrap">
-                    <UserRound size={17} className="input-icon" />
-                    <input
-                      id="identifier"
-                      type="text"
-                      placeholder="e.g. 0112330182 or 0112331026"
-                      value={identifier}
-                      onChange={(e) => setIdentifier(e.target.value)}
-                      required
-                      autoFocus
-                      autoComplete="username"
-                      disabled={isSuccess}
-                    />
-                  </div>
-                </div>
-
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
                   <div className="input-wrap">
@@ -247,6 +233,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
+                      autoFocus
                       autoComplete="current-password"
                       disabled={isSuccess}
                     />
