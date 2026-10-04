@@ -12,7 +12,7 @@ export async function POST(request) {
     const { slug, oldPassword, newPassword } = body || {};
 
     const targetSlug = slug || session.slug;
-    changePassword(targetSlug, oldPassword, newPassword, session);
+    await changePassword(targetSlug, oldPassword, newPassword, session);
 
     const { recordAuditLog } = await import('../../../../lib/store');
     recordAuditLog(

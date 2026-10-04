@@ -197,6 +197,31 @@ CREATE TRIGGER set_project_info_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
+-- -----------------------------------------------------------------------------
+-- 9. User Credentials Table (Secure Auth & Password Hashes)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS user_credentials (
+    slug TEXT PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    aliases JSONB DEFAULT '[]'::jsonb,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'MEMBER',
+    role_title TEXT,
+    email TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_credentials_username ON user_credentials(username);
+CREATE INDEX IF NOT EXISTS idx_user_credentials_email ON user_credentials(email);
+
+DROP TRIGGER IF EXISTS set_user_credentials_updated_at ON user_credentials;
+CREATE TRIGGER set_user_credentials_updated_at
+    BEFORE UPDATE ON user_credentials
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
 
 -- =============================================================================
 -- Row Level Security (RLS) Configuration
@@ -213,6 +238,7 @@ ALTER TABLE team_notes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE banner_config ENABLE ROW LEVEL SECURITY;
 ALTER TABLE project_info ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_credentials ENABLE ROW LEVEL SECURITY;
 
 -- 1. Public Read Policies
 DROP POLICY IF EXISTS "Public can view members" ON members;
@@ -235,6 +261,6 @@ CREATE POLICY "Public can view project info"
     ON project_info FOR SELECT
     USING (true);
 
--- 2. Protected Internal Tables (Tasks, Notes, Audit Logs)
--- No public anonymous access is granted.
--- Trusted Next.js server actions / API endpoints use the server-only service client.
+-- 2. Protected Internal Tables (Tasks, Notes, Audit Logs, User Credentials)
+-- No public anonymous access is granted to user_credentials or sensitive tables.
+-- Trusted Next.js server endpoints use SUPABASE_SECRET_KEY.

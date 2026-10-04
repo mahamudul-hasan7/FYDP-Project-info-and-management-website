@@ -32,7 +32,7 @@ export async function POST(request) {
       );
     }
 
-    const user = findUserByCredentials(identifier, password);
+    const user = await findUserByCredentials(identifier, password);
     if (!user) {
       recordFailedAttempt(rateLimitKey);
       const updatedCheck = checkRateLimit(rateLimitKey);

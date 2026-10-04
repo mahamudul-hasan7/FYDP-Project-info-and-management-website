@@ -82,7 +82,7 @@ async function runSeed() {
   console.log('🔍 Validating destination tables in Supabase...\n');
 
   // Validate table existence
-  const requiredTables = ['members', 'sprint_logs', 'project_info', 'banner_config'];
+  const requiredTables = ['members', 'sprint_logs', 'project_info', 'banner_config', 'user_credentials'];
   for (const table of requiredTables) {
     const { error } = await supabase.from(table).select('*', { count: 'exact', head: true });
     if (error) {
@@ -244,6 +244,84 @@ async function runSeed() {
     console.error('❌ Failed to seed banner config:', bannerErr.message);
   } else {
     console.log('  ✓ Banner config table synced (1 singleton record upserted)');
+  }
+
+  // ---------------------------------------------------------------------------
+  // 5. Seed User Credentials (Idempotent by 'slug', preserves updated passwords)
+  // ---------------------------------------------------------------------------
+  console.log('🔄 Seeding user_credentials table...');
+  const defaultCredentials = [
+    {
+      slug: 'system-admin',
+      username: 'admin',
+      aliases: ['superadmin', 'admin@teamrandom.uiu.ac.bd', 'root', '0000000000'],
+      name: 'System Administrator',
+      role: 'ADMIN',
+      role_title: 'Project Super Admin',
+      email: 'admin@teamrandom.uiu.ac.bd',
+      password_hash: '$2b$10$w29BqDnerqi2Rmd2SEpiLer12x5W3ewHm681/9tGBZqYnrODl4EMe'
+    },
+    {
+      slug: 'md-mahamudul-hasan',
+      username: '0112330182',
+      aliases: ['mahamudul', 'mhasan2330182@bscse.uiu.ac.bd'],
+      name: 'Md Mahamudul Hasan',
+      role: 'MEMBER',
+      role_title: 'Technical Lead',
+      email: 'mhasan2330182@bscse.uiu.ac.bd',
+      password_hash: '$2b$10$J2.g7MTH5kwxiQIQ.pt4I.0koyRDg1SSXK404BtKlNyk0SILaV122'
+    },
+    {
+      slug: 'md-sabbir-hossen',
+      username: '0112331026',
+      aliases: ['sabbir', 'mhossen2331026@bscse.uiu.ac.bd'],
+      name: 'Md Sabbir Hossen',
+      role: 'MEMBER',
+      role_title: 'Faculty Communicator',
+      email: 'mhossen2331026@bscse.uiu.ac.bd',
+      password_hash: '$2b$10$5V6VBkxzC59Ma2Xym1jXtehMehSadumexrSEMMMMXzTnQHttlWx/y'
+    },
+    {
+      slug: 'tania-islam',
+      username: '0112331025',
+      aliases: ['tania', 'tislam2331025@bscse.uiu.ac.bd'],
+      name: 'Tania Islam',
+      role: 'MEMBER',
+      role_title: 'Lead Researcher',
+      email: 'tislam2331025@bscse.uiu.ac.bd',
+      password_hash: '$2b$10$edB8bnjG6JoKMfxtKvge2.ZZlgeEh1AFz1F9Z/4FGup/17NobClsa'
+    },
+    {
+      slug: 'maria-tasnim',
+      username: '0112331019',
+      aliases: ['maria', 'mtasnim2331019@bscse.uiu.ac.bd'],
+      name: 'Maria Tasnim',
+      role: 'MEMBER',
+      role_title: 'Research Assistant',
+      email: 'mtasnim2331019@bscse.uiu.ac.bd',
+      password_hash: '$2b$10$.6CXCjGgG6irZb18lVHOx.3NB5MNDWyiDQLmVW5wC0mPGsDKz9tG.'
+    },
+    {
+      slug: 'rehnuma-khan',
+      username: '0112310260',
+      aliases: ['rehnuma', 'rkhan2310260@bscse.uiu.ac.bd'],
+      name: 'Rehnuma Khan',
+      role: 'MEMBER',
+      role_title: 'Presenter',
+      email: 'rkhan2310260@bscse.uiu.ac.bd',
+      password_hash: '$2b$10$YwaBGfkivb6FPiogSjMLC.0qM7WWELIwD3PJAvzFhwPw0Z3N/OZou'
+    }
+  ];
+
+  const { data: seededCreds, error: credsErr } = await supabase
+    .from('user_credentials')
+    .upsert(defaultCredentials, { onConflict: 'slug', ignoreDuplicates: true })
+    .select('slug');
+
+  if (credsErr) {
+    console.error('❌ Failed to seed user credentials:', credsErr.message);
+  } else {
+    console.log(`  ✓ User credentials table synced: ${defaultCredentials.length} users verified in cloud database.`);
   }
 
   console.log('\n======================================================');
