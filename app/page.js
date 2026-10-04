@@ -8,6 +8,7 @@ import TeamLogo from '../components/TeamLogo';
 import ProjectSection from '../components/ProjectSection';
 import ActivityTimeline from '../components/ActivityTimeline';
 import PortalNavButton from '../components/PortalNavButton';
+import AppFooter from '../components/AppFooter';
 import { getAllMembers } from '../lib/store';
 import { projectData } from '../data/project';
 
@@ -52,18 +53,7 @@ export default async function Home() {
 
       <ActivityTimeline />
 
-      <footer className="app-footer">
-        <div className="footer-left">
-          <span>Team Random • Final Year Design Project</span>
-          <small>United International University • Dept. of CSE</small>
-        </div>
-        <div className="footer-right">
-          <Link href="/member/md-mahamudul-hasan" className="footer-dev-badge" title="View Developer Profile">
-            <span className="dev-label">Developer</span>
-            <strong className="dev-name">Md Mahamudul Hasan</strong>
-          </Link>
-        </div>
-      </footer>
+      <AppFooter />
 
       <MobileDock />
     </main>

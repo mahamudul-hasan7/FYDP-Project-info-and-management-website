@@ -20,6 +20,7 @@ import MemberAvatar from '../../../components/MemberAvatar';
 import CopyIdButton from '../../../components/CopyIdButton';
 import TeammateSwitcher from '../../../components/TeammateSwitcher';
 import MobileDock from '../../../components/MobileDock';
+import AppFooter from '../../../components/AppFooter';
 import { getAllMembers, getMemberBySlug } from '../../../lib/store';
 import { maskStudentId } from '../../../lib/format';
 
@@ -297,18 +298,7 @@ export default async function MemberPage({ params }) {
       {/* Teammate Switcher at bottom */}
       <TeammateSwitcher currentSlug={member.slug} members={allMembers} />
 
-      <footer className="app-footer" style={{ marginTop: '24px' }}>
-        <div className="footer-left">
-          <span>Team Random • Final Year Design Project</span>
-          <small>United International University • Dept. of CSE</small>
-        </div>
-        <div className="footer-right">
-          <Link href="/member/md-mahamudul-hasan" className="footer-dev-badge" title="View Developer Profile">
-            <span className="dev-label">Developer</span>
-            <strong className="dev-name">Md Mahamudul Hasan</strong>
-          </Link>
-        </div>
-      </footer>
+      <AppFooter />
 
       <MobileDock />
     </main>

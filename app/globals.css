@@ -1139,6 +1139,92 @@ a.btn:active,
   flex-shrink: 0;
 }
 
+.unified-app-footer {
+  width: 100%;
+  margin-top: 36px;
+  margin-bottom: 24px;
+}
+.footer-inner-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 22px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+.footer-brand-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.footer-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 750;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.footer-meta-icon {
+  color: var(--orange);
+}
+.footer-team-title {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+.footer-team-title strong {
+  color: var(--text);
+  font-weight: 750;
+}
+.footer-dev-col {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.footer-dev-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.footer-dev-pill:hover {
+  border-color: var(--orange);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.18);
+}
+.footer-dev-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--orange);
+  background: rgba(249, 115, 22, 0.12);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.footer-dev-name {
+  font-size: 12px;
+  font-weight: 750;
+  color: var(--text);
+}
+
 .app-footer {
   min-height: 90px;
   display: flex;
@@ -1997,17 +2083,47 @@ body:has(.report-modal-backdrop) .mobile-dock {
   .project-panel-icon { width: 45px; height: 45px; border-radius: 15px; }
   .project-panel h2 { font-size: 23px; }
   .project-panel p { font-size: 11px; }
-  .app-footer {
-    padding-top: 24px;
-    padding-bottom: calc(105px + env(safe-area-inset-bottom, 20px));
+  .unified-app-footer {
+    margin-top: 24px;
+    margin-bottom: calc(76px + env(safe-area-inset-bottom, 14px));
+    width: 100%;
+  }
+  .footer-inner-card {
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 14px;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 18px;
+  }
+  .footer-brand-meta {
+    align-items: center;
+    text-align: center;
+    gap: 3px;
+  }
+  .footer-team-title {
+    font-size: 11.5px;
+  }
+  .footer-dev-col {
+    justify-content: center;
+    width: 100%;
+  }
+  .footer-dev-pill {
+    padding: 5px 12px;
+  }
+
+  .app-footer {
+    padding-top: 20px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 14px));
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
     min-height: auto;
     width: 100%;
-    margin-top: 32px;
+    margin-top: 24px;
   }
   .app-footer .footer-left {
     align-items: center;
