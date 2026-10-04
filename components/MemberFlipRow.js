@@ -21,7 +21,7 @@ export default function MemberFlipRow({
 
   return (
     <motion.div
-      className={`member-flip-container ${isCurrentUser ? 'logged-in-user-row' : ''}`}
+      className={`member-flip-container ${isCurrentUser ? 'logged-in-user-row' : ''} ${isFlipped ? 'is-flipped' : ''}`}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.18 }}
@@ -35,18 +35,6 @@ export default function MemberFlipRow({
           className={`member-flip-face member-flip-front ${member.placeholder ? 'placeholder-row' : ''}`}
           onClick={() => onSelectModal(member)}
         >
-          {/* Top-Right Badge: UIU ID Pill */}
-          <button
-            type="button"
-            className="member-row-badge-pill"
-            onClick={handleBadgeClick}
-            title="Click to flip to UIU Student ID"
-          >
-            <CreditCard size={12} />
-            <span>UIU ID</span>
-            <RefreshCw size={10} className="badge-spin-hint" />
-          </button>
-
           <div className="member-avatar-wrap">
             <MemberAvatar member={member} size="md" />
             {isCurrentUser && <span className="you-avatar-dot" title="Active Logged In Member" />}
@@ -58,20 +46,31 @@ export default function MemberFlipRow({
                 <h3>{member.name}</h3>
                 {isCurrentUser && (
                   <span className="you-active-badge">
-                    <Sparkles size={11} />
+                    <Sparkles size={10} />
                     <span>You</span>
                   </span>
                 )}
               </div>
-              <span className="member-number">0{index + 1}</span>
             </div>
-            <p>{member.shortRole}</p>
+            <p className="member-short-role">{member.shortRole}</p>
             <span className="member-tagline">{member.tagline}</span>
           </div>
 
-          <span className="member-row-arrow" title="View Profile">
-            <ChevronRight size={20} />
-          </span>
+          <div className="member-row-actions-col">
+            <button
+              type="button"
+              className="member-row-badge-pill"
+              onClick={handleBadgeClick}
+              title="Click to flip to UIU Student ID"
+            >
+              <CreditCard size={11} />
+              <span>UIU ID</span>
+              <RefreshCw size={9} className="badge-spin-hint" />
+            </button>
+            <span className="member-row-arrow" title="View Profile">
+              <ChevronRight size={18} />
+            </span>
+          </div>
         </div>
 
         {/* ========================================================
@@ -89,12 +88,12 @@ export default function MemberFlipRow({
             onClick={handleBadgeClick}
             title="Flip back to Member Profile"
           >
-            <UserRound size={12} />
+            <UserRound size={11} />
             <span>Profile</span>
-            <RefreshCw size={10} className="badge-spin-hint" />
+            <RefreshCw size={9} className="badge-spin-hint" />
           </button>
 
-          {/* Centered ID Card with Clean Margins */}
+          {/* Centered ID Card */}
           <div className="flip-back-id-wrapper">
             <UiuIdCard
               member={member}

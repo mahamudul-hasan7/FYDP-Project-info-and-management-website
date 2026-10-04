@@ -141,62 +141,82 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
               {member.skills.slice(0, 4).map((skill) => <span key={skill}>{skill}</span>)}
             </div>
 
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <Link className="primary-action" href={`/member/${member.slug}`} style={{ flex: 1, minWidth: 140 }}>
-                <span>View Full Profile</span>
-                <ArrowUpRight size={18} />
-              </Link>
-              {member.privacy?.phone === true && member.phone && member.phone !== 'Not provided' && (
-                <a
-                  href={`tel:${member.phone}`}
-                  className="soft-action icon-only"
-                  aria-label={`Call ${member.name}`}
-                  title={`Call ${member.phone}`}
-                >
-                  <Phone size={18} />
-                </a>
-              )}
-              {member.privacy?.linkedin !== false && member.linkedin && (
-                <a
-                  href={member.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="soft-action icon-only"
-                  aria-label="LinkedIn Profile"
-                  title="LinkedIn Profile"
-                >
-                  <Linkedin size={18} />
-                </a>
-              )}
-              {member.privacy?.github !== false && member.github && (
-                <a
-                  href={member.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="soft-action icon-only"
-                  aria-label="GitHub Profile"
-                  title="GitHub Profile"
-                >
-                  <Code2 size={18} />
-                </a>
-              )}
-              {Array.isArray(member.customLinks) &&
-                member.customLinks
-                  .filter((l) => l.isPublic !== false && l.url)
-                  .map((link, idx) => (
-                    <a
-                      key={link.id || idx}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="soft-action icon-only"
-                      aria-label={link.title || 'Website'}
-                      title={link.title ? `${link.title}: ${link.url}` : link.url}
-                    >
-                      <Globe size={18} />
-                    </a>
-                  ))}
-            </div>
+            {/* Social & Contact Links (Row Above) */}
+            {((member.privacy?.phone === true && member.phone && member.phone !== 'Not provided') ||
+              (member.privacy?.linkedin !== false && member.linkedin) ||
+              (member.privacy?.github !== false && member.github) ||
+              (Array.isArray(member.customLinks) && member.customLinks.some((l) => l.isPublic !== false && l.url))) && (
+              <div className="modal-links-row" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                {member.privacy?.phone === true && member.phone && member.phone !== 'Not provided' && (
+                  <a
+                    href={`tel:${member.phone}`}
+                    className="soft-action"
+                    style={{ flex: 1, minWidth: '70px', height: '42px', justifyContent: 'center', padding: '0 12px', gap: '6px' }}
+                    aria-label={`Call ${member.name}`}
+                    title={`Call ${member.phone}`}
+                  >
+                    <Phone size={15} />
+                    <span style={{ fontSize: '12px', fontWeight: '700' }}>Call</span>
+                  </a>
+                )}
+                {member.privacy?.linkedin !== false && member.linkedin && (
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="soft-action"
+                    style={{ flex: 1, minWidth: '80px', height: '42px', justifyContent: 'center', padding: '0 12px', gap: '6px' }}
+                    aria-label="LinkedIn Profile"
+                    title="LinkedIn Profile"
+                  >
+                    <Linkedin size={15} />
+                    <span style={{ fontSize: '12px', fontWeight: '700' }}>LinkedIn</span>
+                  </a>
+                )}
+                {member.privacy?.github !== false && member.github && (
+                  <a
+                    href={member.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="soft-action"
+                    style={{ flex: 1, minWidth: '80px', height: '42px', justifyContent: 'center', padding: '0 12px', gap: '6px' }}
+                    aria-label="GitHub Profile"
+                    title="GitHub Profile"
+                  >
+                    <Code2 size={15} />
+                    <span style={{ fontSize: '12px', fontWeight: '700' }}>GitHub</span>
+                  </a>
+                )}
+                {Array.isArray(member.customLinks) &&
+                  member.customLinks
+                    .filter((l) => l.isPublic !== false && l.url)
+                    .map((link, idx) => (
+                      <a
+                        key={link.id || idx}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="soft-action"
+                        style={{ flex: 1, minWidth: '80px', height: '42px', justifyContent: 'center', padding: '0 12px', gap: '6px' }}
+                        aria-label={link.title || 'Website'}
+                        title={link.title ? `${link.title}: ${link.url}` : link.url}
+                      >
+                        <Globe size={15} />
+                        <span style={{ fontSize: '12px', fontWeight: '700' }}>{link.title || 'Web'}</span>
+                      </a>
+                    ))}
+              </div>
+            )}
+
+            {/* View Full Profile (Full Width Button) */}
+            <Link
+              className="primary-action"
+              href={`/member/${member.slug}`}
+              style={{ width: '100%', justifyContent: 'center', height: '48px', marginTop: '6px' }}
+            >
+              <span>View Full Profile</span>
+              <ArrowUpRight size={18} />
+            </Link>
           </motion.div>
         </motion.div>
       )}
