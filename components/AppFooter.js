@@ -19,9 +19,9 @@ export default function AppFooter() {
 
         <div className="footer-dev-col">
           <Link
-            href="/member/md-mahamudul-hasan"
+            href="/developer"
             className="footer-dev-pill"
-            title="View Developer Portfolio"
+            title="View Developer Profile & Technical Architecture"
           >
             <span className="footer-dev-tag">
               <Code2 size={12} /> Lead Dev
