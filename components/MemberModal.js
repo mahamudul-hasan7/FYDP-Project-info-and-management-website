@@ -105,7 +105,7 @@ export default function MemberModal({ member, isCurrentUser, onClose }) {
               <div>
                 <UserRound size={16} />
                 <span>ID</span>
-                <strong>{isCurrentUser ? member.id : maskStudentId(member.id)}</strong>
+                <strong>{member.id}</strong>
               </div>
               {member.privacy?.email !== false && member.email && (
                 <div>

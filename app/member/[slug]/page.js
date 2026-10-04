@@ -163,7 +163,7 @@ export default async function MemberPage({ params }) {
             </div>
             <div className="meta-row-value">
               {member.id && member.id !== 'To be added' ? (
-                <CopyIdButton text={maskStudentId(member.id)} label="Student ID (Protected)" />
+                <CopyIdButton text={member.id} label="Student ID" />
               ) : (
                 <span className="text-muted">{member.id}</span>
               )}
