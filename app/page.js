@@ -53,8 +53,16 @@ export default async function Home() {
       <ActivityTimeline />
 
       <footer className="app-footer">
-        <span>Team Random • Final Year Design Project</span>
-        <span>Designed for mobile-first use & Vercel</span>
+        <div className="footer-left">
+          <span>Team Random • Final Year Design Project</span>
+          <small>United International University • Dept. of CSE</small>
+        </div>
+        <div className="footer-right">
+          <Link href="/member/md-mahamudul-hasan" className="footer-dev-badge" title="View Developer Profile">
+            <span className="dev-label">Developer</span>
+            <strong className="dev-name">Md Mahamudul Hasan</strong>
+          </Link>
+        </div>
       </footer>
 
       <MobileDock />
