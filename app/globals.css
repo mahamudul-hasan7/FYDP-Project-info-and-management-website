@@ -2106,22 +2106,22 @@ body:has(.report-modal-backdrop) .mobile-dock {
   .team-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 9px;
     width: 100%;
   }
   .team-list .member-row {
     grid-column: auto !important;
     width: 100%;
-    min-height: 104px;
-    border-radius: 22px;
-    padding: 12px 14px;
+    min-height: 74px;
+    border-radius: 18px;
+    padding: 10px 14px;
     gap: 12px;
   }
-  .avatar-md { width: 68px; height: 68px; border-radius: 18px; font-size: 19px; }
-  .member-row h3 { font-size: 15px; }
-  .member-row p { font-size: 10px; }
-  .member-tagline { font-size: 10px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 210px; }
-  .member-row-arrow { width: 32px; height: 32px; border-radius: 11px; }
+  .avatar-md { width: 52px; height: 52px; min-width: 52px; border-radius: 14px; font-size: 16px; }
+  .member-row h3 { font-size: 15px; font-weight: 700; line-height: 1.2; }
+  .member-row p { font-size: 11px; font-weight: 800; margin: 2px 0 2px; }
+  .member-tagline { font-size: 10.5px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; max-width: 230px; }
+  .member-row-arrow { width: 28px; height: 28px; border-radius: 9px; }
 
   .project-panel { grid-template-columns: auto 1fr; border-radius: 24px; padding: 18px; gap: 13px; }
   .project-panel-icon { width: 45px; height: 45px; border-radius: 15px; }
