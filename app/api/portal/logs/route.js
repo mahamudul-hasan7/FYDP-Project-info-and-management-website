@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '../../../../lib/auth';
-import { createWeeklyLog, deleteWeeklyLog, getAllLogs } from '../../../../lib/store';
+import { createWeeklyLog, deleteWeeklyLog, getAllLogs, getCloudDbStatus } from '../../../../lib/store';
 
 export async function GET() {
   const logs = await getAllLogs();
-  return NextResponse.json({ success: true, logs });
+  const cloudStatus = getCloudDbStatus();
+  return NextResponse.json({ success: true, logs, cloudStatus });
 }
 
 export async function POST(request) {
@@ -16,11 +17,13 @@ export async function POST(request) {
 
     const body = await request.json();
     const created = await createWeeklyLog(body, session);
+    const cloudStatus = getCloudDbStatus();
 
     return NextResponse.json({
       success: true,
       message: 'Weekly sprint update published!',
-      log: created
+      log: created,
+      cloudStatus
     });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 400 });
@@ -38,8 +41,9 @@ export async function DELETE(request) {
     const logId = parseInt(searchParams.get('id'), 10);
 
     await deleteWeeklyLog(logId, session);
+    const cloudStatus = getCloudDbStatus();
 
-    return NextResponse.json({ success: true, message: 'Log deleted.' });
+    return NextResponse.json({ success: true, message: 'Log deleted.', cloudStatus });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 400 });
   }

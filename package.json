@@ -6,7 +6,8 @@
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
-    "seed:supabase": "node scripts/seed-supabase.js"
+    "seed:supabase": "node scripts/seed-supabase.js",
+    "supabase:keep-alive": "node scripts/supabase-keep-alive.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

@@ -78,6 +78,7 @@ export default function PortalPage() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('profile');
+  const [cloudStatus, setCloudStatus] = useState({ online: true, checked: false });
 
   // Profile Editor state
   const [allMembers, setAllMembers] = useState([]);
@@ -169,10 +170,21 @@ export default function PortalPage() {
   };
 
   const resolveUniversalSaveSuccess = (title = 'Changes Saved Successfully ✓', message = 'All updates are now live on your portfolio.') => {
-    setSaveOverlay({ show: true, status: 'success', title, message });
+    const isCloudOffline = cloudStatus && cloudStatus.checked && !cloudStatus.online;
+    const finalTitle = isCloudOffline ? 'Changes Saved Locally (Cloud Offline)' : title;
+    const finalMessage = isCloudOffline
+      ? 'সংরক্ষিত হয়েছে (লোকাল মোড)। ক্লাউড ডাটাবেজ অফলাইন থাকায় ক্লাউডে সিঙ্ক হয়নি।'
+      : message;
+
+    setSaveOverlay({
+      show: true,
+      status: isCloudOffline ? 'warning' : 'success',
+      title: finalTitle,
+      message: finalMessage
+    });
     setTimeout(() => {
       setSaveOverlay((prev) => ({ ...prev, show: false }));
-    }, 1150);
+    }, isCloudOffline ? 1650 : 1150);
   };
 
   const resolveUniversalSaveError = (title = 'Failed to Save Changes', message = 'Please check your inputs and try again.') => {
@@ -480,6 +492,7 @@ export default function PortalPage() {
         if (data.allMembers) {
           setAllMembers(data.allMembers);
         }
+        if (data.cloudStatus) setCloudStatus(data.cloudStatus);
       }
     } catch (err) {
       console.error('Failed to load profile', err);
@@ -491,7 +504,10 @@ export default function PortalPage() {
     try {
       const res = await fetch('/api/portal/logs');
       const data = await res.json();
-      if (data.success) setLogs(data.logs || []);
+      if (data.success) {
+        setLogs(data.logs || []);
+        if (data.cloudStatus) setCloudStatus(data.cloudStatus);
+      }
     } catch (err) {
       console.error('Failed to load logs', err);
     }
@@ -502,7 +518,10 @@ export default function PortalPage() {
     try {
       const res = await fetch('/api/portal/tasks');
       const data = await res.json();
-      if (data.success) setTasks(data.tasks || []);
+      if (data.success) {
+        setTasks(data.tasks || []);
+        if (data.cloudStatus) setCloudStatus(data.cloudStatus);
+      }
     } catch (err) {
       console.error('Failed to load tasks', err);
     }
@@ -513,7 +532,10 @@ export default function PortalPage() {
     try {
       const res = await fetch('/api/portal/notes');
       const data = await res.json();
-      if (data.success) setNotes(data.notes || []);
+      if (data.success) {
+        setNotes(data.notes || []);
+        if (data.cloudStatus) setCloudStatus(data.cloudStatus);
+      }
     } catch (err) {
       console.error('Failed to load notes', err);
     }
@@ -1283,6 +1305,22 @@ export default function PortalPage() {
         )}
       </nav>
 
+      {/* Cloud Database Offline Notice */}
+      {cloudStatus && !cloudStatus.online && (
+        <div className="portal-cloud-warning-card">
+          <div className="cloud-warning-header">
+            <div className="cloud-warning-title">
+              <ShieldAlert size={18} className="text-amber" />
+              <strong>Supabase ক্লাউড ডাটাবেজ অফলাইন (Local Fallback Active)</strong>
+            </div>
+            <span className="cloud-offline-pill">● Local Mode</span>
+          </div>
+          <p className="cloud-warning-text">
+            সতর্কবার্তা: Supabase ক্লাউড সার্ভারের সংযোগ বিচ্ছিন্ন (Paused বা DNS Unreachable) থাকায় আপনার পরিবর্তনসমূহ বর্তমানে <strong>লোকাল মেমরিতে</strong> সংরক্ষিত হচ্ছে। ক্লাউড ডাটাবেজ সচল না হওয়া পর্যন্ত অন্য ডিভাইস বা লাইভ সার্ভারে এই পরিবর্তন সিঙ্ক হবে না।
+          </p>
+        </div>
+      )}
+
       {/* TAB 1: Profile Modular Section Editor */}
       {activeTab === 'profile' && profileData && (
         <section className="portal-content-box profile-clean-box">
@@ -1794,6 +1832,14 @@ export default function PortalPage() {
       {/* TAB 2: Supervisor Directives & Task Board (Kanban / Todo) */}
       {activeTab === 'tasks' && (
         <section className="portal-content-box">
+          {cloudStatus && !cloudStatus.online && (
+            <div className="tab-sensitive-offline-warning">
+              <ShieldAlert size={16} />
+              <span>
+                <strong>সতর্কতা:</strong> ক্লাউড ডাটাবেজ অফলাইন। ডিরেক্টিভ টাস্ক লোকাল মেমরিতে সংরক্ষিত হচ্ছে।
+              </span>
+            </div>
+          )}
           <div className="box-header-row">
             <div>
               <div className="card-header-badge">
@@ -2116,6 +2162,14 @@ export default function PortalPage() {
       {/* TAB 3: Weekly Sprint Logs */}
       {activeTab === 'logs' && (
         <section className="portal-content-box">
+          {cloudStatus && !cloudStatus.online && (
+            <div className="tab-sensitive-offline-warning">
+              <ShieldAlert size={16} />
+              <span>
+                <strong>সতর্কতা:</strong> ক্লাউড ডাটাবেজ অফলাইন। নতুন স্প্রিন্ট লগ শুধুমাত্র লোকাল মেমরিতে জমা হবে।
+              </span>
+            </div>
+          )}
           <div className="box-header-row">
             <div>
               <h3>Weekly Sprint Timeline Logs</h3>
@@ -2328,6 +2382,14 @@ export default function PortalPage() {
       {/* TAB 5: Security & Access / Password Manager */}
       {activeTab === 'security' && (
         <section className="portal-content-box">
+          {cloudStatus && !cloudStatus.online && (
+            <div className="tab-sensitive-offline-warning">
+              <ShieldAlert size={16} />
+              <span>
+                <strong>সংবেদনশীল সেকশন সতর্কতা:</strong> ক্লাউড ডাটাবেজ অফলাইন থাকায় পাসওয়ার্ড পরিবর্তন শুধুমাত্র এই লোকাল এনভায়রনমেন্টে সেভ হবে।
+              </span>
+            </div>
+          )}
           <div className="box-header-row">
             <div>
               <div className="card-header-badge">
@@ -2454,6 +2516,14 @@ export default function PortalPage() {
       {/* TAB 6: Super Admin Center & Activity Audit Logs */}
       {activeTab === 'admin' && isAdmin && (
         <section className="portal-content-box">
+          {cloudStatus && !cloudStatus.online && (
+            <div className="tab-sensitive-offline-warning">
+              <ShieldAlert size={16} />
+              <span>
+                <strong>কমান্ড সেন্টার সতর্কতা:</strong> ক্লাউড ডাটাবেজ অফলাইন থাকায় অডিট লগ ও কনফিগারেশন পরিবর্তন লোকাল ফাইল সিস্টেমে সেভ হচ্ছে।
+              </span>
+            </div>
+          )}
           <div className="box-header-row">
             <div>
               <div className="card-header-badge">

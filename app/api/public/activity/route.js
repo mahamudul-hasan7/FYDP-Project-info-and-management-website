@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
-import { getAllLogs, getAllTasks, getAllAuditLogs } from '../../../../lib/store';
+import { getAllLogs, getAllTasks, getAllAuditLogs, getCloudDbStatus } from '../../../../lib/store';
 
 export async function GET() {
   try {
     const logs = (await getAllLogs()) || [];
     const tasks = (await getAllTasks()) || [];
     const auditLogs = (await getAllAuditLogs()) || [];
+    const cloudStatus = getCloudDbStatus();
 
     // STRICT LIMITATION: Whitelist only official milestone events
     // Filter out: internal task deletions, note updates, password changes, private admin overrides
@@ -49,6 +50,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       logs,
+      cloudStatus,
       stats: {
         totalSprints: logs.length,
         activeSprints: logs.filter((l) => l.status === 'active').length,

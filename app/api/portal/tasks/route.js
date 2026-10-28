@@ -4,7 +4,8 @@ import {
   createDirectiveTask,
   deleteDirectiveTask,
   getAllTasks,
-  updateDirectiveTask
+  updateDirectiveTask,
+  getCloudDbStatus
 } from '../../../../lib/store';
 
 export async function GET() {
@@ -15,7 +16,8 @@ export async function GET() {
     }
 
     const tasks = await getAllTasks();
-    return NextResponse.json({ success: true, tasks });
+    const cloudStatus = getCloudDbStatus();
+    return NextResponse.json({ success: true, tasks, cloudStatus });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -30,11 +32,13 @@ export async function POST(request) {
 
     const body = await request.json();
     const created = await createDirectiveTask(body, session);
+    const cloudStatus = getCloudDbStatus();
 
     return NextResponse.json({
       success: true,
       message: 'Directive task created!',
-      task: created
+      task: created,
+      cloudStatus
     });
   } catch (error) {
     const status = error.message.includes('Forbidden') ? 403 : error.message.includes('Unauthorized') ? 401 : 400;
@@ -56,10 +60,12 @@ export async function PUT(request) {
     }
 
     const updated = await updateDirectiveTask(id, updateData, session);
+    const cloudStatus = getCloudDbStatus();
     return NextResponse.json({
       success: true,
       message: 'Task updated!',
-      task: updated
+      task: updated,
+      cloudStatus
     });
   } catch (error) {
     const status = error.message.includes('Forbidden') ? 403 : error.message.includes('Unauthorized') ? 401 : 400;
@@ -81,7 +87,8 @@ export async function DELETE(request) {
     }
 
     await deleteDirectiveTask(id, session);
-    return NextResponse.json({ success: true, message: 'Task deleted.' });
+    const cloudStatus = getCloudDbStatus();
+    return NextResponse.json({ success: true, message: 'Task deleted.', cloudStatus });
   } catch (error) {
     const status = error.message.includes('Forbidden') ? 403 : error.message.includes('Unauthorized') ? 401 : 400;
     return NextResponse.json({ success: false, message: error.message }, { status });

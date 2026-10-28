@@ -48,6 +48,17 @@ export default function UniversalSaveOverlay({
                 </motion.div>
               )}
 
+              {status === 'warning' && (
+                <motion.div
+                  className="save-warning-wrap"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                >
+                  <AlertCircle size={28} className="save-warning-icon" />
+                </motion.div>
+              )}
+
               {status === 'error' && (
                 <motion.div
                   className="save-error-wrap"

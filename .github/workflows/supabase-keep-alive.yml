@@ -1,0 +1,26 @@
+name: Supabase Keep-Alive Heartbeat
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every 3 days to prevent Supabase 7-day auto-pause
+    - cron: '0 0 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ping Supabase Project
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://usahxbipolcghymdable.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_hIyRXKpBktxQUh-VRbkb6A_bjn-cLIV' }}
+        run: |
+          node scripts/supabase-keep-alive.js || true

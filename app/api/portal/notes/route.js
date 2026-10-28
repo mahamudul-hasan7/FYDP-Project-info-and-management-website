@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '../../../../lib/auth';
-import { createTeamNote, getAllNotes } from '../../../../lib/store';
+import { createTeamNote, getAllNotes, deleteTeamNote, getCloudDbStatus } from '../../../../lib/store';
 
 export async function GET() {
   try {
@@ -10,7 +10,8 @@ export async function GET() {
     }
 
     const notes = await getAllNotes();
-    return NextResponse.json({ success: true, notes });
+    const cloudStatus = getCloudDbStatus();
+    return NextResponse.json({ success: true, notes, cloudStatus });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -25,11 +26,13 @@ export async function POST(request) {
 
     const body = await request.json();
     const created = await createTeamNote(body, session);
+    const cloudStatus = getCloudDbStatus();
 
     return NextResponse.json({
       success: true,
       message: 'Team note posted!',
-      note: created
+      note: created,
+      cloudStatus
     });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 400 });
@@ -49,10 +52,10 @@ export async function DELETE(request) {
       return NextResponse.json({ success: false, message: 'Note ID required' }, { status: 400 });
     }
 
-    const { deleteTeamNote } = await import('../../../../lib/store');
     await deleteTeamNote(id, session);
+    const cloudStatus = getCloudDbStatus();
 
-    return NextResponse.json({ success: true, message: 'Note deleted.' });
+    return NextResponse.json({ success: true, message: 'Note deleted.', cloudStatus });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 400 });
   }
