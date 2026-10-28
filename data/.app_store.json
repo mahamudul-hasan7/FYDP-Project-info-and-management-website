@@ -366,6 +366,26 @@
   ],
   "auditLogs": [
     {
+      "id": 1793202845705,
+      "timestamp": "2026-10-28T15:54:05.195Z",
+      "formattedTime": "Oct 28, 2026, 09:54 PM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "NOTE_DELETED",
+      "details": "Removed internal team note: 'Autonomous Verification Note'",
+      "type": "NOTE"
+    },
+    {
+      "id": 1793202845139,
+      "timestamp": "2026-10-28T15:54:04.645Z",
+      "formattedTime": "Oct 28, 2026, 09:54 PM",
+      "actorName": "Md Mahamudul Hasan",
+      "actorRole": "Technical Lead",
+      "action": "NOTE_POSTED",
+      "details": "Posted internal note: 'Autonomous Verification Note' [Tag: Action Item]",
+      "type": "NOTE"
+    },
+    {
       "id": 1,
       "timestamp": "2026-10-03T15:02:52.732Z",
       "formattedTime": "Oct 01, 2026 • 10:30 AM",
