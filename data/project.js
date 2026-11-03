@@ -4,6 +4,8 @@ export const projectData = {
   domain: 'Computer Science & Engineering',
   status: 'Phase 1 • Topic Pending',
   progressPercent: 15,
+  presentationUrl:
+    'https://docs.google.com/presentation/d/12oPWoOBfGlxdU5ex1H1hyu75lGw5GbEh/edit?usp=sharing&ouid=100654441785796533157&rtpof=true&sd=true',
   supervisor: {
     name: 'Faculty Supervisor',
     role: 'Project Supervisor',

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, CircleDot, Clock, Code2, FolderKanban, GraduationCap, Layers, Mail, Sparkles } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, CircleDot, Clock, Code2, FolderKanban, GraduationCap, Layers, Mail, Presentation, Sparkles } from 'lucide-react';
 import { projectData as initialProjectData } from '../data/project';
 
 export default function ProjectSection() {
@@ -26,7 +26,8 @@ export default function ProjectSection() {
     supervisor = initialProjectData.supervisor,
     abstract = initialProjectData.abstract,
     techStack = initialProjectData.techStack,
-    milestones = initialProjectData.milestones
+    milestones = initialProjectData.milestones,
+    presentationUrl = initialProjectData.presentationUrl
   } = project || {};
 
   return (
@@ -55,6 +56,21 @@ export default function ProjectSection() {
           <div className="project-info-text">
             <h3>{title}</h3>
             <p>{abstract}</p>
+            {presentationUrl && (
+              <div className="project-action-row">
+                <a
+                  href={presentationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-deck-btn"
+                  title="Open Presentation Slides in Google Drive"
+                >
+                  <Presentation size={15} />
+                  <span>View Presentation Deck</span>
+                  <ArrowUpRight size={14} />
+                </a>
+              </div>
+            )}
           </div>
           <div className="project-progress-box">
             <div className="progress-label">

@@ -4,8 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 import {
   ArrowUpRight,
   GraduationCap,
+  Presentation,
   Video
 } from 'lucide-react';
+import { projectData } from '../data/project';
 
 export default function TeamBanner({ members }) {
   const [mediaMode, setMediaMode] = useState('video'); // 'video' | 'image'
@@ -118,6 +120,19 @@ export default function TeamBanner({ members }) {
             </div>
 
             <div className="hud-btn-group">
+              {projectData?.presentationUrl && (
+                <a
+                  className="hud-btn presentation-btn"
+                  href={projectData.presentationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Open Presentation Slides in Google Drive"
+                >
+                  <Presentation size={15} />
+                  <span>Presentation Slides</span>
+                  <ArrowUpRight size={14} />
+                </a>
+              )}
               <a className="hud-btn primary" href="#team">
                 <span>View Team</span>
                 <ArrowUpRight size={15} />
